@@ -12,6 +12,7 @@ public class SampleLauncherTest
         SampleLauncher.main( null );
         try
         {
+            System.out.println( "waiting... " );
             Thread.sleep( 2000 );
         }
         catch ( InterruptedException exc )
