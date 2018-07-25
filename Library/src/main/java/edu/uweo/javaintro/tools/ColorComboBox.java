@@ -11,6 +11,7 @@ import java.util.ArrayList;
  *  JComboBox, displaying each item in the color it
  *  represents.
  */
+@SuppressWarnings("serial")
 public class ColorComboBox
     extends JComboBox<Color>
 {
