@@ -2,6 +2,10 @@ log/
 target/
 doc/
 
+*.class
+*.exe
+*.o
+*.obj
 *.tmp
 tmp.*
 *.temp
