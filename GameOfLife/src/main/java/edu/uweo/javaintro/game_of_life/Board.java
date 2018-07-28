@@ -102,9 +102,15 @@ public class Board
 		allCells[row][col] = cell.isAlive();
 	}
 	
+	public void setCells( Cell[] cells )
+	{
+	    for ( Cell cell : cells )
+	        setCell( cell );
+	}
+	
 	public void refresh()
 	{
-		frame.repaint();
+		frame.getContentPane().repaint();
 	}
 	
 	@SuppressWarnings("serial")
