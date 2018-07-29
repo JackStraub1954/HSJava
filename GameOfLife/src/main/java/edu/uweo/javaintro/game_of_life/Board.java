@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.border.MatteBorder;
 
 public class Board
@@ -28,10 +26,9 @@ public class Board
 	private JFrame		frame		= new JFrame( "Game of Life" );
 	
 	private boolean		useGrid		= true;
-	private boolean		useBorder	= false;
+	private boolean		useBorder	= true;
 	private Color		gridColor	= new Color( .8f, .8f, .8f );
 	private Color		borderColor	= Color.ORANGE;
-	private Color		cellColor	= Color.BLACK;
 	private int			cellSize	= 0;
 	
 	/**
@@ -234,15 +231,10 @@ public class Board
 			width = getWidth();
 			height = getHeight();
 			int	base		= width < height ? width : height;
-///v            cellSize = (int)Math.round( base / gridSide );
             cellSize = base / gridSide;
 			if ( cellSize < minCellSize )
 			{
 				cellSize = minCellSize;
-			}
-			else
-			{
-//				cellSize = (int)Math.round( (double)cellSize + gridLineWidth );
 			}
 			
 			paintGrid( gtx );
@@ -254,13 +246,19 @@ public class Board
 			int yco	= 0;
 			gtx.setStroke( gridLineStroke );
 			
+			if ( useBorder )
+			{
+			    xco += borderWidth;
+			    yco += borderWidth;
+			}
+			
 			Rectangle2D	 rect    = new Rectangle2D.Double();
+			int          saveYco = yco;
 			for ( int inx = 0 ; inx < gridSide ; ++inx )
 			{
-			    xco = inx * cellSize;
+			    yco = saveYco;
 				for ( int jnx = 0 ; jnx < gridSide ; ++jnx )
 				{
-				    yco = jnx * cellSize;
 					rect.setRect( xco, yco, cellSize, cellSize );
 					if ( useGrid )
 					{
@@ -272,7 +270,9 @@ public class Board
 						gtx.setColor( gridCellColor );
 						gtx.fill( rect );
 					}
+					yco += cellSize;
 				}
+                xco += cellSize;
 			}
 		}
 	}
@@ -286,6 +286,12 @@ public class Board
 			{
 				int	xco	= evt.getX();
 				int yco = evt.getY();
+				
+				if ( useBorder )
+				{
+				    xco -= borderWidth;
+				    yco -= borderWidth;
+				}
 				
                 int     row         = xco / cellSize;
                 int     col         = yco / cellSize;
