@@ -9,17 +9,16 @@ public class Neighborhood
     
     public Neighborhood()
     {
-        reset( 0, 0 );
     }
 
     public Neighborhood( int row, int col, boolean[][] cells )
     {
-        this.cells = cells;
-        reset( row, col );
+        reset( row, col, cells );
     }
     
-    public void reset( int row, int col )
+    public void reset( int row, int col, boolean[][] cells )
     {
+        this.cells = cells;
         this.row = row;
         this.col = col;
         
@@ -33,13 +32,13 @@ public class Neighborhood
         boolean nWest   = false;
 
         int   len     = cells.length;
-        if ( row < 0  || row >= len )
+        if ( row < 0 || row >= len )
             throw new IndexOutOfBoundsException( "row = " + row );
         if ( col < 0 || col >= len )
-            throw new IndexOutOfBoundsException( "col = " + row );
+            throw new IndexOutOfBoundsException( "col = " + col );
         
-        int  lastRow = len -1;
-        int  lastCol = len -1;
+        int  lastRow = len - 1;
+        int  lastCol = len - 1;
                 
         if ( row == 0 )
         {
@@ -60,6 +59,7 @@ public class Neighborhood
             }
             else if ( col == lastCol )
             {
+                nEast = false;
                 east = false;
                 sEast = false;
                 sWest = cells[1][col - 1];
@@ -85,10 +85,10 @@ public class Neighborhood
             // nWest
             if ( col == 0 )
             {
-                west = false;
-                nWest = false;
                 nEast = cells[lastRow - 1][col + 1];
                 east = cells[lastRow][col + 1];
+                west = false;
+                nWest = false;
             }
             else if ( col == lastCol )
             {
@@ -102,14 +102,15 @@ public class Neighborhood
                 nEast = cells[lastRow - 1][col + 1];
                 east = cells[lastRow][col + 1];
                 west = cells[lastRow][col - 1];
+                nWest = cells[lastRow - 1][col - 1];
             }
         }
         else if ( col == 0 )
         {
             north = cells[row - 1][0];
             nEast = cells[row - 1][1];
-            east = cells[1][row];
-            sEast = cells[1][row + 1];
+            east = cells[row][1];
+            sEast = cells[row + 1][1];
             south = cells[row + 1][0];
             sWest = false;
             west = false;
@@ -121,6 +122,17 @@ public class Neighborhood
             nEast = false;
             east = false;
             sEast = false;
+            south = cells[row + 1][col];
+            sWest = cells[row + 1][col - 1];
+            west = cells[row][col - 1];
+            nWest = cells[row - 1][col - 1];
+        }
+        else
+        {
+            north = cells[row - 1][col];
+            nEast = cells[row - 1][col + 1];
+            east = cells[row][col + 1];
+            sEast = cells[row + 1][col + 1];
             south = cells[row + 1][col];
             sWest = cells[row + 1][col - 1];
             west = cells[row][col - 1];

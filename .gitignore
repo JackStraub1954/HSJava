@@ -1,6 +1,7 @@
 log/
 target/
 doc/
+AdHoc/
 
 *.class
 *.exe

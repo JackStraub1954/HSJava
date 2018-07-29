@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 public class Main
 	implements ActionListener, ControlListener
 {
-	private Board	board	= new Board();
+	private Board	board;
 	
 	public static void main( String[] args )
 	{
@@ -21,10 +21,9 @@ public class Main
 	
 	private void execute()
 	{
-		board = new Board();
+		board = new Board( 15 );
 		board.addActionListener( this );
 		SwingUtilities.invokeLater( board );
-		board.setCell( new Cell( 0, 20, true ) );
 	}
 	
 	public void actionPerformed( ActionEvent evt )
@@ -34,22 +33,41 @@ public class Main
 		cell.toggleAlive();
 		board.setCell( cell );
 		board.refresh();
-		
-		boolean[][]	cells	= board.getCells();
 	}
 	
 	public void controlActivated( ActionEvent evt )
 	{
-		System.out.println( "activated" );
+		nextState( board.getCells() );
 	}
 	
-//	public static class Neighborhood
-//	{
-//		public Neighborhood data = new Neighborhood();
-//
-//        public Neighborhood( int row, int col, boolean[][] cells  )
-//		{
-//		}
-//		
+	/*
+	 * Rules: 
+	 * 1. Off-board cells are always dead.
+	 * 2. A live cell with fewer than two live neighbors dies.
+	 * 3. A live cell with two or three live neighbors remains alive.
+	 * 4. A live cell with more than three live neighbors dies.
+	 * 5. A dead cell with exactly three live neighbors becomes alive.
+	 */
+	private void nextState( boolean[][] cells )
+	{
+	    int            len     = cells.length;
+	    boolean[][]    temp    = new boolean[cells.length][cells.length];
+	    Neighborhood   neigh   = new Neighborhood();
+	    for ( int row = 0 ; row < len ; ++row )
+	        for ( int col = 0 ; col < len ; ++col )
+	        {
+	            neigh.reset( row,  col,  cells );
+	            int    count   = neigh.getLivingCellCount();
+	            if ( count < 2 || count > 3 )
+	                temp[row][col] = false;
+	            else if ( count == 3 )
+	                temp[row][col] = true;
+	            else
+	                temp[row][col] = cells[row][col];
+	        }
+	    
+	    board.setCells( temp );
+	    board.refresh();
+	}
 }
 

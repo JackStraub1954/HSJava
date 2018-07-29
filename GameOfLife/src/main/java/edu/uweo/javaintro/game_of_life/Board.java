@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Stroke;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -17,7 +19,8 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.JScrollPane;
+import javax.swing.border.MatteBorder;
 
 public class Board
 	implements Runnable
@@ -25,9 +28,9 @@ public class Board
 	private JFrame		frame		= new JFrame( "Game of Life" );
 	
 	private boolean		useGrid		= true;
-	private boolean		useBorder	= true;
+	private boolean		useBorder	= false;
 	private Color		gridColor	= new Color( .8f, .8f, .8f );
-	private Color		borderColor	= Color.BLUE;
+	private Color		borderColor	= Color.ORANGE;
 	private Color		cellColor	= Color.BLACK;
 	private int			cellSize	= 0;
 	
@@ -46,20 +49,33 @@ public class Board
 	 * </pre>
 	 * </div>
 	 */
-	private int			borderWidth		= 5;
+	private int			borderWidth		= 10;
 	private int			gridLineWidth	= 1;
 	private int			gridSide		= 500;
 	private int			minCellSize		= 10;
 	private Color		background		= Color.WHITE;
 	private Color		gridCellColor	= Color.BLACK;
 	private boolean		interactive		= true;
-	private boolean[][]	allCells		= new boolean[gridSide][gridSide];
+	private boolean[][]	allCells;
 	
 	private List<ActionListener>	listeners	= new ArrayList<>();
+	
+	public Board()
+	{
+	    this( 75 );
+	}
+	
+	public Board( int gridSide )
+	{
+	    this.gridSide = gridSide;
+	    allCells       = new boolean[gridSide][gridSide];
+	}
 	
 	public void run()
 	{
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+//		JScrollPane   pane    = new JScrollPane( new Canvas() );
+//		frame.setContentPane( pane );
 		frame.setContentPane( new Canvas() );
 		frame.pack();
 		frame.setVisible( true );
@@ -83,7 +99,12 @@ public class Board
 		return arr;
 	}
 	
-	public boolean getInteractive()
+	public int getSide()
+	{
+	    return gridSide;
+	}
+	
+	public boolean isInteractive()
 	{
 		return interactive;
 	}
@@ -97,7 +118,7 @@ public class Board
 	{
 		int	row	= cell.getRow();
 		int col = cell.getCol();
-		if ( row >= gridSide || row < 0 || col >= gridSide)
+		if ( row >= gridSide || row < 0 || col >= gridSide || col < 0 )
 			throw new IndexOutOfBoundsException( cell.toString() );
 		allCells[row][col] = cell.isAlive();
 	}
@@ -108,28 +129,99 @@ public class Board
 	        setCell( cell );
 	}
 	
+	public void setCells( boolean[][] state )
+	    throws IllegalArgumentException
+	{
+	    validateState( state );
+	    
+	    int    rowLimit    = allCells.length;
+        for ( int row = 0 ; row < rowLimit ; ++ row )
+	    {
+            int colLimit = allCells[row].length;
+            for ( int col = 0 ; col < colLimit ; ++col )
+                allCells[row][col] = state[row][col];
+	    }
+	}
+	
 	public void refresh()
 	{
 		frame.getContentPane().repaint();
 	}
 	
+	public void close()
+	{
+	    frame.setVisible( false );
+	    frame.dispose();
+	}
+	
+	private void validateState( boolean[][] state )
+	    throws IllegalArgumentException
+	{
+	    final String   errFmt  = 
+            "Invalid array dimensions: [%d][%d]; expected: [%d][%d]";
+        
+	    boolean    err         = false;
+	    int        expRows     = allCells.length;
+	    int        expCols     = allCells[0].length;
+	    int        actRows     = state.length;
+	    int        actCols     = state[0].length;
+	    
+	    if ( expRows != actRows )
+	        err = true;
+	    else
+	    {
+	        for ( int row = 0 ; row < expRows && !err ; ++row )
+	        {
+	            expCols = allCells[row].length;
+	            actCols = state[row].length;
+	            if ( expCols != actCols )
+	                err = true;
+	        }
+	    }
+	    
+	    if ( err )
+	    {
+	        String msg =
+                String.format( errFmt, actRows, actCols, expRows, expCols );
+	        throw new IllegalArgumentException( msg );
+	    }
+	}
+	
 	@SuppressWarnings("serial")
     private class Canvas extends JPanel
 	{
-		private Stroke		borderStroke	=
-			new BasicStroke( borderWidth ); 
 		private Stroke		gridLineStroke	= 
-			new BasicStroke( gridLineWidth );
-		private Stroke		gridStroke		=
 			new BasicStroke( gridLineWidth );
 		private int			width;
 		private int			height;
-		private boolean		interactive		= true;
 		
 		public Canvas()
 		{
-			setPreferredSize( new Dimension( 500, 500 ) );
+		    int   size    = (gridSide + 1) * minCellSize;
+		    Dimension screenSize  = Toolkit.getDefaultToolkit().getScreenSize();
+		    int       width       = screenSize.width;
+		    int       height      = screenSize.height;
+		    int       base        = width < height ? width : height;
+		    base = (int)( .75 * base );
+		    size = size < base ? size : base;
+			setPreferredSize( new Dimension( size, size ) );
 			addMouseListener( new MouseProcessor() );
+			
+			if ( background != null )
+			    setBackground( background );
+			
+			if ( useBorder && borderColor != null )
+			{
+			    MatteBorder  border  = 
+		            new MatteBorder( 
+	                    borderWidth,
+	                    borderWidth,
+	                    borderWidth,
+	                    borderWidth,
+	                    borderColor
+                    );
+			    setBorder( border );
+			}
 		}
 		
 		@Override
@@ -141,32 +233,19 @@ public class Board
 			
 			width = getWidth();
 			height = getHeight();
-			double	base		= width < height ? width : height;
-			cellSize = (int)Math.round( base / gridSide );
+			int	base		= width < height ? width : height;
+///v            cellSize = (int)Math.round( base / gridSide );
+            cellSize = base / gridSide;
 			if ( cellSize < minCellSize )
 			{
-				cellSize = minCellSize + gridLineWidth;
+				cellSize = minCellSize;
 			}
 			else
 			{
-				cellSize = (int)Math.round( cellSize + gridLineWidth );
+//				cellSize = (int)Math.round( (double)cellSize + gridLineWidth );
 			}
 			
-			paintBorder( gtx );
 			paintGrid( gtx );
-		}
-		
-		private void paintBorder( Graphics2D gtx)
-		{
-			if ( useBorder )
-			{
-				gtx.setStroke( borderStroke );
-				gtx.setColor( borderColor );
-				gtx.drawLine( 0, 0, width, 0 );
-				gtx.drawLine( 0, height, width, height );
-				gtx.drawLine( 0, 0, 0, height );
-				gtx.drawLine( width, 0, width, height );
-			}
 		}
 		
 		private void paintGrid( Graphics2D gtx )
@@ -174,19 +253,15 @@ public class Board
 			int	xco	= 0;
 			int yco	= 0;
 			gtx.setStroke( gridLineStroke );
-			if ( useBorder )
-			{
-				xco += borderWidth;
-				yco += borderWidth;
-			}
 			
-			Rectangle2D	rect	= new Rectangle2D.Double();
+			Rectangle2D	 rect    = new Rectangle2D.Double();
 			for ( int inx = 0 ; inx < gridSide ; ++inx )
 			{
+			    xco = inx * cellSize;
 				for ( int jnx = 0 ; jnx < gridSide ; ++jnx )
 				{
-					int	col	= xco + jnx * cellSize;
-					rect.setRect( col , yco, cellSize, cellSize );
+				    yco = jnx * cellSize;
+					rect.setRect( xco, yco, cellSize, cellSize );
 					if ( useGrid )
 					{
 						gtx.setColor( gridColor);
@@ -198,14 +273,12 @@ public class Board
 						gtx.fill( rect );
 					}
 				}
-				yco += cellSize;
 			}
 		}
 	}
 	
 	private class MouseProcessor implements MouseListener
 	{
-
 		@Override
 		public void mouseClicked( MouseEvent evt )
 		{
@@ -213,53 +286,45 @@ public class Board
 			{
 				int	xco	= evt.getX();
 				int yco = evt.getY();
-				if ( useBorder )
-				{
-					xco -= borderWidth;
-					yco -= borderWidth;
-				}
 				
-				int 	row			= (int)(yco + .5) / cellSize;
-				int 	col 		= (int)(xco + .5) / cellSize;
-				boolean	alive		= allCells[row][col];
-				Cell	cell		= new Cell( row, col, alive );
-				int		ident		= evt.getID();
-				int		modifiers	= evt.getModifiers();
-				ActionEvent	event	= 
-					new ActionEvent( cell, ident, "", modifiers );
-				for ( ActionListener listener : listeners )
-					listener.actionPerformed( event );
+                int     row         = xco / cellSize;
+                int     col         = yco / cellSize;
+				if ( row < allCells.length && col < allCells[row].length )
+				{
+    				boolean	alive		= allCells[row][col];
+    				Cell	cell		= new Cell( row, col, alive );
+    				int		ident		= evt.getID();
+    				int		modifiers	= evt.getModifiers();
+    				ActionEvent	event	= 
+    					new ActionEvent( cell, ident, "", modifiers );
+    				for ( ActionListener listener : listeners )
+    					listener.actionPerformed( event );
+				}
 			}
-			
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e)
 		{
-			// TODO Auto-generated method stub
-			
+			// not used
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e)
 		{
-			// TODO Auto-generated method stub
-			
+            // not used
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
-			// TODO Auto-generated method stub
-			
+            // not used
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e)
 		{
-			// TODO Auto-generated method stub
-			
+            // not used
 		}
-		
 	}
 }
