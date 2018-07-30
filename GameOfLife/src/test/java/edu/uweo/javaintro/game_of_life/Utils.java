@@ -68,4 +68,16 @@ public class Utils
             exc.printStackTrace();
         }
     }
+    
+    public static void pause( int millis )
+    {
+        try
+        {
+            Thread.sleep( millis );
+        }
+        catch ( InterruptedException exc )
+        {
+            // don't care
+        }
+    }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.MatteBorder;
 
 public class Board
@@ -71,9 +72,9 @@ public class Board
 	public void run()
 	{
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-//		JScrollPane   pane    = new JScrollPane( new Canvas() );
-//		frame.setContentPane( pane );
-		frame.setContentPane( new Canvas() );
+		JScrollPane   pane    = new JScrollPane( new Canvas() );
+		frame.setContentPane( pane );
+//		frame.setContentPane( new Canvas() );
 		frame.pack();
 		frame.setVisible( true );
 	}
@@ -149,6 +150,13 @@ public class Board
 	{
 	    frame.setVisible( false );
 	    frame.dispose();
+	}
+	
+	public void clear()
+	{
+	    for ( int inx = 0 ; inx < allCells.length ; ++inx )
+	        for ( int jnx = 0 ; jnx < allCells[inx].length ; ++jnx )
+	            allCells[inx][jnx] = false;
 	}
 	
 	private void validateState( boolean[][] state )
@@ -238,6 +246,11 @@ public class Board
 			}
 			
 			paintGrid( gtx );
+			int  size    = gridSide * cellSize;
+			if ( useBorder )
+			    size += 2 * borderWidth;
+			setPreferredSize( new Dimension( size, size ) );
+			revalidate();
 		}
 		
 		private void paintGrid( Graphics2D gtx )

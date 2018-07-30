@@ -53,9 +53,9 @@ public class Controls
 			super( new GridLayout( 3, 3 ) );
 			String[][]	labels	=
 			{
-					{ "Run", "", "" },
-					{ "", "", "" },
-					{ "", "", "" },
+				{ "Run", "Step", "Clear" },
+				{ "Save", "Open", "" },
+				{ "", "", "" },
 			};
 			
 			for ( String[] outer : labels )
