@@ -4,5 +4,6 @@ import java.awt.event.ActionEvent;
 
 public interface ControlListener 
 {
-	public void controlActivated( ActionEvent evt );
+	public void controlActivated( ControlEvent evt );
+	public void sliderAdjusted( ControlEvent evt );
 }

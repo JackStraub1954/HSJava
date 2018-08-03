@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -18,15 +17,13 @@ public class Main
 	implements ActionListener, ControlListener
 {
 	private Board          board;
-	private boolean        running = false;
+	private boolean        running     = false;
 	private JFileChooser   fileChooser = new JFileChooser();
+    private Controls       controls     = new Controls();;
 	
 	public static void main( String[] args )
 	{
-		Main		app			= new Main();
-		Controls	controls	= new Controls();
-		controls.addControlListener( app );
-		controls.start();
+	    Main       app     = new Main();
 		app.execute();
 	}
 	
@@ -35,6 +32,9 @@ public class Main
 		board = new Board( 100 );
 		board.addActionListener( this );
 		SwingUtilities.invokeLater( board );
+		
+		controls.addControlListener( this );
+		controls.start();
 	}
 	
 	public void actionPerformed( ActionEvent evt )
@@ -46,37 +46,36 @@ public class Main
 		board.refresh();
 	}
 	
-	public void controlActivated( ActionEvent evt )
+	public void controlActivated( ControlEvent evt )
 	{
-		//nextState( board.getCells() );
-	    //System.out.println( evt.getSource() );
-	    Object src = evt.getSource();
-	    if ( src instanceof JButton )
-	    {
-	        String text    = ((JButton)src).getText();
-	        switch ( text )
-	        {
-	        case "Run":
-	            doRun();
-	            break;
-	        case "Step":
-	            doStep();
-	            break;
-	        case "Save":
-	            doSave();
-	            break;
-	        case "Open":
-	            doOpen();
-	            break;
-	        case "Clear":
-	            doClear();
-	            break;
-	        default:
-	            System.err.println( "eh?" );
-	            break;
-	        }
+        String text    = evt.getLabel();
+        switch ( text )
+        {
+        case "Run":
+            doRun();
+            break;
+        case "Step":
+            doStep();
+            break;
+        case "Save":
+            doSave();
+            break;
+        case "Open":
+            doOpen();
+            break;
+        case "Clear":
+            doClear();
+            break;
+        default:
+            System.err.println( "eh?" );
+            break;
 	    }
 	}
+	
+	public void sliderAdjusted( ControlEvent evt )
+    {
+        
+    }
 	
 	private void doClear()
 	{
@@ -188,6 +187,7 @@ public class Main
 	
 	public class Runner implements Runnable
 	{
+	    private    long   millis; 
 	    public void run()
 	    {
 	        while ( running )
@@ -195,6 +195,12 @@ public class Main
 	            nextState( board.getCells() );
 	            pause( 250 );
 	        }
+	    }
+	    
+	    public void updateGPS()
+	    {
+	        double val = controls.getSliderValue();
+	        
 	    }
 	}
 }

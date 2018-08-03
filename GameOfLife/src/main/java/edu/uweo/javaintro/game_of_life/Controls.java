@@ -1,5 +1,6 @@
 package edu.uweo.javaintro.game_of_life;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,10 +17,13 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Controls
 	implements Runnable
 {
+    public static final String NEW_LINE            = System.lineSeparator();
 	public static final String RUN_LABEL           = "Run";
 	public static final String INTERACTIVE_LABEL   = "Interactive";
 	public static final String STOP_LABEL          = "Stop";
@@ -28,16 +32,20 @@ public class Controls
 	public static final String CLEAR_LABEL         = "Clear";
 	public static final String OPEN_LABEL          = "Open";
 	public static final String SAVE_LABEL          = "Save";
-    public static final String GPS_LABEL           = "Generations per Second";
-    public static final String MAX_GPS_LABEL       = "Max Generations per Second";
+	public static final String APPLY_LABEL         = "Apply";        
+    public static final String GPS_LABEL           = 
+        "<html><body>Generations<br>/Second</body></html>";
+    public static final String MAX_GPS_LABEL       = 
+        "<html><body>Max Generations<br>/Second</body></html>";
 	
 	private String[]   userButtons     = { "", "", "" };
 	
 	private final JFrame       frame       = new JFrame( "Game of Life Controller" );
-	private final MainPanel    mainPanel   = new MainPanel();
+	private final JTextField   gpsText     = new JTextField( "10", 3 );
+    private final JCheckBox    interactive = new JCheckBox( INTERACTIVE_LABEL );
 	private final JSlider      slider      = new JSlider();
-	private final JTextField   maxGPSText  = new JTextField();
-	private final JLabel       maxGPLabel  = new JLabel( MAX_GPS_LABEL );
+	private final JTextField   maxGPSText  = new JTextField( "5", 3 );
+    private final MainPanel    mainPanel   = new MainPanel();
 	
 	private final List<ControlListener>	controlListeners	= new ArrayList<>();
 	
@@ -68,39 +76,63 @@ public class Controls
 			
 	public void run()
 	{
-		frame.setDefaultCloseOperation( JFrame.HIDE_ON_CLOSE );
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setContentPane( new MainPanel() );
 		frame.pack();
 		frame.setVisible( true );
 	}
+    
+    public String getMaxGenerationsPerSecond()
+    {
+        return maxGPSText.getText();
+    }
+    
+    public String getGenerationsPerSecond()
+    {
+        return gpsText.getText();
+    }
+    
+    public boolean isInteractive()
+    {
+        return interactive.isSelected();
+    }
+    
+    public double getSliderValue()
+    {
+        double  rval    = slider.getValue() / 100.0;
+        return rval;
+    }
 	
 	private class MainPanel extends JPanel
-		implements ActionListener
+		implements ActionListener, ChangeListener
 	{
 		public MainPanel()
 		{
-			super( new GridLayout( 3, 3 ) );
-			String[][]	labels	=
-			{
-				{ "Run", "Step", "Clear" },
-				{ "Save", "Open", "" },
-				{ "", "", "" },
-			};
-			
-			for ( String[] outer : labels )
-				for ( String str : outer )
-				{
-					JButton	button	= new JButton( str );
-					button.addActionListener( this );
-					add( button );
-				}
+			super( new BorderLayout() );
+			add( new WestPanel(), BorderLayout.WEST );
+			add( new CenterPanel(), BorderLayout.CENTER );
+			add( new SouthPanel(), BorderLayout.SOUTH );
 		}
 		
 		public void actionPerformed( ActionEvent evt )
 		{
+		    Object        src     = evt.getSource();
+		    if ( !(src instanceof AbstractButton ) )
+		        throw new RuntimeException( "Invalid source: " + src );
+		    AbstractButton button = (AbstractButton)src;
+		    String        label   = button.getText();
+		    ControlEvent  event   = new ControlEvent( evt.getSource(), label, Controls.this );
 			for ( ControlListener listener : controlListeners )
-				listener.controlActivated( evt );
+				listener.controlActivated( event );
 		}
+
+        @Override
+        public void stateChanged( ChangeEvent evt )
+        {
+            ControlEvent  event   = new ControlEvent( evt.getSource(), GPS_LABEL, Controls.this );
+            for ( ControlListener listener : controlListeners )
+                listener.sliderAdjusted( event );
+        }
 	}
 	
 	private class WestPanel extends JPanel
@@ -109,7 +141,7 @@ public class Controls
 	    {
     	    AbstractButton[]   controls    =
             {
-                new JCheckBox( INTERACTIVE_LABEL ),
+                interactive,
                 new JButton( EXIT_LABEL ),
                 new JButton( OPEN_LABEL ),
                 new JButton( SAVE_LABEL ),
@@ -137,13 +169,46 @@ public class Controls
 	{
 	    public CenterPanel()
 	    {
-	        JPanel maxGPSpanel = new JPanel();
-	        maxGPSpanel.add( new JLabel( MAX_GPS_LABEL ) );
+	        super( new GridLayout( 3, 1 ) );
+	        
+	        JPanel gpsPanel    = new JPanel();
+	        gpsPanel.add( new JLabel( GPS_LABEL ) );
+	        gpsPanel.add( gpsText );
+	        
+	        JPanel maxGPSPanel = new JPanel();
+	        maxGPSPanel.add( new JLabel( MAX_GPS_LABEL ) );
+	        maxGPSPanel.add( maxGPSText );
+	        JButton    applyButton = new JButton( APPLY_LABEL );
+	        applyButton.addActionListener( mainPanel );
+	        maxGPSPanel.add( applyButton );
 	        JComponent[]   components  =
-	            {
-                    new JLabel( GPS_LABEL ),
-                    slider,
-	            };
+            {
+                gpsPanel,
+                slider,
+                maxGPSPanel,
+            };
+	        
+	        slider.addChangeListener( mainPanel );
+	        for ( JComponent component : components )
+	            add( component );
+	    }
+	}
+	
+	private class SouthPanel extends JPanel
+	{
+	    public SouthPanel()
+	    {
+    	    AbstractButton[]   components  = 
+            {
+                new JButton( RUN_LABEL ),
+                new JButton( STEP_LABEL ),
+            };
+    	    
+    	    for ( AbstractButton button : components )
+    	    {
+    	        add( button );
+    	        button.addActionListener( mainPanel);
+    	    }
 	    }
 	}
 }
