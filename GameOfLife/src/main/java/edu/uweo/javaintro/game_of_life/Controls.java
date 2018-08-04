@@ -82,14 +82,20 @@ public class Controls
 		frame.setVisible( true );
 	}
     
-    public String getMaxGenerationsPerSecond()
+    public double getMaxGenerationsPerSecond()
+        throws NumberFormatException
     {
-        return maxGPSText.getText();
+        String  gpsStr  = maxGPSText.getText();
+        double  gps     = Double.parseDouble( gpsStr );
+        return gps;
     }
     
-    public String getGenerationsPerSecond()
+    public double getGenerationsPerSecond()
+        throws NumberFormatException
     {
-        return gpsText.getText();
+        String  gpsStr  = gpsText.getText();
+        double  gps     = Double.parseDouble( gpsStr );
+        return gps;
     }
     
     public boolean isInteractive()
@@ -129,9 +135,11 @@ public class Controls
         @Override
         public void stateChanged( ChangeEvent evt )
         {
-            ControlEvent  event   = new ControlEvent( evt.getSource(), GPS_LABEL, Controls.this );
-            for ( ControlListener listener : controlListeners )
-                listener.sliderAdjusted( event );
+            ControlEvent  event   = 
+                new ControlEvent( evt.getSource(), GPS_LABEL, Controls.this );
+            if ( !slider.getValueIsAdjusting() )
+                for ( ControlListener listener : controlListeners )
+                    listener.sliderAdjusted( event );
         }
 	}
 	
@@ -145,6 +153,7 @@ public class Controls
                 new JButton( EXIT_LABEL ),
                 new JButton( OPEN_LABEL ),
                 new JButton( SAVE_LABEL ),
+                new JButton( CLEAR_LABEL ),
             };
     	    
     	    for ( AbstractButton button : controls )

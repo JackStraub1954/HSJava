@@ -17,14 +17,22 @@ public class Main
 	implements ActionListener, ControlListener
 {
 	private Board          board;
-	private boolean        running     = false;
-	private JFileChooser   fileChooser = new JFileChooser();
-    private Controls       controls     = new Controls();;
+	private boolean        running         = false;
+	private JFileChooser   fileChooser     = new JFileChooser();
+    private Controls       controls         = new Controls();
+    private Thread          controlThread   = null;
+    private Runner          runner          = new Runner();          
 	
 	public static void main( String[] args )
 	{
 	    Main       app     = new Main();
 		app.execute();
+	}
+	
+	public Main()
+	{
+	    String userDir = System.getProperty( "user.dir" );
+	    fileChooser.setCurrentDirectory( new File( userDir ) );
 	}
 	
 	private void execute()
@@ -39,11 +47,14 @@ public class Main
 	
 	public void actionPerformed( ActionEvent evt )
 	{
-		Cell	cell	= (Cell)evt.getSource();
-		System.out.println( cell );
-		cell.toggleAlive();
-		board.setCell( cell );
-		board.refresh();
+	    if ( controls.isInteractive() )
+	    {
+    		Cell	cell	= (Cell)evt.getSource();
+    //		System.out.println( cell );
+    		cell.toggleAlive();
+    		board.setCell( cell );
+    		board.refresh();
+	    }
 	}
 	
 	public void controlActivated( ControlEvent evt )
@@ -66,6 +77,9 @@ public class Main
         case "Clear":
             doClear();
             break;
+        case "Exit":
+            doExit();
+            break;
         default:
             System.err.println( "eh?" );
             break;
@@ -74,7 +88,11 @@ public class Main
 	
 	public void sliderAdjusted( ControlEvent evt )
     {
-        
+        runner.updateGPS();
+        if ( controlThread != null && controlThread.isAlive() )
+        {
+            controlThread.interrupt();
+        }
     }
 	
 	private void doClear()
@@ -88,8 +106,8 @@ public class Main
         running = !running;
         if ( running )
         {
-            Runner runner  = new Runner();
-            new Thread( runner ).start();
+            controlThread = new Thread( runner, "Runner" );
+            controlThread.start();
         }
 	}
 	
@@ -125,10 +143,8 @@ public class Main
 	    if ( rcode == JFileChooser.APPROVE_OPTION )
 	    {
 	        File   file    = fileChooser.getSelectedFile();
-            try ( FileInputStream fStream = new FileInputStream( file );
-            )
+            try ( FileInputStream fStream = new FileInputStream( file ); )
             {
-                
                 ObjectInputStream   oStream = new ObjectInputStream( fStream );
                 boolean[][] cells   = (boolean[][])oStream.readObject();
                 board.setCells( cells );
@@ -141,6 +157,11 @@ public class Main
                 exc.printStackTrace();
             }
 	    }
+	}
+	
+	private void doExit()
+	{
+	    System.exit( 0 );
 	}
 	
 	/*
@@ -173,7 +194,7 @@ public class Main
 	    board.refresh();
 	}
     
-    private static void pause( int millis )
+    private static void pause( long millis )
     {
         try
         {
@@ -190,17 +211,20 @@ public class Main
 	    private    long   millis; 
 	    public void run()
 	    {
+	        updateGPS();
 	        while ( running )
 	        {
 	            nextState( board.getCells() );
-	            pause( 250 );
+	            pause( millis );
 	        }
 	    }
 	    
 	    public void updateGPS()
 	    {
-	        double val = controls.getSliderValue();
-	        
+	        double maxGPS  = controls.getMaxGenerationsPerSecond();
+	        double val     = controls.getSliderValue();
+	        double gps     = val * maxGPS;
+	        millis = (int)(1000 / gps);
 	    }
 	}
 }
