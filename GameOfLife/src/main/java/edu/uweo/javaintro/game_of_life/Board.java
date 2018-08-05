@@ -9,8 +9,8 @@ import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +53,6 @@ public class Board
 	private int			minCellSize		= 10;
 	private Color		background		= Color.WHITE;
 	private Color		gridCellColor	= Color.BLACK;
-	private boolean		interactive		= true;
 	private boolean[][]	allCells;
 	
 	private List<ActionListener>	listeners	= new ArrayList<>();
@@ -74,7 +73,6 @@ public class Board
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		JScrollPane   pane    = new JScrollPane( new Canvas() );
 		frame.setContentPane( pane );
-//		frame.setContentPane( new Canvas() );
 		frame.pack();
 		frame.setVisible( true );
 	}
@@ -100,16 +98,6 @@ public class Board
 	public int getSide()
 	{
 	    return gridSide;
-	}
-	
-	public boolean isInteractive()
-	{
-		return interactive;
-	}
-	
-	public void setInteractive( boolean interactive )
-	{
-		this.interactive = interactive;
 	}
 	
 	public void setCell( Cell cell )
@@ -290,60 +278,33 @@ public class Board
 		}
 	}
 	
-	private class MouseProcessor implements MouseListener
+	private class MouseProcessor extends MouseAdapter
 	{
 		@Override
 		public void mouseClicked( MouseEvent evt )
 		{
-			if ( interactive )
+			int	xco	= evt.getX();
+			int yco = evt.getY();
+			
+			if ( useBorder )
 			{
-				int	xco	= evt.getX();
-				int yco = evt.getY();
-				
-				if ( useBorder )
-				{
-				    xco -= borderWidth;
-				    yco -= borderWidth;
-				}
-				
-                int     row         = xco / cellSize;
-                int     col         = yco / cellSize;
-				if ( row < allCells.length && col < allCells[row].length )
-				{
-    				boolean	alive		= allCells[row][col];
-    				Cell	cell		= new Cell( row, col, alive );
-    				int		ident		= evt.getID();
-    				int		modifiers	= evt.getModifiers();
-    				ActionEvent	event	= 
-    					new ActionEvent( cell, ident, "", modifiers );
-    				for ( ActionListener listener : listeners )
-    					listener.actionPerformed( event );
-				}
+			    xco -= borderWidth;
+			    yco -= borderWidth;
 			}
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e)
-		{
-			// not used
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e)
-		{
-            // not used
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e)
-		{
-            // not used
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e)
-		{
-            // not used
+			
+            int     row         = xco / cellSize;
+            int     col         = yco / cellSize;
+			if ( row < allCells.length && col < allCells[row].length )
+			{
+				boolean	alive		= allCells[row][col];
+				Cell	cell		= new Cell( row, col, alive );
+				int		ident		= evt.getID();
+				int		modifiers	= evt.getModifiers();
+				ActionEvent	event	= 
+					new ActionEvent( cell, ident, "", modifiers );
+				for ( ActionListener listener : listeners )
+					listener.actionPerformed( event );
+			}
 		}
 	}
 }
