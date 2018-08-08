@@ -1,8 +1,6 @@
 package edu.uweo.javaintro.game_of_life;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.swing.JOptionPane;
 
 public class Utils
 {
@@ -56,17 +54,7 @@ public class Utils
 
     public static void pause()
     {
-        InputStreamReader   reader      = new InputStreamReader( System.in );
-        BufferedReader      bufReader   = new BufferedReader( reader );
-        try
-        {
-            bufReader.readLine();
-        }
-        catch ( IOException exc )
-        {
-            System.err.println( exc.getMessage() );
-            exc.printStackTrace();
-        }
+    	JOptionPane.showMessageDialog( null, "Paused..." );
     }
     
     public static void pause( int millis )
