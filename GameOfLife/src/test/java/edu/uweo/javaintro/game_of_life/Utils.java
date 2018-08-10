@@ -1,5 +1,10 @@
 package edu.uweo.javaintro.game_of_life;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Frame;
+import java.util.function.Predicate;
+
 import javax.swing.JOptionPane;
 
 public class Utils
@@ -67,5 +72,28 @@ public class Utils
         {
             // don't care
         }
+    }
+    
+    public static Component findComponent( Predicate<Component> pred )
+    {
+        Component   comp    = null;
+        Frame[] frames  = Frame.getFrames();
+        
+        return comp;
+    }
+    
+    private static Component 
+    findComponent( Container container, Predicate<Component> pred )
+    {
+        Component       comp        = null;
+        Component[]     components  = container.getComponents();
+        int len = components.length;
+        for ( int inx = 0 ; inx < len && comp == null ; ++inx )
+        {
+            Component   temp    = components[inx];
+            /// recurse
+        }
+        
+        return comp;
     }
 }

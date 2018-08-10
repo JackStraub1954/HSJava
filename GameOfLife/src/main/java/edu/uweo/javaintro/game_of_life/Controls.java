@@ -1,6 +1,8 @@
 package edu.uweo.javaintro.game_of_life;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -49,9 +52,9 @@ public class Controls
 	
 	private final List<ControlListener>	controlListeners	= new ArrayList<>();
 	
-	public static void main( String[] args )
+	public void setUserButtons( String[] buttons )
 	{
-		new Controls().start();
+	    userButtons = buttons;
 	}
 	
 	public void start()
@@ -82,12 +85,34 @@ public class Controls
 		frame.setVisible( true );
 	}
     
+    public void setMaxGenerationsPerSecond( double max )
+    {
+        String  dStr    = "" + max;
+        setMaxGenerationsPerSecond( dStr );
+    }
+    
+    public void setMaxGenerationsPerSecond( String max )
+    {
+        maxGPSText.setText( max );
+    }
+    
     public double getMaxGenerationsPerSecond()
         throws NumberFormatException
     {
         String  gpsStr  = maxGPSText.getText();
         double  gps     = Double.parseDouble( gpsStr );
         return gps;
+    }
+    
+    public void setGenerationsPerSecond( double max )
+    {
+        String  dStr    = "" + max;
+        setGenerationsPerSecond( dStr );
+    }
+    
+    public void setGenerationsPerSecond( String max )
+    {
+        maxGPSText.setText( max );
     }
     
     public double getGenerationsPerSecond()
@@ -101,6 +126,37 @@ public class Controls
     public boolean isInteractive()
     {
         return interactive.isSelected();
+    }
+    
+    public void setInteractive( boolean val )
+    {
+        interactive.setSelected( val );
+    }
+    
+    public void setEnabled( boolean activate, String text )
+    {
+        ButtonList  buttons = new ButtonList( frame, text );
+        for ( AbstractButton button : buttons )
+            button.setEnabled( activate );
+    }
+    
+    public void toggleEnabled( String text )
+    {
+        ButtonList  buttons = new ButtonList( frame, text );
+        for ( AbstractButton button : buttons )
+        {
+            boolean activate    = !button.isEnabled();
+            button.setEnabled( !activate );
+        }
+    }
+    
+    public boolean isEnabled( String text )
+    {
+        boolean     rval    = false;
+        ButtonList  buttons = new ButtonList( frame, text );
+        if ( buttons.size() == 0 )
+            rval = buttons.get( 0 ).isEnabled();
+        return rval;
     }
     
     public double getSliderValue()
@@ -179,6 +235,10 @@ public class Controls
 	    public CenterPanel()
 	    {
 	        super( new GridLayout( 3, 1 ) );
+	        
+	        gpsText.setEditable( false );
+            gpsText.setHorizontalAlignment(SwingConstants.RIGHT);
+            maxGPSText.setHorizontalAlignment(SwingConstants.RIGHT);
 	        
 	        JPanel gpsPanel    = new JPanel();
 	        gpsPanel.add( new JLabel( GPS_LABEL ) );
