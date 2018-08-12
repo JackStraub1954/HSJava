@@ -67,6 +67,11 @@ public class Controls
 		frame.setVisible( state );
 	}
 	
+	public boolean isShowing()
+	{
+	    return frame.isShowing();
+	}
+	
 	public void addControlListener( ControlListener listener )
 	{
 		controlListeners.add( listener );
@@ -112,7 +117,7 @@ public class Controls
     
     public void setGenerationsPerSecond( String max )
     {
-        maxGPSText.setText( max );
+        gpsText.setText( max );
     }
     
     public double getGenerationsPerSecond()
