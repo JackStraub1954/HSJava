@@ -1,5 +1,8 @@
 package edu.uweo.javaintro.game_of_life;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -9,8 +12,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.AbstractButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class Main
@@ -41,7 +47,8 @@ public class Main
 		board.addActionListener( this );
 		SwingUtilities.invokeLater( board );
 		
-		controls.addControlListener( this );
+		String[]        labels      = { "AAA", "BBB", "CCC" };
+        controls.setUserButtons( labels );		controls.addControlListener( this );
 		controls.start();
 	}
 	

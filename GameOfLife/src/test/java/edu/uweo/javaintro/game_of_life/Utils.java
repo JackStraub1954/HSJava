@@ -5,8 +5,10 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.util.function.Predicate;
 
+import javax.swing.AbstractButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class Utils
 {
@@ -72,6 +74,34 @@ public class Utils
         catch ( InterruptedException exc )
         {
             // don't care
+        }
+    }
+    
+    public static void dumpFrames()
+    {
+        Frame[] frames  = Frame.getFrames();
+        for ( Frame frame : frames )
+        {
+            System.out.println( frame.getClass().getSimpleName() );
+            if ( frame instanceof JFrame )
+                dumpPane( ((JFrame)frame).getContentPane(), 2 );
+        }
+    }
+    
+    private static void dumpPane( Container pane, int indent )
+    {
+        String      spaces  = "                              ";
+        Component[] children    = pane.getComponents();
+        for ( Component child : children )
+        {
+            StringBuilder bldr    = new StringBuilder();
+            bldr.append( spaces.substring( 0, indent ) );
+            bldr.append( child.getClass().getSimpleName() ).append( " " );
+            if ( child instanceof AbstractButton )
+                bldr.append( ((AbstractButton)child).getText() );
+            System.out.println( bldr );
+            if  ( child instanceof Container )
+                dumpPane( (Container)child, indent + 2 );
         }
     }
     

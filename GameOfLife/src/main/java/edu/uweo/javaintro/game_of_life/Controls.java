@@ -51,7 +51,10 @@ public class Controls
     private final JCheckBox    interactive = new JCheckBox( INTERACTIVE_LABEL );
 	private final JSlider      slider      = new JSlider();
 	private final JTextField   maxGPSText  = new JTextField( "5", 3 );
-    private final MainPanel    mainPanel   = new MainPanel();
+	
+	// The main panel can't be created during construction, so
+	// it can't be final. The main panel is created in the run method.
+    private MainPanel    mainPanel   = new MainPanel();
 	
 	private final List<ControlListener>	controlListeners	= new ArrayList<>();
 	
@@ -93,6 +96,7 @@ public class Controls
 			
 	public void run()
 	{
+	    mainPanel = new MainPanel();
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setContentPane( mainPanel );
 		frame.pack();
@@ -152,18 +156,6 @@ public class Controls
         ComponentList   list    = getComponentList( text );
         for ( Component comp : list )
             comp.setEnabled( activate );
-//        if ( text.equals( INTERACTIVE_LABEL ) )
-//            slider.setEnabled( false );
-//        else if ( text.equals( GPS_LABEL))
-//            gpsText.setEnabled( false );
-//        else if ( text.equals( MAX_GPS_LABEL))
-//            maxGPSText.setEnabled( false );
-//        else
-//        {
-//            ButtonList  buttons = new ButtonList( frame, text );
-//            for ( AbstractButton button : buttons )
-//                button.setEnabled( activate );
-//        }
     }
     
     public void toggleEnabled( String text )
@@ -174,20 +166,14 @@ public class Controls
             boolean activate    = !comp.isEnabled();
             comp.setEnabled( activate );
         }
-//        ButtonList  buttons = new ButtonList( frame, text );
-//        for ( AbstractButton button : buttons )
-//        {
-//            boolean activate    = button.isEnabled();
-//            button.setEnabled( !activate );
-//        }
     }
     
     public boolean isEnabled( String text )
     {
-        boolean     rval    = false;
-        ButtonList  buttons = new ButtonList( frame, text );
-        if ( buttons.size() == 0 )
-            rval = buttons.get( 0 ).isEnabled();
+        boolean         rval    = false;
+        ComponentList   comps   = getComponentList( text );
+        if ( comps.size() > 0 )
+            rval = comps.get( 0 ).isEnabled();
         return rval;
     }
     
@@ -201,6 +187,12 @@ public class Controls
     {
         double  rval    = slider.getValue() / 100.0;
         return rval;
+    }
+    
+    public void dispose()
+    {
+        frame.setContentPane( new JPanel() );
+        frame.dispose();
     }
     
     private ComponentList getComponentList( String text )
@@ -223,7 +215,8 @@ public class Controls
         return list;
     }
 	
-	private class MainPanel extends JPanel
+	@SuppressWarnings("serial")
+    private class MainPanel extends JPanel
 		implements ActionListener, ChangeListener
 	{
 		public MainPanel()
@@ -232,32 +225,17 @@ public class Controls
 			add( new WestPanel(), BorderLayout.WEST );
 			add( new CenterPanel(), BorderLayout.CENTER );
 			add( new SouthPanel(), BorderLayout.SOUTH );
-			dump( this );
-		}
-		
-		private void dump( JPanel panel )
-		{
-		    Component[]   children    = panel.getComponents();
-		    for ( Component child : children )
-		    {
-		        StringBuilder bldr    = new StringBuilder();
-		        bldr.append( child.getClass().getSimpleName() ).append( " " );
-		        if ( child instanceof AbstractButton )
-		            bldr.append( ((AbstractButton)child).getText() );
-		        System.out.println( bldr );
-		        if  ( child instanceof JPanel )
-		            dump( (JPanel)child );
-		    }
 		}
 		
 		public void actionPerformed( ActionEvent evt )
 		{
 		    Object        src     = evt.getSource();
-		    if ( !(src instanceof AbstractButton ) )
+		    if ( !(src instanceof AbstractButton) )
 		        throw new RuntimeException( "Invalid source: " + src );
 		    AbstractButton button = (AbstractButton)src;
 		    String        label   = button.getText();
-		    ControlEvent  event   = new ControlEvent( evt.getSource(), label, Controls.this );
+		    ControlEvent  event   = 
+	            new ControlEvent( evt.getSource(), label, Controls.this );
 			for ( ControlListener listener : controlListeners )
 				listener.controlActivated( event );
 		}
@@ -273,7 +251,8 @@ public class Controls
         }
 	}
 	
-	private class WestPanel extends JPanel
+	@SuppressWarnings("serial")
+    private class WestPanel extends JPanel
 	{
 	    public WestPanel()
 	    {
@@ -304,7 +283,8 @@ public class Controls
 	    }
 	}
 	
-	private class CenterPanel extends JPanel
+	@SuppressWarnings("serial")
+    private class CenterPanel extends JPanel
 	{
 	    public CenterPanel()
 	    {
@@ -337,7 +317,8 @@ public class Controls
 	    }
 	}
 	
-	private class SouthPanel extends JPanel
+	@SuppressWarnings("serial")
+    private class SouthPanel extends JPanel
 	{
 	    public SouthPanel()
 	    {

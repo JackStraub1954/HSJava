@@ -51,6 +51,7 @@ public class ControlsTest
     @After
     public void tearDown()
     {
+        controls.dispose();
         controls = null;
 //        Utils.pause( 1000 );
     }
@@ -110,7 +111,7 @@ public class ControlsTest
         assertTrue( controls.isShowing() );
     }
 
-//    @Test
+    @Test
     public void testAddRemoveControlListener()
     {
         startControls();
@@ -198,7 +199,6 @@ public class ControlsTest
         for ( String label : allLabels )
         {
             Predicate<Component>    pred    = new ButtonFinder( label );
-//            System.out.println( label );
             testSetIsEnabled( pred, label );
         }
         
@@ -220,10 +220,13 @@ public class ControlsTest
         Component   comp    = Utils.findComponent( pred );
         assertNotNull( comp );
         controls.setEnabled( true, label );
+        assertTrue( controls.isEnabled( label ) );
         assertTrue( comp.isEnabled() );
         controls.setEnabled( false, label );
+        assertFalse( controls.isEnabled( label ) );
         assertFalse( comp.isEnabled() );
         controls.setEnabled( true, label );
+        assertTrue( controls.isEnabled( label ) );
         assertTrue( comp.isEnabled() );
     }
 
@@ -253,6 +256,25 @@ public class ControlsTest
         testToggleEnabled( pred, label );
     }
     
+    @Test
+    public void testSliderAdjusted()
+    {
+        startControls();
+        Component   comp    = Utils.findComponent( c -> c instanceof JSlider );
+        assertNotNull( comp );
+        assertTrue( comp instanceof JSlider );
+        JSlider slider  = (JSlider)comp;
+        
+        double          expDValue   = .75;
+        int             expIValue   = (int)(expDValue * 100);
+        EventListener   listener    = new EventListener( "" );
+        controls.addControlListener( listener );
+        controls.setSliderValue( expDValue );
+        assertTrue( listener.isAdjusted() );
+        assertEquals( expDValue, controls.getSliderValue(), .001 );
+        assertEquals( expIValue, slider.getValue() );
+    }
+    
     private void testToggleEnabled( Predicate<Component> pred, String label )
     {
         Component   comp    = Utils.findComponent( pred );
@@ -279,6 +301,16 @@ public class ControlsTest
         assertEquals( val, controls.getSliderValue(), .001 );
     }
     
+    /**
+     * Get test coverage for "component not found" in isEnabled()
+     */
+    @Test
+    public void testIsEnabledFailure()
+    {
+        startControls();
+        assertFalse( controls.isEnabled( "dummy" ) );
+    }
+    
     private void startControls()
     {
         controls.start();
@@ -290,6 +322,7 @@ public class ControlsTest
     {
         private String  expectedLabel   = null;
         private boolean clicked         = false;
+        private boolean adjusted        = false;
         private boolean result          = false;
         
         public EventListener( String label )
@@ -299,8 +332,14 @@ public class ControlsTest
         
         public void reset()
         {
+            adjusted = false;
             clicked = false;
             result = false;
+        }
+        
+        public boolean isAdjusted()
+        {
+            return adjusted;
         }
         
         public boolean isClicked()
@@ -326,35 +365,19 @@ public class ControlsTest
         }
 
         @Override
-        public void sliderAdjusted(ControlEvent evt)
+        public void sliderAdjusted( ControlEvent evt )
         {
-            // TODO Auto-generated method stub
-            
+            adjusted = true;
         }
-        
     }
 
     private class ButtonFinder implements Predicate<Component>
     {
         private String text = "";
         
-        public ButtonFinder()
-        {
-        }
-        
         public ButtonFinder( String text )
         {
             this.text = text;
-        }
-        
-        public void setText( String text )
-        {
-            this.text = text;
-        }
-        
-        public String getText()
-        {
-            return text;
         }
         
         public boolean test( Component comp )
