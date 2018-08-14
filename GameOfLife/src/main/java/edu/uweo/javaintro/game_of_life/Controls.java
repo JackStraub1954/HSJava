@@ -2,12 +2,12 @@ package edu.uweo.javaintro.game_of_life;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -40,6 +40,9 @@ public class Controls
         "<html><body>Generations<br>/Second</body></html>";
     public static final String MAX_GPS_LABEL       = 
         "<html><body>Max Generations<br>/Second</body></html>";
+    
+    public static final String  GPS_TEXT_NAME       = "GPSTextBox";
+    public static final String  MAX_GPS_TEXT_NAME   = "MaxGPSTextBox";
 	
 	private String[]   userButtons     = { "", "", "" };
 	
@@ -51,6 +54,12 @@ public class Controls
     private final MainPanel    mainPanel   = new MainPanel();
 	
 	private final List<ControlListener>	controlListeners	= new ArrayList<>();
+	
+	public Controls()
+	{
+        gpsText.setName( GPS_TEXT_NAME );
+        maxGPSText.setName( MAX_GPS_TEXT_NAME );
+	}
 	
 	public void setUserButtons( String[] buttons )
 	{
@@ -85,7 +94,7 @@ public class Controls
 	public void run()
 	{
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		frame.setContentPane( new MainPanel() );
+		frame.setContentPane( mainPanel );
 		frame.pack();
 		frame.setVisible( true );
 	}
@@ -140,19 +149,37 @@ public class Controls
     
     public void setEnabled( boolean activate, String text )
     {
-        ButtonList  buttons = new ButtonList( frame, text );
-        for ( AbstractButton button : buttons )
-            button.setEnabled( activate );
+        ComponentList   list    = getComponentList( text );
+        for ( Component comp : list )
+            comp.setEnabled( activate );
+//        if ( text.equals( INTERACTIVE_LABEL ) )
+//            slider.setEnabled( false );
+//        else if ( text.equals( GPS_LABEL))
+//            gpsText.setEnabled( false );
+//        else if ( text.equals( MAX_GPS_LABEL))
+//            maxGPSText.setEnabled( false );
+//        else
+//        {
+//            ButtonList  buttons = new ButtonList( frame, text );
+//            for ( AbstractButton button : buttons )
+//                button.setEnabled( activate );
+//        }
     }
     
     public void toggleEnabled( String text )
     {
-        ButtonList  buttons = new ButtonList( frame, text );
-        for ( AbstractButton button : buttons )
+        ComponentList   list    = getComponentList( text );
+        for ( Component comp : list )
         {
-            boolean activate    = !button.isEnabled();
-            button.setEnabled( !activate );
+            boolean activate    = !comp.isEnabled();
+            comp.setEnabled( activate );
         }
+//        ButtonList  buttons = new ButtonList( frame, text );
+//        for ( AbstractButton button : buttons )
+//        {
+//            boolean activate    = button.isEnabled();
+//            button.setEnabled( !activate );
+//        }
     }
     
     public boolean isEnabled( String text )
@@ -164,10 +191,36 @@ public class Controls
         return rval;
     }
     
+    public void setSliderValue( double dVal )
+    {
+        int iVal    = (int)( dVal * 100 + .5 );
+        slider.setValue( iVal );
+    }
+    
     public double getSliderValue()
     {
         double  rval    = slider.getValue() / 100.0;
         return rval;
+    }
+    
+    private ComponentList getComponentList( String text )
+    {
+        ComponentList   list    = null;
+        if ( text.equals( INTERACTIVE_LABEL ) )
+            list = new ComponentList( slider );
+        else if ( text.equals( GPS_LABEL))
+            list = new ComponentList( gpsText ); 
+        else if ( text.equals( MAX_GPS_LABEL))
+            list = new ComponentList( maxGPSText );
+        else
+        {
+            Predicate<Component>    pred    = 
+                c -> c instanceof AbstractButton 
+                     && ((AbstractButton)c).getText().equals( text );
+            list = new ComponentList( frame, pred );
+        }
+        
+        return list;
     }
 	
 	private class MainPanel extends JPanel
@@ -179,6 +232,22 @@ public class Controls
 			add( new WestPanel(), BorderLayout.WEST );
 			add( new CenterPanel(), BorderLayout.CENTER );
 			add( new SouthPanel(), BorderLayout.SOUTH );
+			dump( this );
+		}
+		
+		private void dump( JPanel panel )
+		{
+		    Component[]   children    = panel.getComponents();
+		    for ( Component child : children )
+		    {
+		        StringBuilder bldr    = new StringBuilder();
+		        bldr.append( child.getClass().getSimpleName() ).append( " " );
+		        if ( child instanceof AbstractButton )
+		            bldr.append( ((AbstractButton)child).getText() );
+		        System.out.println( bldr );
+		        if  ( child instanceof JPanel )
+		            dump( (JPanel)child );
+		    }
 		}
 		
 		public void actionPerformed( ActionEvent evt )

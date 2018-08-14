@@ -105,6 +105,8 @@ public class Utils
         for ( int inx = 0 ; inx < len && comp == null ; ++inx )
         {
             Component   temp    = components[inx];
+//            if ( temp == null )
+//                System.out.println( "null" );
             if ( pred.test( temp ) )
                 comp = temp;
             else if ( temp instanceof Container )
