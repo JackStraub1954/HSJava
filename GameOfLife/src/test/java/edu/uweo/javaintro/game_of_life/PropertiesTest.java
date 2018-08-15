@@ -20,7 +20,7 @@ public class PropertiesTest
         new Tester( GRID_LINE_WIDTH, 1, 2 ),
         new Tester( GRID_SIDE, 500, 600 ),
         new Tester( MIN_CELL_SIDE, 10, 20 ),
-        new Tester( GRID_CELL_COLOR, Color.BLACK, Color.YELLOW ),
+        new Tester( CELL_COLOR, Color.BLACK, Color.YELLOW ),
     };
     
     @Test

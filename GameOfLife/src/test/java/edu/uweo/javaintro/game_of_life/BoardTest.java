@@ -6,11 +6,10 @@ import org.junit.Test;
 
 public class BoardTest
 {
-
     @Test
     public void testBoard()
     {
-        fail("Not yet implemented");
+        Board   board   = new Board();
     }
 
     @Test

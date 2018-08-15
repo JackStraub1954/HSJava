@@ -11,9 +11,9 @@ public enum Properties
     BORDER_WIDTH( 10 ),
     GRID_LINE_WIDTH( 1 ),
     GRID_SIDE( 500 ),
-    CELL_SIDE( 10 ),
     MIN_CELL_SIDE( 10 ),
-    GRID_CELL_COLOR( Color.BLACK );
+    BACKGROUND_COLOR( Color.WHITE ),
+    CELL_COLOR( Color.BLACK );
     
     private final Object    defValue;
     private Object          currValue;
