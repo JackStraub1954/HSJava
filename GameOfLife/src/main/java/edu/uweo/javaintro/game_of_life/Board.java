@@ -30,7 +30,7 @@ public class Board
 	private boolean		useBorder	= true;
 	private Color		gridColor	= new Color( .8f, .8f, .8f );
 	private Color		borderColor	= Color.ORANGE;
-	private int			cellSize	= 0;
+	private int			cellSide	= 0;
 	
 	/**
 	 * Determines the "width" of the border drawn around the
@@ -64,8 +64,8 @@ public class Board
 	
 	public Board( int gridSide )
 	{
-	    this.gridSide = gridSide;
-	    allCells       = new boolean[gridSide][gridSide];
+	    Properties.GRID_SIDE.setProperty( gridSide );
+	    initState();
 	}
 	
 	public void run()
@@ -145,6 +145,18 @@ public class Board
 	    for ( int inx = 0 ; inx < allCells.length ; ++inx )
 	        for ( int jnx = 0 ; jnx < allCells[inx].length ; ++jnx )
 	            allCells[inx][jnx] = false;
+	}
+	
+	private void initState()
+	{
+        useGrid = (boolean)Properties.USE_GRID.getProperty();
+        useBorder = (boolean)Properties.USE_BORDER.getProperty();
+        gridColor = (Color)Properties.GRID_COLOR.getProperty();
+        borderColor = (Color)Properties.BORDER_COLOR.getProperty();
+        cellSide = (int)Properties.CELL_SIDE.getProperty();
+        borderWidth = (int)Properties.BORDER_WIDTH.getProperty();
+        gridLineWidth = (int)Properties.GRID_LINE_WIDTH.getProperty();
+        gridSide = (int)Properties.GRID_SIDE.getProperty();
 	}
 	
 	private void validateState( boolean[][] state )
@@ -227,14 +239,14 @@ public class Board
 			width = getWidth();
 			height = getHeight();
 			int	base		= width < height ? width : height;
-            cellSize = base / gridSide;
-			if ( cellSize < minCellSize )
+            cellSide = base / gridSide;
+			if ( cellSide < minCellSize )
 			{
-				cellSize = minCellSize;
+				cellSide = minCellSize;
 			}
 			
 			paintGrid( gtx );
-			int  size    = gridSide * cellSize;
+			int  size    = gridSide * cellSide;
 			if ( useBorder )
 			    size += 2 * borderWidth;
 			setPreferredSize( new Dimension( size, size ) );
@@ -260,7 +272,7 @@ public class Board
 			    yco = saveYco;
 				for ( int jnx = 0 ; jnx < gridSide ; ++jnx )
 				{
-					rect.setRect( xco, yco, cellSize, cellSize );
+					rect.setRect( xco, yco, cellSide, cellSide );
 					if ( useGrid )
 					{
 						gtx.setColor( gridColor);
@@ -271,9 +283,9 @@ public class Board
 						gtx.setColor( gridCellColor );
 						gtx.fill( rect );
 					}
-					yco += cellSize;
+					yco += cellSide;
 				}
-                xco += cellSize;
+                xco += cellSide;
 			}
 		}
 	}
@@ -292,8 +304,8 @@ public class Board
 			    yco -= borderWidth;
 			}
 			
-            int     row         = xco / cellSize;
-            int     col         = yco / cellSize;
+            int     row         = xco / cellSide;
+            int     col         = yco / cellSide;
 			if ( row < allCells.length && col < allCells[row].length )
 			{
 				boolean	alive		= allCells[row][col];
