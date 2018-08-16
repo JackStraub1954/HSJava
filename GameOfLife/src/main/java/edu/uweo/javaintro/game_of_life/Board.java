@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -156,7 +157,19 @@ public class Board implements Runnable
     
     public void start()
     {
-        SwingUtilities.invokeLater( this );
+        try
+        {
+            SwingUtilities.invokeAndWait( this );
+        }
+        catch ( InvocationTargetException exc )
+        {
+            exc.printStackTrace();
+            throw new RuntimeException( "Board.start failure", exc );
+        }
+        catch ( InterruptedException exc )
+        {
+            exc.printStackTrace();
+        }
     }
 
     private void initState()
