@@ -1,4 +1,4 @@
-package edu.uweo.javaintro.game_of_life;
+package app;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +12,13 @@ import java.io.ObjectOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import edu.uweo.javaintro.game_of_life.Board;
+import edu.uweo.javaintro.game_of_life.Cell;
+import edu.uweo.javaintro.game_of_life.ControlEvent;
+import edu.uweo.javaintro.game_of_life.ControlListener;
+import edu.uweo.javaintro.game_of_life.Controls;
+import edu.uweo.javaintro.game_of_life.Neighborhood;
 
 public class Main implements ActionListener, ControlListener
 {
@@ -57,27 +64,28 @@ public class Main implements ActionListener, ControlListener
     public void controlActivated(ControlEvent evt)
     {
         String text = evt.getLabel();
-        switch (text)
+        switch ( text )
         {
-        case "Run":
+        case Controls.RUN_LABEL:
             doRun();
             break;
-        case "Step":
+        case Controls.STEP_LABEL:
             doStep();
             break;
-        case "Save":
+        case Controls.SAVE_LABEL:
             doSave();
             break;
-        case "Open":
+        case Controls.OPEN_LABEL:
             doOpen();
             break;
-        case "Clear":
+        case Controls.CLEAR_LABEL:
             doClear();
             break;
-        case "Exit":
+        case Controls.EXIT_LABEL:
             doExit();
             break;
         default:
+            // new Throwable().printStackTrace();
             System.err.println("eh?");
             break;
         }
@@ -144,7 +152,8 @@ public class Main implements ActionListener, ControlListener
                 boolean[][] cells = (boolean[][]) oStream.readObject();
                 board.setCells(cells);
                 board.refresh();
-            } catch (IOException | ClassNotFoundException | ClassCastException exc)
+            } catch (IOException | ClassNotFoundException
+                | ClassCastException exc)
             {
                 JOptionPane.showMessageDialog(null, "Open failure");
                 exc.printStackTrace();
@@ -158,10 +167,10 @@ public class Main implements ActionListener, ControlListener
     }
 
     /*
-     * Rules: 1. Off-board cells are always dead. 2. A live cell with fewer than two
-     * live neighbors dies. 3. A live cell with two or three live neighbors remains
-     * alive. 4. A live cell with more than three live neighbors dies. 5. A dead
-     * cell with exactly three live neighbors becomes alive.
+     * Rules: 1. Off-board cells are always dead. 2. A live cell with fewer than
+     * two live neighbors dies. 3. A live cell with two or three live neighbors
+     * remains alive. 4. A live cell with more than three live neighbors dies.
+     * 5. A dead cell with exactly three live neighbors becomes alive.
      */
     private void nextState(boolean[][] cells)
     {

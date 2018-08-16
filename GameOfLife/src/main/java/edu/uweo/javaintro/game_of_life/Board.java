@@ -19,10 +19,13 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 
 public class Board implements Runnable
 {
+    public static final String CANVAS_NAME = "GameOfLifeCanvas";
+    
     private JFrame frame = new JFrame("Game of Life");
 
     private boolean useGrid;
@@ -30,6 +33,7 @@ public class Board implements Runnable
     private Color   gridColor;
     private Color   borderColor;
     private int     cellSide;
+    private Canvas  canvas;
 
     /**
      * Determines the "width" of the border drawn around the outside of the board.
@@ -67,8 +71,10 @@ public class Board implements Runnable
 
     public void run()
     {
+        canvas = new Canvas();
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JScrollPane pane = new JScrollPane(new Canvas());
+        JScrollPane pane = new JScrollPane( canvas );
         frame.setContentPane(pane);
         frame.pack();
         frame.setVisible(true);
@@ -124,6 +130,11 @@ public class Board implements Runnable
                 allCells[row][col] = state[row][col];
         }
     }
+    
+    public int getCellSide()
+    {
+        return cellSide;
+    }
 
     public void refresh()
     {
@@ -141,6 +152,11 @@ public class Board implements Runnable
         for (int inx = 0; inx < allCells.length; ++inx)
             for (int jnx = 0; jnx < allCells[inx].length; ++jnx)
                 allCells[inx][jnx] = false;
+    }
+    
+    public void start()
+    {
+        SwingUtilities.invokeLater( this );
     }
 
     private void initState()
@@ -197,6 +213,8 @@ public class Board implements Runnable
 
         public Canvas()
         {
+            setName( CANVAS_NAME );
+            
             int size = (gridSide + 1) * minCellSide;
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int width = screenSize.width;
