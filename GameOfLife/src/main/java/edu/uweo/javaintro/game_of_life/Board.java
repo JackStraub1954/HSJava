@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -119,9 +120,9 @@ public class Board implements Runnable
             setCell(cell);
     }
 
-    public void setCells(boolean[][] state) throws IllegalArgumentException
+    public void setCells( boolean[][] state ) throws IllegalArgumentException
     {
-        validateState(state);
+        validateState( state );
 
         int rowLimit = allCells.length;
         for (int row = 0; row < rowLimit; ++row)
@@ -170,6 +171,7 @@ public class Board implements Runnable
         catch ( InterruptedException exc )
         {
             exc.printStackTrace();
+            throw new RuntimeException( "Board.start failure", exc );
         }
     }
 
@@ -188,7 +190,19 @@ public class Board implements Runnable
         allCells        = new boolean[gridSide][gridSide];
     }
 
-    private void validateState(boolean[][] state) throws IllegalArgumentException
+    /**
+     * Verifies that the shape of a 2-D boolean array is suitable for initializing
+     * the 2-D boolean array of cells (<em>allCells</em>). Most likely, 
+     * the input array was passed by a user for the purpose of setting the board
+     * to a predetermined state.
+     * 
+     * @param state     The state to validate.
+     *  
+     * @throws IllegalArgumentException
+     * 
+     * @see setCells( boolean[][] )
+     */
+    private void validateState( boolean[][] state ) throws IllegalArgumentException
     {
         final String errFmt = "Invalid array dimensions: [%d][%d]; expected: [%d][%d]";
 
@@ -202,7 +216,7 @@ public class Board implements Runnable
             err = true;
         else
         {
-            for (int row = 0; row < expRows && !err; ++row)
+            for ( int row = 0 ; row < expRows && !err ; ++row )
             {
                 expCols = allCells[row].length;
                 actCols = state[row].length;
@@ -244,7 +258,14 @@ public class Board implements Runnable
 
             if (useBorder && borderColor != null)
             {
-                MatteBorder border = new MatteBorder(borderWidth, borderWidth, borderWidth, borderWidth, borderColor);
+                MatteBorder border = 
+                    new MatteBorder( 
+                        borderWidth, 
+                        borderWidth, 
+                        borderWidth, 
+                        borderWidth, 
+                        borderColor
+                    );
                 setBorder(border);
             }
         }

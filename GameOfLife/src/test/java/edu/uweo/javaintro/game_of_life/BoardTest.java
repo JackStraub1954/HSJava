@@ -200,6 +200,73 @@ public class BoardTest
     }
     
     @Test
+    public void noBorderTest1()
+    {
+        Properties.USE_BORDER.setProperty( false );
+        System.out.println( Properties.USE_BORDER.getProperty() );
+
+        board = new Board();
+        
+        board.addActionListener( e ->
+            { Cell cell = (Cell)e.getSource();
+              cell.setAlive( true );
+              board.setCell( cell );
+            }
+        );
+        board.start();
+        
+        Point   point   = getCellPosition( board, new Cell( 0, 0 ) );
+        click( point );
+        Utils.pause( 125 );
+        boolean[][] state   = board.getCells();
+        assertTrue( state[0][0] );
+    }
+    
+    @Test
+    public void noBorderTest3()
+    {
+        Properties.BORDER_WIDTH.setProperty( 0 );
+
+        board = new Board();
+        
+        board.addActionListener( e ->
+            { Cell cell = (Cell)e.getSource();
+              cell.setAlive( true );
+              board.setCell( cell );
+            }
+        );
+        board.start();
+        
+        Point   point   = getCellPosition( board, new Cell( 0, 0 ) );
+        click( point );
+        Utils.pause( 125 );
+        boolean[][] state   = board.getCells();
+        assertTrue( state[0][0] );
+    }
+    
+    @Test
+    public void noBorderTest2()
+    {
+        Properties.BORDER_COLOR.setProperty( null );
+
+        board = new Board();
+        
+        board.addActionListener( e ->
+            { Cell cell = (Cell)e.getSource();
+              cell.setAlive( true );
+              board.setCell( cell );
+            }
+        );
+        board.start();
+        
+        Point   point   = getCellPosition( board, new Cell( 0, 0 ) );
+        click( point );
+        Utils.pause( 125 );
+        boolean[][] state   = board.getCells();
+        assertTrue( state[0][0] );
+    }
+    
+    @Test
     public void clearTest()
     {
         board.start();
@@ -247,6 +314,22 @@ public class BoardTest
     {
         int inx = board.getCells().length;
         board.setCell( new Cell( 0, -1 ) );
+    }
+    
+    @Test ( expected = IllegalArgumentException.class )
+    public void testSetCellsBooleanArrayGoWrong1()
+    {
+        int         len     = (Integer)Properties.GRID_SIDE.getProperty();
+        boolean[][] arr     = new boolean[len + 1][len];
+        board.setCells( arr );
+    }
+    
+    @Test ( expected = IllegalArgumentException.class )
+    public void testSetCellsBooleanArrayGoWrong2()
+    {
+        int         len     = (Integer)Properties.GRID_SIDE.getProperty();
+        boolean[][] arr     = new boolean[len][len + 1];
+        board.setCells( arr );
     }
 
     @Test
@@ -400,7 +483,7 @@ public class BoardTest
     private Point getCellOrigin( Board board )
     {
         Component   canvas  = getCanvas();
-        boolean     useGrid = (Boolean)Properties.USE_GRID.getProperty();
+        boolean     useGrid = (Boolean)Properties.USE_BORDER.getProperty();
         Color       color   = (Color)Properties.BORDER_COLOR.getProperty();
         Point       nEast   = canvas.getLocationOnScreen();
 

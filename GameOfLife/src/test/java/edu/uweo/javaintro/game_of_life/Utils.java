@@ -114,10 +114,10 @@ public class Utils
         for ( int inx = 0 ; inx < len && comp == null ; ++inx )
         {
             Frame   frame   = frames[inx];
-//            System.out.println( inx + ": " + frame );
-            if ( frame instanceof JFrame )
+            // If Frame is not displayable, don't search it. It has
+            // most likely been disposed.
+            if ( frame instanceof JFrame && frame.isDisplayable() )
             {
-//                System.out.println( "    " + frame.isShowing());
                 comp = findComponent( frames[inx], pred );
             }
         }
