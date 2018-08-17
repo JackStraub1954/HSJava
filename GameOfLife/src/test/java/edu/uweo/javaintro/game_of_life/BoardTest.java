@@ -2,20 +2,24 @@ package edu.uweo.javaintro.game_of_life;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Robot;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.util.function.Predicate;
 
 import javax.swing.JPanel;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,6 +44,13 @@ public class BoardTest
             exc.printStackTrace();
             fail( exc.getMessage() );
         }
+    }
+    
+    @After
+    public void tearDown()
+    {
+        board.close();
+        Utils.pause( 500 );
     }
     
     @Test
@@ -101,15 +112,25 @@ public class BoardTest
     }
 
     @Test
-    public void testAddActionListener()
+    public void testAddRemoveActionListener()
     {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testRemoveActionListener()
-    {
-        fail("Not yet implemented");
+        board.start();
+        
+        int     row     = 10;
+        int     col     = 20;
+        Cell    cell    = new Cell( row, col );
+        Point   cellPos = getCellPosition( board, cell );
+        
+        ClickMonitor    clicker = new ClickMonitor();
+        board.addActionListener( clicker );
+        click( cellPos );
+        Utils.pause( 125 );
+        assertTrue( clicker.clicked );
+        
+        clicker.clicked = false;
+        board.removeActionListener( clicker );
+        click( cellPos );
+        assertFalse( clicker.clicked );
     }
 
     @Test
@@ -141,7 +162,6 @@ public class BoardTest
         for ( int inx = 0 ; inx < gridSide ; ++inx )
             for ( int jnx = 0 ; jnx < gridSide ; ++jnx )
                 assertEquals( exp[inx][jnx], act[inx][jnx] );
-//        Utils.pause();
     }
 
     @Test
@@ -161,25 +181,118 @@ public class BoardTest
     @Test
     public void testSetCell()
     {
-        fail("Not yet implemented");
+        board.start();
+        
+        int         row     = 5;
+        int         col     = 5;
+        
+        boolean[][] cells   = board.getCells();
+        assertFalse( cells[row][col] );
+        
+        Cell    cell    = new Cell( row, col, true );
+        board.setCell( cell );
+        cells   = board.getCells();
+        assertTrue( cells[row][col] );
+        
+        board.refresh();
+        Utils.pause( 250 );
+        validateImage( cells );
+    }
+    
+    @Test
+    public void clearTest()
+    {
+        board.start();
+        for ( int inx = 0 ; inx < 10 ; ++inx )
+            board.setCell( new Cell( inx, inx, true ) );
+        
+        board.refresh();
+        Utils.pause( 125 );
+        validateImage();
+        
+        board.clear();
+        board.refresh();
+        Utils.pause( 125 );
+        
+        boolean[][] cells   = board.getCells();
+        for ( int inx = 0 ; inx < cells.length ; ++inx )
+            for ( int jnx = 0 ; jnx < cells[inx].length ; ++jnx )
+                assertFalse( cells[inx][jnx] );
+        validateImage();
+    }
+    
+    @Test ( expected = IndexOutOfBoundsException.class )
+    public void testSetCellGoWrong1()
+    {
+        int inx = board.getCells().length;
+        board.setCell( new Cell( inx, 0 ) );
+    }
+    
+    @Test ( expected = IndexOutOfBoundsException.class )
+    public void testSetCellGoWrong2()
+    {
+        int inx = board.getCells().length;
+        board.setCell( new Cell( 0, inx) );
+    }
+    
+    @Test ( expected = IndexOutOfBoundsException.class )
+    public void testSetCellGoWrong3()
+    {
+        int inx = board.getCells().length;
+        board.setCell( new Cell( -1, 0 ) );
+    }
+    
+    @Test ( expected = IndexOutOfBoundsException.class )
+    public void testSetCellGoWrong4()
+    {
+        int inx = board.getCells().length;
+        board.setCell( new Cell( 0, -1 ) );
     }
 
     @Test
     public void testSetCellsCellArray()
     {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testSetCellsBooleanArrayArray()
-    {
-        fail("Not yet implemented");
+        int         start       = 10;
+        int         limit       = 10;
+        boolean[][] cellState   = board.getCells();
+        Cell[]      cells   = new Cell[limit];
+        for ( int inx = 0 ; inx < cells.length ; ++inx )
+        {
+            int cellInx = inx + start;
+            assertFalse( cellState[cellInx][cellInx] );
+            cells[inx] = new Cell( start + inx, start + inx, true );
+        }
+        
+        board.start();
+        board.setCells( cells );
+        board.refresh();
+        cellState = board.getCells();
+        for ( int inx = 0 ; inx < cells.length ; ++inx )
+        {
+            int cellInx = inx + start;
+            assertTrue( cellState[cellInx][cellInx] );
+        }
+        
+        Utils.pause( 125 );
+        this.validateImage( cellState );
     }
 
     @Test
     public void testRefresh()
     {
-        fail("Not yet implemented");
+        board.start();
+        
+        for ( int inx = 0 ; inx < 10 ; ++inx )
+            board.setCell( new Cell( inx, inx, true ) );
+        board.refresh();
+        Utils.pause( 125 );
+        validateImage();
+        
+        for ( int inx = 5 ; inx < 15 ; ++inx )
+            board.setCell( new Cell( inx + 5, inx, true ) );
+        board.refresh();
+        Utils.pause( 125 );
+        validateImage();
     }
 
     @Test
@@ -214,6 +327,11 @@ public class BoardTest
         assertNotNull( panel );
         
         return panel;
+    }
+    
+    private void validateImage()
+    {
+        validateImage( board.getCells() );
     }
     
     private void validateImage( boolean[][] cells )
@@ -301,5 +419,15 @@ public class BoardTest
         nEast.y += offset;
         
         return nEast;
+    }
+    
+    private class ClickMonitor implements ActionListener
+    {
+        public boolean clicked  = false;
+        
+        public void actionPerformed( ActionEvent evt )
+        {
+            clicked = true;
+        }
     }
 }

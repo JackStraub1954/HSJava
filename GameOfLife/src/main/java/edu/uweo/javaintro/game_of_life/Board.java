@@ -144,6 +144,7 @@ public class Board implements Runnable
 
     public void close()
     {
+        frame.setContentPane( new JPanel() );
         frame.setVisible(false);
         frame.dispose();
     }
