@@ -1,5 +1,67 @@
 package edu.uweo.javaintro.game_of_life;
 
+/**
+ * An instance of this class represents the neighborhood of a given
+ * cell in Conway's Game of Life. <em>Neighborhood</em> is defined as the
+ * cell and its eight peripheral neighbors. <br>
+ * 
+ * <table style = "margin-left: auto; margin-right: auto">
+ * <caption style = "caption-side: bottom; font-size: 80%;">The Neighborhood of a Cell</caption>
+ * <tr>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: gray;">&nbsp;</td>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: gray;">&nbsp;</td>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: gray;">&nbsp;</td>
+ * </tr>
+ * <tr>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: gray;">&nbsp;</td>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: lightGray;">&nbsp;</td>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: gray;">&nbsp;</td>
+ * </tr>
+ * <tr>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: gray;">&nbsp;</td>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: gray;">&nbsp;</td>
+ * <td style = "border: 2px solid black; width: 20px; height: 20px; background-color: gray;">&nbsp;</td>
+ * </tr>
+ * </table>
+ * 
+ * Individual neighbors are referred to as (clockwise, from upper left) 
+ * <em>northwest (NW), north (N), northeast (NE), east (E), southeast (SE), 
+ * south (S), southwest (SW) </em>and<em> west (W).</em> Life and death of a cell
+ * are determined by the original rules as specified by Conway:
+ * <ol>
+ * <li>Any live cell with fewer than two live neighbors dies, as if by under population.</li>
+ * <li>Any live cell with two or three live neighbors lives on to the next generation.</li>
+ * <li>Any live cell with more than three live neighbors dies, as if by overpopulation.</li>
+ * <li>Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.</li>
+ * </ol>
+ * In addition:
+ * <ol>
+ * <li>
+ * Each new generation of cells is computed simultaneously
+ * (also as specified by Conway).
+ * That is to say, if cells A and B are adjacent, 
+ * the new state of A is dependent on 
+ * the current state of cell B, and the new state of B is 
+ * is dependent on the current state of cell A.
+ * </li>
+ * <li>
+ * The size of the board is finite (contrary to Conway's original
+ * design).
+ * </li>
+ * <li>
+ * Any cell outside of the bounds of the board is considered dead.
+ * </li>
+ * <li>
+ * The state of the board is represented by a two-dimensional
+ * array of Boolean values; a cell with a state of <em>false</em>
+ * is considered dead, and a cell with a state of <em>true</em>
+ * is considered alive.
+ * </li>
+ * </ol>
+ * @see <a href=https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life>
+ *     <em>Conway's Game of Life,</em> on Wikipedia.
+ * </a>
+ */
 public class Neighborhood
 {
     private int         row;
@@ -7,16 +69,45 @@ public class Neighborhood
     private boolean[][] cells;
     private boolean[]   neighbors   = new boolean[8];
     
+    /**
+     * Instantiates a new neighborhood.
+     * 
+     * @see #reset(int, int, boolean[][])
+     */
     public Neighborhood()
     {
     }
 
+    /**
+     * Instantiates a neighborhood for a given cell.
+     *
+     * @param row   The row of the given cell.
+     * @param col   The column of the given cell.       
+     * @param cells Array specifying the state of every cell on the board.
+     * 
+     * @throws IndexOutOfBoundsException if the given
+     *         row/column pair is not on the board.
+     * 
+     * @see #reset(int, int, boolean[][])
+     */
     public Neighborhood( int row, int col, boolean[][] cells )
     {
         reset( row, col, cells );
     }
     
+    /**
+     * Changes this neighborhood to reflect the neighborhood
+     * of a different cell.
+     *
+     * @param row   The row of the new cell.
+     * @param col   The column of the new cell.
+     * @param cells Array specifying the state of every cell on the board.
+     * 
+     * @throws IndexOutOfBoundsException if the given
+     *         row/column pair is not on the board.
+     */
     public void reset( int row, int col, boolean[][] cells )
+        throws IndexOutOfBoundsException
     {
         this.cells = cells;
         this.row = row;
@@ -149,6 +240,11 @@ public class Neighborhood
         neighbors[7] = nWest;
     }
     
+    /**
+     * Gets the number of live neighbors in this neighborhood.
+     *
+     * @return the number of live neighbors in this neighborhood
+     */
     public int getLivingCellCount()
     {
         int count   = 0;
@@ -158,24 +254,47 @@ public class Neighborhood
         return count;
     }
 
+    /**
+     * Gets the row of the cell at the center
+     * of this neighborhood.
+     *
+     * @return the row of the cell at the center of this neighborhood.
+     */
     public int getRow()
     {
         return row;
     }
 
+    /**
+     * Gets the column of the cell at the center
+     * of this neighborhood..
+     *
+     * @return the column of the cell at the center of this neighborhood
+     */
     public int getCol()
     {
         return col;
     }
 
+    /**
+     * Gets the array representing the state of the whole board.
+     *
+     * @return the array representing the state of the whole board
+     */
     public boolean[][] getCells()
     {
         return cells;
     }
 
+    /**
+     * Gets an array representing the state
+     * of each of the eight neighbors of the cell at the center
+     * of this neighborhood.
+     *
+     * @return the neighbors
+     */
     public boolean[] getNeighbors()
     {
         return neighbors;
     }
-
 }

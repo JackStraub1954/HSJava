@@ -26,7 +26,6 @@ import javax.swing.event.ChangeListener;
 public class Controls
 	implements Runnable
 {
-    public static final String NEW_LINE            = System.lineSeparator();
 	public static final String RUN_LABEL           = "Run";
 	public static final String INTERACTIVE_LABEL   = "Interactive";
 	public static final String STOP_LABEL          = "Stop";
@@ -54,7 +53,7 @@ public class Controls
 	
 	// The main panel can't be created during construction, so
 	// it can't be final. The main panel is created in the run method.
-    private MainPanel    mainPanel   = new MainPanel();
+    private MainPanel    mainPanel;
 	
 	private final List<ControlListener>	controlListeners	= new ArrayList<>();
 	

@@ -4,19 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.util.function.Predicate;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.junit.After;
@@ -25,25 +23,14 @@ import org.junit.Test;
 
 public class BoardTest
 {
-    private Robot   robot;
+    private static final int    DEFAULT_PAUSE   = 500;
     private Board   board;
     
     @Before
     public void setUp()
     {
-        try
-        {
-            board = new Board();
-            
-            robot = new Robot();
-            robot.setAutoWaitForIdle( true );
-//            robot.setAutoDelay( 50 );
-        }
-        catch ( AWTException exc )
-        {
-            exc.printStackTrace();
-            fail( exc.getMessage() );
-        }
+        Properties.reset();
+        board = new Board();
     }
     
     @After
@@ -51,6 +38,7 @@ public class BoardTest
     {
         board.close();
         Utils.pause( 500 );
+//        Utils.waitForEventQueue();
     }
     
     @Test
@@ -71,11 +59,12 @@ public class BoardTest
         {
             Cell    cell    = new Cell( inx, inx, true );
             Point   point   = getCellPosition( board, cell );
-            click( point );
+            Utils.clickMouse( point );
             board.refresh();
         }
         
-        Utils.pause( 250 );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         boolean[][] cells   = board.getCells();
         
         // Is number of rows correct?
@@ -106,12 +95,6 @@ public class BoardTest
     }
 
     @Test
-    public void testRun()
-    {
-        //fail("Not yet implemented");
-    }
-
-    @Test
     public void testAddRemoveActionListener()
     {
         board.start();
@@ -123,13 +106,14 @@ public class BoardTest
         
         ClickMonitor    clicker = new ClickMonitor();
         board.addActionListener( clicker );
-        click( cellPos );
-        Utils.pause( 125 );
+        Utils.clickMouse( cellPos );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         assertTrue( clicker.clicked );
         
         clicker.clicked = false;
         board.removeActionListener( clicker );
-        click( cellPos );
+        Utils.clickMouse( cellPos );
         assertFalse( clicker.clicked );
     }
 
@@ -195,7 +179,8 @@ public class BoardTest
         assertTrue( cells[row][col] );
         
         board.refresh();
-        Utils.pause( 250 );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         validateImage( cells );
     }
     
@@ -216,8 +201,9 @@ public class BoardTest
         board.start();
         
         Point   point   = getCellPosition( board, new Cell( 0, 0 ) );
-        click( point );
-        Utils.pause( 125 );
+        Utils.clickMouse( point );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         boolean[][] state   = board.getCells();
         assertTrue( state[0][0] );
     }
@@ -238,8 +224,9 @@ public class BoardTest
         board.start();
         
         Point   point   = getCellPosition( board, new Cell( 0, 0 ) );
-        click( point );
-        Utils.pause( 125 );
+        Utils.clickMouse( point );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         boolean[][] state   = board.getCells();
         assertTrue( state[0][0] );
     }
@@ -258,10 +245,15 @@ public class BoardTest
             }
         );
         board.start();
+        Utils.waitForEventQueue();
         
+//        Utils.pause( DEFAULT_PAUSE );
         Point   point   = getCellPosition( board, new Cell( 0, 0 ) );
-        click( point );
-        Utils.pause( 125 );
+        Utils.clickMouse( point );
+        Utils.pause( DEFAULT_PAUSE );
+        board.refresh();
+//        Utils.waitForEventQueue();
+        Utils.pause( DEFAULT_PAUSE );
         boolean[][] state   = board.getCells();
         assertTrue( state[0][0] );
     }
@@ -274,12 +266,14 @@ public class BoardTest
             board.setCell( new Cell( inx, inx, true ) );
         
         board.refresh();
-        Utils.pause( 125 );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         validateImage();
         
         board.clear();
         board.refresh();
-        Utils.pause( 125 );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         
         boolean[][] cells   = board.getCells();
         for ( int inx = 0 ; inx < cells.length ; ++inx )
@@ -305,14 +299,12 @@ public class BoardTest
     @Test ( expected = IndexOutOfBoundsException.class )
     public void testSetCellGoWrong3()
     {
-        int inx = board.getCells().length;
         board.setCell( new Cell( -1, 0 ) );
     }
     
     @Test ( expected = IndexOutOfBoundsException.class )
     public void testSetCellGoWrong4()
     {
-        int inx = board.getCells().length;
         board.setCell( new Cell( 0, -1 ) );
     }
     
@@ -356,7 +348,8 @@ public class BoardTest
             assertTrue( cellState[cellInx][cellInx] );
         }
         
-        Utils.pause( 125 );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         this.validateImage( cellState );
     }
 
@@ -368,13 +361,14 @@ public class BoardTest
         for ( int inx = 0 ; inx < 10 ; ++inx )
             board.setCell( new Cell( inx, inx, true ) );
         board.refresh();
-        Utils.pause( 125 );
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
         validateImage();
         
         for ( int inx = 5 ; inx < 15 ; ++inx )
             board.setCell( new Cell( inx + 5, inx, true ) );
         board.refresh();
-        Utils.pause( 125 );
+        Utils.pause( DEFAULT_PAUSE );
         validateImage();
     }
 
@@ -399,6 +393,37 @@ public class BoardTest
                 else
                     assertFalse( cells[inx][jnx] );
             }
+    }
+    
+    @Test
+    public void testBackgroundNull()
+    {
+        Properties.BACKGROUND_COLOR.setProperty( null );
+        board.start();
+        Utils.pause( DEFAULT_PAUSE );
+//        Utils.waitForEventQueue();
+    }
+    
+    @Test
+    public void testResize()
+    {
+        board.start();
+        
+        JFrame  frame   = Utils.findBoardFrame();
+        assertNotNull( frame );
+        
+        int origWidth   = frame.getWidth();
+        int origHeight  = frame.getHeight();
+        int newWidth    = origWidth + 100;
+        int newHeight   = origHeight + 100;
+        System.out.printf( "%d,  %d, %d, %d %n", origWidth, origHeight,
+                newWidth, newHeight);
+        frame.setSize( new Dimension( newWidth, origHeight ) );
+        board.refresh();
+        Utils.pause( DEFAULT_PAUSE );
+        frame.setSize( new Dimension( origWidth, newHeight ) );
+        board.refresh();
+        Utils.pause( DEFAULT_PAUSE );
     }
     
     private JPanel getCanvas()
@@ -461,13 +486,6 @@ public class BoardTest
         canvas.paint( image.getGraphics() );
         
         return image;
-    }
-    
-    private void click( Point point )
-    {
-        robot.mouseMove( point.x, point.y );
-        robot.mousePress( InputEvent.BUTTON1_DOWN_MASK );
-        robot.mouseRelease( InputEvent.BUTTON1_DOWN_MASK );
     }
     
     // Returns the point at the center of a cell

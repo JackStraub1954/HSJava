@@ -274,18 +274,6 @@ public class ControlsTest
         assertEquals( expDValue, controls.getSliderValue(), .001 );
         assertEquals( expIValue, slider.getValue() );
     }
-    
-    private void testToggleEnabled( Predicate<Component> pred, String label )
-    {
-        Component   comp    = Utils.findComponent( pred );
-        assertNotNull( comp );
-        controls.setEnabled( true, label );
-        assertTrue( comp.isEnabled() );
-        controls.toggleEnabled( label );
-        assertFalse( comp.isEnabled() );
-        controls.toggleEnabled( label );
-        assertTrue( comp.isEnabled() );
-    }
 
     @Test
     public void testSetGetSliderValue()
@@ -309,6 +297,18 @@ public class ControlsTest
     {
         startControls();
         assertFalse( controls.isEnabled( "dummy" ) );
+    }
+    
+    private void testToggleEnabled( Predicate<Component> pred, String label )
+    {
+        Component   comp    = Utils.findComponent( pred );
+        assertNotNull( comp );
+        controls.setEnabled( true, label );
+        assertTrue( comp.isEnabled() );
+        controls.toggleEnabled( label );
+        assertFalse( comp.isEnabled() );
+        controls.toggleEnabled( label );
+        assertTrue( comp.isEnabled() );
     }
     
     private void startControls()

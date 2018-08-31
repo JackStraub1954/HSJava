@@ -1,14 +1,20 @@
 package edu.uweo.javaintro.game_of_life;
 
+import static org.junit.Assert.fail;
+
+import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.Frame;
+import java.awt.Point;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.util.function.Predicate;
 
 import javax.swing.AbstractButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class Utils
 {
@@ -77,6 +83,49 @@ public class Utils
         }
     }
     
+//    private static EventQueue   eventQueue;
+//    public static void pause( int millis )
+//    {
+//        Toolkit toolKit = Toolkit.getDefaultToolkit();
+//        try
+//        {
+//            do
+//            {
+//                EventQueue.invokeAndWait( () -> eventQueue = toolKit.getSystemEventQueue() );
+//            } while ( eventQueue.peekEvent() != null );
+//        }
+//        catch ( InvocationTargetException exc )
+//        {
+//            
+//        }
+//        catch ( InterruptedException exc )
+//        {
+//            // don't care
+//        }
+//    }
+    
+    private static Robot  robot;
+    static
+    {
+        try
+        {
+            robot = new Robot();
+            robot.setAutoWaitForIdle( true );
+//            robot.setAutoDelay( 50 );
+        }
+        catch ( AWTException exc )
+        {
+            exc.printStackTrace();
+            fail( exc.getMessage() );
+        }
+    }
+    public static void clickMouse( Point point )
+    {
+        robot.mouseMove( point.x, point.y );
+        robot.mousePress( InputEvent.BUTTON1_DOWN_MASK );
+        robot.mouseRelease( InputEvent.BUTTON1_DOWN_MASK );
+    }
+    
     public static void dumpFrames()
     {
         Frame[] frames  = Frame.getFrames();
@@ -85,6 +134,18 @@ public class Utils
             System.out.println( frame.getClass().getSimpleName() );
             if ( frame instanceof JFrame )
                 dumpPane( ((JFrame)frame).getContentPane(), 2 );
+        }
+    }
+    
+    public static void waitForEventQueue()
+    {
+        try
+        {
+            EventQueue.invokeAndWait( () -> {} );
+        }
+        catch ( Exception exc )
+        {
+            exc.printStackTrace();
         }
     }
     
@@ -103,6 +164,21 @@ public class Utils
             if  ( child instanceof Container )
                 dumpPane( (Container)child, indent + 2 );
         }
+    }
+    
+    public static JFrame findBoardFrame()
+    {
+        JFrame  frame   = null;
+        Frame[] frames  = Frame.getFrames();
+        
+        for ( int inx = 0 ; inx < frames.length && frame == null ; ++inx )
+        {
+            Frame   temp    = frames[inx];
+            if ( temp instanceof JFrame && temp.isVisible() )
+                frame = (JFrame)temp;
+        }
+        
+        return frame;
     }
     
     public static Component findComponent( Predicate<Component> pred )
@@ -128,15 +204,12 @@ public class Utils
     private static Component 
     findComponent( Container container, Predicate<Component> pred )
     {
-//        System.out.println( container );
         Component       comp        = null;
         Component[]     components  = container.getComponents();
         int len = components.length;
         for ( int inx = 0 ; inx < len && comp == null ; ++inx )
         {
             Component   temp    = components[inx];
-//            if ( temp == null )
-//                System.out.println( "null" );
             if ( pred.test( temp ) )
                 comp = temp;
             else if ( temp instanceof Container )
