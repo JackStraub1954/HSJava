@@ -120,8 +120,19 @@ import java.awt.Color;
  * <li>{@link #USE_GRID}</li>
  * <li>{@link #GRID_LINE_WIDTH}</li>
  * <li>{@link #GRID_COLOR}</li>
+ * <li>{@link #GRID_SIDE}</li>
+ * <li>{@link #MIN_CELL_SIDE}</li>
  * </ul>
+ * </dd>
  * 
+ * <dt>Category: Colors</dt>
+ * <dd>
+ * The color of a cell that is alive/dead.
+ * <p>See:</p>
+ * <ul>
+ * <li>{@link #BACKGROUND_COLOR}</li>
+ * <li>{@link #CELL_COLOR}</li>
+ * </ul>
  * </dd>
  * </dl>
  * </blockquote>
@@ -129,44 +140,97 @@ import java.awt.Color;
 public enum Properties
 {
     
-    /** The use border. */
+    /** 
+     * Controls whether or not a border is drawn around the 
+     * game board.
+     * The default is true.
+     * 
+     *   @see #BORDER_COLOR
+     *   @see #BORDER_WIDTH
+     */
     USE_BORDER( true ),
     
-    /** The border width. */
+    /** 
+     * The width in pixels of the border drawn around the game board.
+     * Only applicable if USE_BORDER is true. The border will
+     * not be drawn if BORDER_WIDTH is 0.
+     *  The default is 10.
+     */
     BORDER_WIDTH( 10 ),
     
-    /** The border color. */
+    /** 
+     * The color of the border drawn around the game board.
+     * Only applicable if USE_BORDER is true. The border will
+     * not be drawn if BORDER_COLOR is null.
+     * The default is <em>Color( 0f, .28f, .73f ).</em>
+     */
     BORDER_COLOR( new Color( 0f, .28f, .73f ) ),
     
-    /** The use grid. */
+    /**
+     *  Indicates whether or not the grid is to be drawn over
+     *  the game board.
+     *  The default is true.
+     *  
+     *  @see #GRID_LINE_WIDTH
+     *  @see #GRID_COLOR
+     */
     USE_GRID( true ),
     
-    /** The grid line width. */
+    /** 
+     * The width of a line on the grid. If this value is 0
+     * the grid will not be drawn.
+     * The default is 1. 
+     */
     GRID_LINE_WIDTH( 1 ),
     
-    /** The grid color. */
+    /** 
+     * The color of the grid drawn over the game board
+     * If this value is null the grid will not be drawn.
+     * The default is gray80 (<em>Color(.8f,.8f,.8f)).</em>
+     * 
+     */
     GRID_COLOR( new Color( .8f, .8f, .8f ) ),
     
-    /** The grid side. */
+    /** 
+     * The number of cells on the side of the grid.
+     * Note that the width and height of the grid
+     * are always equal.
+     * The default is 500.
+     */
     GRID_SIDE( 500 ),
     
-    /** The min cell side. */
+    /** 
+     * The minimum length of the side of a cell.
+     * Note that the width and height of a cell are
+     * always equal.
+     * The default value is 10.
+     */
     MIN_CELL_SIDE( 10 ),
     
-    /** The background color. */
+    /** 
+     * The background color of the game board.
+     * This will be the color of a cell when it is not selected.
+     * The default is white.
+     * @see #CELL_COLOR
+     */
     BACKGROUND_COLOR( Color.WHITE ),
     
-    /** The cell color. */
+    /** 
+     * The color of a cell when it is selected.
+     * 
+     * @see #BACKGROUND_COLOR
+     */
     CELL_COLOR( Color.BLACK );
     
-    /** The def value. */
+    /** The default value of this property. */
     private final Object    defValue;
     
-    /** The curr value. */
+    /** The current value of this property. */
     private Object          currValue;
     
     /**
-     * Instantiates a new properties.
+     * Instantiates a new the Properties object
+     * (an enum constant).
      *
      * @param obj the obj
      */
@@ -176,9 +240,9 @@ public enum Properties
     }
     
     /**
-     * Gets the property.
+     * Gets the current value of this property.
      *
-     * @return the property
+     * @return the current value of this property
      */
     public Object getProperty()
     {
@@ -186,7 +250,7 @@ public enum Properties
     }
     
     /**
-     * Sets the property.
+     * Sets the current value of this property.
      *
      * @param obj the new property
      */
@@ -196,7 +260,7 @@ public enum Properties
     }
     
     /**
-     * Reset.
+     * Resets all properties to their default values.
      */
     public static void reset()
     {
@@ -206,9 +270,9 @@ public enum Properties
     }
     
     /**
-     * Gets the default value.
+     * Gets the default value of this property.
      *
-     * @return the default value
+     * @return the default value of this property
      */
     public Object getDefaultValue()
     {
