@@ -2,6 +2,7 @@ package edu.uweo.javaintro.game_of_life;
 
 import java.awt.Color;
 
+// TODO: Auto-generated Javadoc
 /**
  * Encapsulates the properties of a Game of Life board. Properties are
  * divided into several categories:
@@ -10,7 +11,8 @@ import java.awt.Color;
  * <dt>Category: Border</dt>
  * <dd>
  * 
- * <div style = "border-left: 5px solid black; border-top: 5px solid black; max-width: 5em; height: 5em;">
+ * <div style = "border-left: 5px solid black; border-top: 5px solid black;
+ *      max-width: 5em; height: 5em;">
  * 
  * <pre>
  *    &#x2191;

@@ -2,6 +2,8 @@ log/
 target/
 doc/
 AdHoc/
+adhoc/
+ad_hoc/
 
 *.class
 *.exe
@@ -11,6 +13,8 @@ AdHoc/
 tmp.*
 *.temp
 temp.*
+Temp.*
+TEMP.*
 .swp
 *~
 

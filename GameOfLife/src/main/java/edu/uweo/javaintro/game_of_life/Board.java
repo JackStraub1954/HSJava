@@ -23,53 +23,111 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 
+/**
+ * Encapsulates the game board on which the Game of Life plays out.
+ * The board is divided into square cells, which can be marked as
+ * alive or dead. The appearance of the board is controlled by the
+ * Properties singleton,
+ * and is fixed during construction;
+ * changing a property after instantiating the board
+ * will not change the appearance
+ * of the board.
+ * <p>
+ * An ActionEvent is dispatched each time the
+ * user clicks on the board.
+ * 
+ * @see Properties
+ * @see <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
+ *          Conway's Game of Life.</a>
+ */
 public class Board implements Runnable
 {
+    
+    /**
+     * The name of the frame that contains the game board.
+     *  Mainly useful for testing.
+     */
     public static final String CANVAS_NAME = "GameOfLifeCanvas";
     
+    /** The frame that contains the game board. */
     private JFrame frame = new JFrame("Game of Life");
 
+    /** The use grid. */
     private boolean useGrid;
+    
+    /** 
+     * If true, a border will be drawn
+     * around the outside of the game board. 
+     */
     private boolean useBorder;
+    
+    /** The color of the grid drawn on the inside of the game board. */
     private Color   gridColor;
+    
+    /** The color of the border drawn around the outside of the game board. */
     private Color   borderColor;
+    
+    /** The length of the side of a cell, in pixels. */
     private int     cellSide;
+    
+    /** The frame's content pane, on which is drawn the game board. */
     private Canvas  canvas;
 
     /**
-     * Determines the "width" of the border drawn around the outside of the board.
-     * 
-     * <div style = "border-left: 5px solid black; border-top: 5px solid black;
-     * max-width: 5em; height: 5em;" >
-     * 
-     * <pre>
-     *    &#x2191;
-     * &#x2190; border
-     * </pre>
-     * 
-     * </div>
+     * The width of the border 
+     * drawn around the outside of the board, in pixels.
      */
     private int         borderWidth;
+    
+    /** The width of a grid line drawn inside the game board, in pixels. */
     private int         gridLineWidth;
+    
+    /** The number of cells in the side of a grid. */
     private int         gridSide;
+    
+    /**
+     *  The minimum length/height of a cell.
+     */
     private int         minCellSide;
+    
+    /** The background color. */
     private Color       backgroundColor;
+    
+    /** The color of a live cell. */
     private Color       cellColor;
+    
+    /** 
+     * Reflects the state (alive/dead) of every cell on the
+     * game board.
+     */
     private boolean[][] allCells;
 
+    /** Event listeners. */
     private List<ActionListener> listeners = new ArrayList<>();
 
+    /**
+     * Instantiates a new game board with the default width.
+     */
     public Board()
     {
         initState();
     }
 
+    /**
+     * Instantiates a new board of the given width/height, in cells.
+     *
+     * @param gridSide the given width/height
+     */
     public Board( int gridSide )
     {
         Properties.GRID_SIDE.setProperty(gridSide);
         initState();
     }
 
+    /**
+     * Configures the game board. The game board consists of
+     * a drawing surface contained in a JScrollPane.
+     */
     public void run()
     {
         canvas = new Canvas();
@@ -81,16 +139,38 @@ public class Board implements Runnable
         frame.setVisible(true);
     }
 
+    /**
+     * Adds the given ActionListener.
+     *
+     * @param listener the given ActionListener
+     */
     public void addActionListener(ActionListener listener)
     {
         listeners.add(listener);
     }
 
+    /**
+     * Removes the given ActionListener.
+     *
+     * @param listener the given ActionListener
+     */
     public void removeActionListener(ActionListener listener)
     {
         listeners.remove(listener);
     }
 
+    /**
+     * Returns a copy of the state of all cells on the game board.
+     * Note that, since a <em>copy</em> of the state is returned,
+     * changing the returned array will <em>not</em> affect
+     * the state of the board.
+     *
+     * @return the cells
+     * 
+     * @see #setCell(Cell)
+     * @see #setCells(Cell[])
+     * @see #setCells(boolean[][])
+     */
     public boolean[][] getCells()
     {
         boolean[][] arr = new boolean[allCells.length][];
@@ -99,12 +179,31 @@ public class Board implements Runnable
         return arr;
     }
 
+    /**
+     * Gets the length of a side of the game board.
+     * Note that the game board is always square.
+     *
+     * @return the side
+     */
     public int getSide()
     {
         return gridSide;
     }
 
+    /**
+     * Sets the state of a given cell.
+     * Note that the board will not visually reflect the given state
+     * until the user performs a refresh operation.
+     *
+     * @param cell the given cell
+     * 
+     * @throws IndexOutOfBoundsException if the row or column
+     *         of the given cell is outside the bounds of the board.
+     *         
+     * @see #refresh()
+     */
     public void setCell(Cell cell)
+        throws IndexOutOfBoundsException
     {
         int row = cell.getRow();
         int col = cell.getCol();
@@ -113,12 +212,39 @@ public class Board implements Runnable
         allCells[row][col] = cell.isAlive();
     }
 
+    /**
+     * Sets the state of the given cells.
+     * Note that the board will not visually reflect the given state
+     * until the user performs a refresh operation.
+     *
+     * @param cells the new cells
+     * 
+     * @throws IndexOutOfBoundsException if any of the given cells
+     *         are outside the bounds of the board.
+     *         
+     * @see #refresh()
+     */
     public void setCells(Cell[] cells)
+        throws IndexOutOfBoundsException
     {
         for (Cell cell : cells)
             setCell(cell);
     }
 
+    /**
+     * Sets the state of all the cells on the board.
+     * Note that the board will not visually reflect the given state
+     * until the user performs a refresh operation.
+     *
+     * @param state array that determines the state of each cell
+     *              on the board.
+     * 
+     * @throws IllegalArgumentException the illegal argument exception
+     *         if the dimensions of the given array do not exactly match
+     *         the dimensions of the board.
+     *         
+     * @see #refresh()
+     */
     public void setCells( boolean[][] state ) throws IllegalArgumentException
     {
         validateState( state );
@@ -132,16 +258,27 @@ public class Board implements Runnable
         }
     }
     
+    /**
+     * Gets the length of the side of the board, in cells.
+     *
+     * @return the length of the side of the board, in cells
+     */
     public int getCellSide()
     {
         return cellSide;
     }
 
+    /**
+     * Redraws the board.
+     */
     public void refresh()
     {
         frame.getContentPane().repaint();
     }
 
+    /**
+     * Closes and disposes the frame that contains the game board.
+     */
     public void close()
     {
         frame.setContentPane( new JPanel() );
@@ -149,6 +286,9 @@ public class Board implements Runnable
         frame.dispose();
     }
 
+    /**
+     * Clears the game board; every cell will be marked dead.
+     */
     public void clear()
     {
         for (int inx = 0; inx < allCells.length; ++inx)
@@ -156,6 +296,9 @@ public class Board implements Runnable
                 allCells[inx][jnx] = false;
     }
     
+    /**
+     * Launches the game board.
+     */
     public void start()
     {
         try
@@ -174,6 +317,9 @@ public class Board implements Runnable
         }
     }
 
+    /**
+     * Initializes the state of the game board.
+     */
     private void initState()
     {
         useGrid         = (boolean) Properties.USE_GRID.getProperty();
@@ -187,6 +333,12 @@ public class Board implements Runnable
         minCellSide     = (int) Properties.MIN_CELL_SIDE.getProperty();
         backgroundColor = (Color)Properties.BACKGROUND_COLOR.getProperty();
         allCells        = new boolean[gridSide][gridSide];
+        
+        if ( gridColor == null || gridLineWidth <= 0 )
+            useGrid = false;
+        
+        if ( borderColor == null || borderWidth <= 0 )
+            useBorder = false;
     }
 
     /**
@@ -194,12 +346,11 @@ public class Board implements Runnable
      * the 2-D boolean array of cells (<em>allCells</em>). Most likely, 
      * the input array was passed by a user for the purpose of setting the board
      * to a predetermined state.
-     * 
+     *
      * @param state     The state to validate.
      *  
-     * @throws IllegalArgumentException
-     * 
-     * @see setCells( boolean[][] )
+     * @throws IllegalArgumentException the illegal argument exception
+     * @see #setCells( boolean[][] )
      */
     private void validateState( boolean[][] state ) throws IllegalArgumentException
     {
@@ -231,13 +382,25 @@ public class Board implements Runnable
         }
     }
 
+    /**
+     * The Swing component responsible for drawing the game board.
+     * The geometry of a cell drawn on the board is based on the
+     * minimum of the board's width and height, in pixels. When
+     * the board is resized, the geometry of a cell will be adjusted.
+     * The side of a cell will never be smaller than the 
+     * MIN_CELL_SIDE property.
+     */
     @SuppressWarnings("serial")
     private class Canvas extends JPanel
     {
-        private Stroke gridLineStroke = new BasicStroke(gridLineWidth);
-        private int width;
-        private int height;
+        
+        /** The grid line stroke. */
+        private final Stroke    gridLineStroke = 
+            new BasicStroke(gridLineWidth);
 
+        /**
+         * Instantiates a new canvas.
+         */
         public Canvas()
         {
             setName( CANVAS_NAME );
@@ -255,7 +418,7 @@ public class Board implements Runnable
             if (backgroundColor != null)
                 setBackground(backgroundColor);
 
-            if (useBorder && borderColor != null)
+            if (useBorder)
             {
                 MatteBorder border = 
                     new MatteBorder( 
@@ -269,6 +432,9 @@ public class Board implements Runnable
             }
         }
 
+        /* (non-Javadoc)
+         * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+         */
         @Override
         public void paintComponent(Graphics graphics)
         {
@@ -276,16 +442,25 @@ public class Board implements Runnable
 
             Graphics2D gtx = (Graphics2D) graphics.create();
 
-            width = getWidth();
-            height = getHeight();
+            // The board must be square, so set the working dimensions 
+            // to minimum(width, height).
+            int width = getWidth();
+            int height = getHeight();
             int base = width < height ? width : height;
+            
+            // Calculate the size of a cell; do not allow it to be
+            // smaller than MIN_CELL_SIDE.
             cellSide = base / gridSide;
             if (cellSide < minCellSide)
             {
                 cellSide = minCellSide;
             }
 
+            // Draw the board.
             paintGrid(gtx);
+            
+            // Recalculate the preferred size of the Canvas.
+            // This is necessary to make the scroll bars work properly.
             int size = gridSide * cellSide;
             if (useBorder)
                 size += 2 * borderWidth;
@@ -293,6 +468,11 @@ public class Board implements Runnable
             revalidate();
         }
 
+        /**
+         * Paints the grid.
+         *
+         * @param gtx the gtx
+         */
         private void paintGrid(Graphics2D gtx)
         {
             int xco = 0;
@@ -330,8 +510,16 @@ public class Board implements Runnable
         }
     }
 
+    /**
+     * Listens for mouse events, and dispatches events to the 
+     * board's Actionlisteners.
+     */
     private class MouseProcessor extends MouseAdapter
     {
+        
+        /* (non-Javadoc)
+         * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+         */
         @Override
         public void mouseClicked(MouseEvent evt)
         {
