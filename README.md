@@ -1,2 +1,0 @@
-# HSJava
-High School Java
