@@ -6,11 +6,11 @@ import javax.swing.JPanel;
 
 public class Canvas extends JPanel
 {
+    private int		initWidth   	= 800;
+    private int     initHeight  	= 500;
     public Canvas()
     {
-        int         width   = 800;
-        int         height  = 500;
-        Dimension   size    = new Dimension( width, height );
+        Dimension   size    = new Dimension( initWidth, initHeight );
         this.setPreferredSize( size );
     }
 }
