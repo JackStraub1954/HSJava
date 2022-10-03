@@ -1,4 +1,4 @@
-package lectures.graphics_01.version01;
+package lectures.graphics_01.version03.copy;
 
 /**
  * This is the class that kicks off our graphics project.

@@ -1,4 +1,4 @@
-package lectures.graphics_01.version01;
+package lectures.graphics_01.version03;
 
 import java.awt.BorderLayout;
 
