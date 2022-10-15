@@ -1,4 +1,4 @@
-package lectures.graphics_01.version03.copy;
+package lectures.graphics_02.timer;
 
 /**
  * This is the class that kicks off our graphics project.
