@@ -1,8 +1,5 @@
 package lectures.graphics_02.timer;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.swing.JComponent;
 
 /**
@@ -13,7 +10,7 @@ import javax.swing.JComponent;
  * 
  * @author Jack Straub
  */
-public class AnimationTimer extends TimerTask
+public class AnimationTimer implements Runnable
 {
     /** 
      * The JComponent who's repaint method is to be invoked.
@@ -25,8 +22,11 @@ public class AnimationTimer extends TimerTask
      * Provided by the user in the constructor.
      */
     private final long          delay;
-    /** The Java utility that implements the timer. */
-    private final Timer         timer;
+    /**
+     * Thread to execute the timer. Created <em>but not started</em>
+     * in the constructor.
+     */
+    private final Thread		timerThread;
     
     /** 
      * Controls operation of the timer.
@@ -54,7 +54,7 @@ public class AnimationTimer extends TimerTask
     {
         this.component = component;
         this.delay = delay;
-        timer = new Timer( name );
+        timerThread = new Thread( this, name );
     }
 
     /**
@@ -74,10 +74,16 @@ public class AnimationTimer extends TimerTask
      * Begins execution of this timer.
      * The first execution of the timer will be scheduled
      * to run immediately.
+     * Note that a timer CANNOT be started more than once.
      */
     public void start()
     {
-        timer.schedule( this, 0 );
+    	// If the thread state is NEW the thread has not been started.
+    	// If it's anything else, the thread has been started, and may
+    	// not be started again.
+    	Thread.State	state	= timerThread.getState();
+        if ( state == Thread.State.NEW )
+        	timerThread.start();
     }
     
     /**
@@ -92,7 +98,8 @@ public class AnimationTimer extends TimerTask
     /**
      * Convenience method to put this thread to sleep for the
      * given number of milliseconds.
-     * The heart of the operation is "Thread.sleep()."
+     * The heart of the operation is "Thread.sleep(),"
+     * which is actually pretty simple.
      * The minor complication is that the sleep method
      * might throw an InterruptedException which then
      * has to be caught.
