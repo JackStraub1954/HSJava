@@ -1,4 +1,4 @@
-package lectures.graphics_02.timer;
+package lectures.graphics_02.timer_00simple;
 
 import java.awt.BorderLayout;
 

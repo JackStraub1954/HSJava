@@ -1,4 +1,4 @@
-package lectures.graphics_02.timer;
+package lectures.graphics_02.timer_01bouncing_ball;
 
 import javax.swing.JComponent;
 

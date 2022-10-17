@@ -1,4 +1,4 @@
-package lectures.graphics_02.timer;
+package lectures.graphics_02.timer_02bouncing_ball;
 
 /**
  * This is the class that kicks off our graphics project.
