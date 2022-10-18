@@ -318,7 +318,10 @@ public class BoardTest
     {
         int         len     = (Integer)Properties.GRID_SIDE.getProperty();
         boolean[][] arr     = new boolean[len + 1][len];
-        board.setCells( arr );
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> board.setCells( arr )
+        );
     }
     
     @Test
