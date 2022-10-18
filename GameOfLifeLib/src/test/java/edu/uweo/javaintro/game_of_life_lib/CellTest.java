@@ -1,8 +1,7 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import edu.uweo.javaintro.game_of_life_lib.Cell;
 

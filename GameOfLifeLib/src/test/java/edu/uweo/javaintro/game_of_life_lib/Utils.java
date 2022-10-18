@@ -1,6 +1,6 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.AWTException;
 import java.awt.Component;

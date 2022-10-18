@@ -1,6 +1,7 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import java.awt.Button;
 import java.awt.Component;
@@ -11,8 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.junit.Test;
 
 import edu.uweo.javaintro.game_of_life_lib.ComponentList;
 

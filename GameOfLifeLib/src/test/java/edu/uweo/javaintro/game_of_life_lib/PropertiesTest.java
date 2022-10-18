@@ -1,11 +1,11 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
 import static edu.uweo.javaintro.game_of_life_lib.Properties.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 
-import org.junit.Test;
 
 import edu.uweo.javaintro.game_of_life_lib.Properties;
 

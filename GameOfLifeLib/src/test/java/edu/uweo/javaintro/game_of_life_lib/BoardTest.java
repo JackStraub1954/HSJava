@@ -1,9 +1,6 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -17,9 +14,9 @@ import java.util.function.Predicate;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.uweo.javaintro.game_of_life_lib.Board;
 import edu.uweo.javaintro.game_of_life_lib.Cell;
@@ -30,14 +27,14 @@ public class BoardTest
     private static final int    DEFAULT_PAUSE   = 500;
     private Board   board;
     
-    @Before
+    @BeforeEach
     public void setUp()
     {
         Properties.reset();
         board = new Board();
     }
     
-    @After
+    @AfterEach
     public void tearDown()
     {
         board.close();
@@ -79,7 +76,7 @@ public class BoardTest
                 // is length of row correct?
                 assertEquals( gridSide, cells[inx].length );
                 if ( inx == jnx )
-                    assertTrue( "" + inx + ", " + jnx, cells[inx][jnx] );
+                    assertTrue( cells[inx][jnx], "" + inx + ", " + jnx );
                 else
                     assertFalse( cells[inx][jnx] );
             }
@@ -286,33 +283,37 @@ public class BoardTest
         validateImage();
     }
     
-    @Test ( expected = IndexOutOfBoundsException.class )
+    @Test
     public void testSetCellGoWrong1()
     {
+		Class<IndexOutOfBoundsException>	clazz	= IndexOutOfBoundsException.class;
         int inx = board.getCells().length;
-        board.setCell( new Cell( inx, 0 ) );
+        assertThrows( clazz, () -> board.setCell( new Cell( inx, 0 ) ) );
     }
     
-    @Test ( expected = IndexOutOfBoundsException.class )
+    @Test
     public void testSetCellGoWrong2()
     {
+		Class<IndexOutOfBoundsException>	clazz	= IndexOutOfBoundsException.class;
         int inx = board.getCells().length;
-        board.setCell( new Cell( 0, inx) );
+        assertThrows( clazz, () -> board.setCell( new Cell( 0, inx) ) );
     }
     
-    @Test ( expected = IndexOutOfBoundsException.class )
+    @Test
     public void testSetCellGoWrong3()
     {
-        board.setCell( new Cell( -1, 0 ) );
+		Class<IndexOutOfBoundsException>	clazz	= IndexOutOfBoundsException.class;
+        assertThrows( clazz, () -> board.setCell( new Cell( -1, 0 ) ) );
     }
     
-    @Test ( expected = IndexOutOfBoundsException.class )
+    @Test
     public void testSetCellGoWrong4()
     {
-        board.setCell( new Cell( 0, -1 ) );
+		Class<IndexOutOfBoundsException>	clazz	= IndexOutOfBoundsException.class;
+        assertThrows( clazz, () -> board.setCell( new Cell( 0, -1 ) ) );
     }
     
-    @Test ( expected = IllegalArgumentException.class )
+    @Test
     public void testSetCellsBooleanArrayGoWrong1()
     {
         int         len     = (Integer)Properties.GRID_SIDE.getProperty();
@@ -320,12 +321,13 @@ public class BoardTest
         board.setCells( arr );
     }
     
-    @Test ( expected = IllegalArgumentException.class )
+    @Test
     public void testSetCellsBooleanArrayGoWrong2()
     {
+		Class<IllegalArgumentException>	clazz	= IllegalArgumentException.class;
         int         len     = (Integer)Properties.GRID_SIDE.getProperty();
         boolean[][] arr     = new boolean[len][len + 1];
-        board.setCells( arr );
+        assertThrows( clazz, () -> board.setCells( arr ) );
     }
 
     @Test
@@ -393,7 +395,7 @@ public class BoardTest
             for ( int jnx = 0 ; jnx < gridSide ; ++jnx )
             {
                 if ( inx == jnx )
-                    assertTrue( "" + inx + ", " + jnx, cells[inx][jnx] );
+                    assertTrue( cells[inx][jnx], "" + inx + ", " + jnx );
                 else
                     assertFalse( cells[inx][jnx] );
             }

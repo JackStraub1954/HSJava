@@ -1,19 +1,15 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.awt.Component;
 import java.util.function.Predicate;
 
 import javax.swing.AbstractButton;
 import javax.swing.JSlider;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import edu.uweo.javaintro.game_of_life_lib.ControlEvent;
 import edu.uweo.javaintro.game_of_life_lib.ControlListener;
@@ -46,13 +42,13 @@ public class ControlsTest
     private Controls    controls;
     private Object      threader    = new Object();
     
-    @Before
+    @BeforeEach
     public void setUp()
     {
         controls = new Controls();
     }
     
-    @After
+    @AfterEach
     public void tearDown()
     {
         controls.dispose();
