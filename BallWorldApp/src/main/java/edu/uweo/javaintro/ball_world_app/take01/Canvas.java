@@ -1,24 +1,23 @@
-package lectures.graphics_02.timer_01bouncing_ball;
+package edu.uweo.javaintro.ball_world_app.take01;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.Arc2D;
 
 import javax.swing.JPanel;
 
-import lectures.graphics_02.timer_00simple.AnimationTimer;
-
 /**
- * This is version 2.1 of a class that will be used
+ * This is version 2.2 of a class that will be used
  * to demonstrate simple graphics.
- * This version demonstrates how to set a timer
- * that will cause the repaint method to be called 
- * repeatedly at some interval.
- * Each time the timer fires it will change the horizontal
- * position of a ball.
- * When the ball reaches one side of the window
- * it will reverse direction.
+ * This version is essentially the same as version 1,
+ * but it does a better job of encapsulating parameters,
+ * such as the ball fill and draw colors, 
+ * width of the edge of the ball, speed of the timer 
+ * and incremental ball repositioning.
  * 
  * @author Jack Straub
  *
@@ -36,7 +35,9 @@ public class Canvas extends JPanel
      * This timer will cause the Canvas's repaint method
      * to be invoked every two seconds.
      */
-    private final       AnimationTimer  timer;
+    private final AnimationTimer    timer;
+    /** Interval between timer firing, in milliseconds */
+    private final int               timerDelta  = 10;
     
     /** 
      * The graphics context; set every time paintComponent is invoked.
@@ -59,14 +60,10 @@ public class Canvas extends JPanel
      */
     private int         currHeight  = 0;
     
-    /** The diameter of the bouncing ball */
-    private int         ballDiameter    = 50;
-    /** The current x coordinate of the bouncing ball */
-    private int         ballXco         = 0;
-    /** The current y coordinate of the bouncing ball */
-    private int         ballYco         = 0;
-    /** true if the ball is moving right, false if it's moving left */
-    private boolean     ballMovingEast  = true;
+    /**
+     * Encapsulation of the bouncing ball.
+     */
+    private Ball        ball        = new Ball();
     
     /**
      * Constructor. Sets the initial size of the window,
@@ -83,19 +80,20 @@ public class Canvas extends JPanel
         // window may be different after being displayed.
         this.setPreferredSize( size );
         
-        // Give the ball an initial position at the center of the
-        // window, base on the window's preferred size (remember that
-        // the window manager doesn't have to honor the preferred size,
-        // so the position may not be perfect).
-        ballXco = initWidth / 2 - ballDiameter / 2;
-        ballYco = initHeight / 2 - ballDiameter / 2;
-        
         // Start the timer which will cause this Canvas's repaint method
         // to be called every 10 milliseconds.
-        timer = new AnimationTimer( this, "BouncingBall", 10 );
+        timer = new AnimationTimer( this, "CanvasRepainter", timerDelta );
         timer.start();
     }
     
+    /**
+     * Redraws the canvas every time invoked.
+     * This entails filling the window background, 
+     * calculating the new position of the bouncing ball
+     * and drawing the bouncing ball at the new position.
+     * 
+     * @param   graphics    the graphics context
+     */
     @Override
     public void paintComponent( Graphics graphics )
     {
@@ -113,41 +111,10 @@ public class Canvas extends JPanel
         gtx.fillRect( 0, 0, currWidth, currHeight );
         // end boilerplate
         
-        // Change the y coordinate of the ball so that it is positioned
-        // vertically in the window; this is only necessary if the 
-        // operator has resized the window
-        ballYco = currHeight / 2 - ballDiameter / 2;
-        
         /* 
-         * Reposition the ball either further east, or further west
-         * as required. If the ball is at the horizontal boundary of
-         * the window, change the direction of the ball before repositioning.
+         * Reposition the ball.  If the ball is at a boundary of
          */
-        if ( ballMovingEast )
-        {
-            if ( ballXco + ballDiameter >= currWidth )
-                ballMovingEast = false;
-        }
-        else
-        {
-            if ( ballXco <= 0 )
-                ballMovingEast = true;
-        }
-        ballXco = ballMovingEast ? ballXco + 2 : ballXco - 2;
-        
-        // if the new position of the ball extends beyond the limits
-        // of the window, tweak the position so that the ball so that
-        // it meets the limit exactly
-        if ( ballXco < 0 )
-            ballXco = 0;
-        else if ( ballXco + ballDiameter > currWidth )
-            ballXco = currWidth - ballDiameter;
-        else
-            ;
-        gtx.setColor( Color.CYAN );
-        gtx.fillOval( ballXco, ballYco, ballDiameter, ballDiameter );
-        gtx.setColor( Color.BLACK );
-        gtx.drawOval( ballXco, ballYco, ballDiameter, ballDiameter );
+        ball.redraw( gtx, currWidth, currHeight );
         
         // boilerplate; facilitate garbage collection of graphics context
         gtx.dispose();

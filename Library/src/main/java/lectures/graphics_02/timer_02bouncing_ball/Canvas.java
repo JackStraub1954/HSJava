@@ -10,6 +10,8 @@ import java.awt.geom.Arc2D;
 
 import javax.swing.JPanel;
 
+import lectures.graphics_02.timer_00simple.AnimationTimer;
+
 /**
  * This is version 2.2 of a class that will be used
  * to demonstrate simple graphics.
@@ -25,26 +27,40 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class Canvas extends JPanel
 {
-	/** The initial width of the window, in pixels. */
-    private int         initWidth   = 400;
+    /** The initial width of the window, in pixels. */
+    private final int   initWidth       = 400;
     /** The initial height of the window, in pixels. */
-    private int         initHeight  = 300;
+    private final int   initHeight      = 300;
+    /** Background color of the Canvas */
+    private final Color bgColor         = new Color( 0xe52b50);    
+    /**
+     * This timer will cause the Canvas's repaint method
+     * to be invoked every two seconds.
+     */
+    private final AnimationTimer    timer;
+    /** Interval between timer firing, in milliseconds */
+    private final int               timerDelta  = 10;
     
-    /** The graphics context; set every time paintComponent is invoked */
+    /** 
+     * The graphics context; set every time paintComponent is invoked.
+     * It's an instance variable to make it convenient for use
+     * by helper methods employed by paintComponent.
+     */
     private Graphics2D  gtx         = null;
     /** 
      * The current width of the Canvas; 
-     * set every time paintComponent is invoked
+     * set every time paintComponent is invoked.
+     * It's an instance variable to make it convenient for use
+     * by helper methods employed by paintComponent.
      */
     private int         currWidth   = 0;
     /** 
      * The current height of the Canvas; 
-     * set every time paintComponent is invoked
+     * set every time paintComponent is invoked.
+     * It's an instance variable to make it convenient for use
+     * by helper methods employed by paintComponent.
      */
     private int         currHeight  = 0;
-    
-    /** Background color of the Canvas */
-    private Color       bgColor         = new Color( 0xe52b50);
     
     /** The fill color of the bouncing ball */
     private Color       ballFillColor   = Color.BLUE;
@@ -83,17 +99,9 @@ public class Canvas extends JPanel
             ballDiameter,   // width
             ballDiameter,   // height
             0,              // start angle
-            2 * Math.PI,    // extent
+            360,            // extent
             Arc2D.OPEN      // closure
         );
-    
-    /**
-     * This timer will cause this Canvas's repaint method
-     * to be invoked every two seconds.
-     */
-    private AnimationTimer  timer;
-    /** Interval between timer firing, in milliseconds */
-    private int             timerDelta  = 10;
     
     /**
      * Constructor. Sets the initial size of the window,

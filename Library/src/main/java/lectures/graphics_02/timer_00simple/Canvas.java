@@ -23,30 +23,37 @@ import javax.swing.JPanel;
 public class Canvas extends JPanel
 {
 	/** The initial width of the window, in pixels. */
-    private int		   initWidth   	= 800;
+    private final int   initWidth   	= 800;
     /** The initial height of the window, in pixels. */
-    private int         initHeight  = 500;
+    private final int   initHeight      = 500;
+    /** Background color of the Canvas */
+    private final Color bgColor         = new Color( 0xe52b50);    
+    /**
+     * This timer will cause the Canvas's repaint method
+     * to be invoked every two seconds.
+     */
+    private final       AnimationTimer  timer;
     
-    /** The graphics context; set every time paintComponent is invoked */
+    /** 
+     * The graphics context; set every time paintComponent is invoked.
+     * It's an instance variable to make it convenient for use
+     * by helper methods employed by paintComponent.
+     */
     private Graphics2D  gtx         = null;
     /** 
      * The current width of the Canvas; 
-     * set every time paintComponent is invoked
+     * set every time paintComponent is invoked.
+     * It's an instance variable to make it convenient for use
+     * by helper methods employed by paintComponent.
      */
     private int         currWidth   = 0;
     /** 
      * The current height of the Canvas; 
-     * set every time paintComponent is invoked
+     * set every time paintComponent is invoked.
+     * It's an instance variable to make it convenient for use
+     * by helper methods employed by paintComponent.
      */
     private int         currHeight  = 0;
-    /** Background color of the Canvas */
-    private Color       bgColor     = new Color( 0xe52b50);
-    
-    /**
-     * This timer will cause this Canvas's repaint method
-     * to be invoked every two seconds.
-     */
-    private AnimationTimer  timer;
     
     /**
      * Constructor. Sets the initial size of the window,

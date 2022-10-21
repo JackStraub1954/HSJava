@@ -1,24 +1,23 @@
-package lectures.graphics_02.timer_01bouncing_ball;
+package edu.uweo.javaintro.ball_world_app;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.Arc2D;
 
 import javax.swing.JPanel;
 
-import lectures.graphics_02.timer_00simple.AnimationTimer;
-
 /**
- * This is version 2.1 of a class that will be used
+ * This is version 2.2 of a class that will be used
  * to demonstrate simple graphics.
- * This version demonstrates how to set a timer
- * that will cause the repaint method to be called 
- * repeatedly at some interval.
- * Each time the timer fires it will change the horizontal
- * position of a ball.
- * When the ball reaches one side of the window
- * it will reverse direction.
+ * This version is essentially the same as version 1,
+ * but it does a better job of encapsulating parameters,
+ * such as the ball fill and draw colors, 
+ * width of the edge of the ball, speed of the timer 
+ * and incremental ball repositioning.
  * 
  * @author Jack Straub
  *
@@ -36,7 +35,9 @@ public class Canvas extends JPanel
      * This timer will cause the Canvas's repaint method
      * to be invoked every two seconds.
      */
-    private final       AnimationTimer  timer;
+    private final AnimationTimer    timer;
+    /** Interval between timer firing, in milliseconds */
+    private final int               timerDelta  = 10;
     
     /** 
      * The graphics context; set every time paintComponent is invoked.
@@ -59,14 +60,46 @@ public class Canvas extends JPanel
      */
     private int         currHeight  = 0;
     
-    /** The diameter of the bouncing ball */
-    private int         ballDiameter    = 50;
-    /** The current x coordinate of the bouncing ball */
-    private int         ballXco         = 0;
-    /** The current y coordinate of the bouncing ball */
-    private int         ballYco         = 0;
-    /** true if the ball is moving right, false if it's moving left */
-    private boolean     ballMovingEast  = true;
+    /** The fill color of the bouncing ball */
+    private Color       ballFillColor   = Color.BLUE;
+    /** The edge color of the bouncing ball */
+    private Color       ballEdgeColor   = Color.BLACK;
+    /** Stroke (mainly width) if the edge of the bouncing ball */
+    private Stroke      ballEdgeStroke  = new BasicStroke( 2.5f );
+    /** Diameter of the bouncing ball (width and height) */
+    private double      ballDiameter    = 50;
+    /** x coordinate of the bouncing ball */
+    private double      ballXco         = 0;
+    /** y coordinate of the bouncing ball */
+    private double      ballYco         = 0;
+    /** x-coordinate increment when the ball moves */
+    private double      ballXDelta      = 6;
+    /** x-coordinate increment when the ball moves */
+    private double      ballYDelta      = 4;
+    
+    /** 
+     * Encapsulates the geometry of the bouncing ball.
+     * The x and y coordinates will change each time
+     * the ball is redrawn. 
+     * The width and height are the same, indicating
+     * that the arc will be circular.
+     * The starting angle is 0 radians, and the extent
+     * is 2 * PI radians indicating the arc will
+     * be a full circle.
+     * The type of the closure is OPEN; note that closure
+     * is only important if the extent of the arc is 
+     * less than a full circle.
+     */
+    private Arc2D.Double    bouncingBall    = 
+        new Arc2D.Double( 
+            0,              // x-coordinate
+            0,              // y-coordinate
+            ballDiameter,   // width
+            ballDiameter,   // height
+            0,              // start angle
+            360,            // extent
+            Arc2D.OPEN      // closure
+        );
     
     /**
      * Constructor. Sets the initial size of the window,
@@ -92,10 +125,18 @@ public class Canvas extends JPanel
         
         // Start the timer which will cause this Canvas's repaint method
         // to be called every 10 milliseconds.
-        timer = new AnimationTimer( this, "BouncingBall", 10 );
+        timer = new AnimationTimer( this, "CanvasRepainter", timerDelta );
         timer.start();
     }
     
+    /**
+     * Redraws the canvas every time invoked.
+     * This entails filling the window background, 
+     * calculating the new position of the bouncing ball
+     * and drawing the bouncing ball at the new position.
+     * 
+     * @param   graphics    the graphics context
+     */
     @Override
     public void paintComponent( Graphics graphics )
     {
@@ -113,27 +154,16 @@ public class Canvas extends JPanel
         gtx.fillRect( 0, 0, currWidth, currHeight );
         // end boilerplate
         
-        // Change the y coordinate of the ball so that it is positioned
-        // vertically in the window; this is only necessary if the 
-        // operator has resized the window
-        ballYco = currHeight / 2 - ballDiameter / 2;
-        
         /* 
-         * Reposition the ball either further east, or further west
-         * as required. If the ball is at the horizontal boundary of
+         * Reposition the ball. If the ball is at a boundary of
          * the window, change the direction of the ball before repositioning.
          */
-        if ( ballMovingEast )
-        {
-            if ( ballXco + ballDiameter >= currWidth )
-                ballMovingEast = false;
-        }
-        else
-        {
-            if ( ballXco <= 0 )
-                ballMovingEast = true;
-        }
-        ballXco = ballMovingEast ? ballXco + 2 : ballXco - 2;
+        if ( ballXco + ballDiameter >= currWidth || ballXco <= 0 )
+            ballXDelta *= -1;
+        if ( ballYco + ballDiameter >= currHeight || ballYco <= 0 )
+            ballYDelta *= -1;
+        ballXco += ballXDelta;
+        ballYco += ballYDelta;
         
         // if the new position of the ball extends beyond the limits
         // of the window, tweak the position so that the ball so that
@@ -144,10 +174,20 @@ public class Canvas extends JPanel
             ballXco = currWidth - ballDiameter;
         else
             ;
-        gtx.setColor( Color.CYAN );
-        gtx.fillOval( ballXco, ballYco, ballDiameter, ballDiameter );
-        gtx.setColor( Color.BLACK );
-        gtx.drawOval( ballXco, ballYco, ballDiameter, ballDiameter );
+        
+        if ( ballYco < 0 )
+            ballYco = 0;
+        else if ( ballYco + ballDiameter > currHeight )
+            ballYco = currHeight - ballDiameter;
+        else
+            ;
+        bouncingBall.x = ballXco;
+        bouncingBall.y = ballYco;
+        gtx.setColor( ballFillColor );
+        gtx.fill( bouncingBall );
+        gtx.setColor( ballEdgeColor );
+        gtx.setStroke( ballEdgeStroke );
+        gtx.draw( bouncingBall );
         
         // boilerplate; facilitate garbage collection of graphics context
         gtx.dispose();
