@@ -96,6 +96,15 @@ public class AnimationTimer implements Runnable
     }
     
     /**
+     * Gets the refresh rate of this timer.
+     * @return  the refresh rate of this timer
+     */
+    public long getDelay()
+    {
+        return delay;
+    }
+    
+    /**
      * Convenience method to put this thread to sleep for the
      * given number of milliseconds.
      * The heart of the operation is "Thread.sleep(),"

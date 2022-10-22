@@ -71,16 +71,7 @@ public class Ball
      * is only important if the extent of the arc is 
      * less than a full circle.
      */
-    private Arc2D.Double    bouncingBall    = 
-        new Arc2D.Double( 
-            0,              // x-coordinate
-            0,              // y-coordinate
-            ballDiameter,   // width
-            ballDiameter,   // height
-            0,              // start angle
-            360,            // extent
-            Arc2D.OPEN      // closure
-        );
+    private Arc2D.Double    bouncingBall;
     
     /**
      * Default constructor. All properties default.
@@ -118,16 +109,6 @@ public class Ball
             DEF_X_DELTA,
             DEF_Y_DELTA
         );
-        bouncingBall    = 
-            new Arc2D.Double( 
-                ballXco,        // x-coordinate
-                ballYco,        // y-coordinate
-                ballDiameter,   // width
-                ballDiameter,   // height
-                0,              // start angle
-                360,            // extent
-                Arc2D.OPEN      // closure
-            );
     }
     
     /**
@@ -184,6 +165,16 @@ public class Ball
         this.ballYco = yco;
         this.ballXDelta = xDelta;
         this.ballYDelta = yDelta;
+        bouncingBall    = 
+            new Arc2D.Double( 
+                ballXco,        // x-coordinate
+                ballYco,        // y-coordinate
+                ballDiameter,   // width
+                ballDiameter,   // height
+                0,              // start angle
+                360,            // extent
+                Arc2D.OPEN      // closure
+            );
     }
     
     /**

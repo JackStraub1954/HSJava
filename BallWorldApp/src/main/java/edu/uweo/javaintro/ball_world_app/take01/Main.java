@@ -9,7 +9,7 @@ package edu.uweo.javaintro.ball_world_app.take01;
 public class Main
 {
 	/** The object we'll be drawing to. */
-    private static Canvas    canvas;
+    private static BallField    canvas;
     /** The frame that encloses the project's GUI. */
     private static Root      root;
     
@@ -21,7 +21,7 @@ public class Main
     public static void main(String[] args)
     {
     	/** Instantiate the drawing area. */
-        canvas = new Canvas();
+        canvas = new BallField();
         /** Instantiate the application frame. */
         root = new Root( canvas );
         /** Display the application frame. */
