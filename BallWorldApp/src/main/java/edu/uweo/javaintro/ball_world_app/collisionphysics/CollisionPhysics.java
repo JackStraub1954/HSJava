@@ -145,10 +145,10 @@ public class CollisionPhysics
             response = new CollisionResponse();
         else
         {
-            double  delta       = rectX > pointX ? -radius : radius;
-            double  distance    = rectX - pointX + radius +delta;
+            double  delta       = rectX > pointX ? radius : -radius;
+            double  distance    = rectX - pointX + delta;
             double  time        = distance / speedX;
-            if ( time > 0 && time < timeLimit )
+            if ( time > 0 && time <= timeLimit )
                 response = 
                     new CollisionResponse( time, -speedX, speedY );
             else
@@ -182,7 +182,7 @@ public class CollisionPhysics
             response = new CollisionResponse();
         else
         {
-            double  delta       = rectY > pointY ? -radius : radius;
+            double  delta       = rectY > pointY ? radius : -radius;
             double  distance    = rectY - pointY + radius + delta;
             double  time        = distance / speedY;
             if ( time > 0 && time < timeLimit )

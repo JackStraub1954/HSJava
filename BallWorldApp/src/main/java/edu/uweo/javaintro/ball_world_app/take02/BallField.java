@@ -37,9 +37,9 @@ public class BallField extends JPanel
     /** The default edge color of the window */
     public static final Color   DEF_EDGE_COLOR      = new Color( 0x52be80  );;
     /** The default edge width of the window, in pixels */
-    public static final int     DEF_EDGE_WIDTH      = 10;
+    public static final int     DEF_EDGE_WIDTH      = 0;
     /** The default timer interval, in milliseconds */
-    public static final long    DEF_TIMER_DELTA     = 10;
+    public static final long    DEF_TIMER_DELTA     = 60;
 
     /** Background color of the window */
     private Color   bgColor;    

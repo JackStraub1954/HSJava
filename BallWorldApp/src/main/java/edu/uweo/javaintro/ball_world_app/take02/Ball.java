@@ -32,16 +32,12 @@ public class Ball
     public static final Color   DEF_EDGE_COLOR  = Color.BLACK;
     /**  Default edge width of the bouncing ball */
     public static final double  DEF_EDGE_WIDTH  = 3;
-    /** Default diameter of the bouncing ball (width and height) */
-    public static final double  DEF_DIAMETER    = 50;
+    /** Default radius of the bouncing ball (width and height) */
+    public static final double  DEF_RADIUS      = 25;
     /** Default x-coordinate increment when the ball moves */
     public static final double  DEF_X_DELTA     = 6;
     /** Default x-coordinate increment when the ball moves */
     public static final double  DEF_Y_DELTA     = 4;
-    /** Default x coordinate of the bouncing ball */
-    public static final double  DEF_XCO         = 0;
-    /** Default y coordinate of the bouncing ball */
-    public static final double  DEF_YCO         = 0;
     
     
     /** The fill color of the bouncing ball */
@@ -50,8 +46,8 @@ public class Ball
     private Color       ballEdgeColor;
     /** Stroke (mainly width) if the edge of the bouncing ball */
     private BasicStroke ballEdgeStroke;
-    /** Diameter of the bouncing ball (width and height) */
-    private double      ballDiameter;
+    /** Radius of the bouncing ball (width and height) */
+    private double      ballRadius;
     /** x-coordinate increment when the ball moves */
     private double      ballXDelta;
     /** x-coordinate increment when the ball moves */
@@ -86,12 +82,10 @@ public class Ball
     public Ball()
     {
         this(
-            DEF_DIAMETER,
+            DEF_RADIUS,
             DEF_EDGE_WIDTH,
             DEF_FILL_COLOR,
             DEF_EDGE_COLOR,
-            DEF_XCO,
-            DEF_YCO,
             DEF_X_DELTA,
             DEF_Y_DELTA
         );
@@ -99,20 +93,18 @@ public class Ball
     
     /**
      * Constructor. 
-     * Sets the diameter of this ball;
+     * Sets the radius of this ball;
      * all other properties default.
      * 
-     * @param diameter  diameter of this ball
+     * @param radius  radius of this ball
      */
-    public Ball( double diameter )
+    public Ball( double radius )
     {
         this(
-            diameter,
+            radius,
             DEF_EDGE_WIDTH,
             DEF_FILL_COLOR,
             DEF_EDGE_COLOR,
-            DEF_XCO,
-            DEF_YCO,
             DEF_X_DELTA,
             DEF_Y_DELTA
         );
@@ -120,67 +112,61 @@ public class Ball
     
     /**
      * Constructor. 
-     * Sets the diameter and colors of this ball;
+     * Sets the radius and colors of this ball;
      * all other properties default.
      * 
-     * @param diameter  diameter of this ball
+     * @param radius    radius of this ball
      * @param fillColor fill color of this  ball
      * @param edgeColor edge color of this ball
      */
-    public Ball( double diameter, Color fillColor, Color edgeColor )
+    public Ball( double radius, Color fillColor, Color edgeColor )
     {
         this(
-            diameter,
+            radius,
             DEF_EDGE_WIDTH,
             fillColor,
             edgeColor,
-            DEF_XCO,
-            DEF_YCO,
             DEF_X_DELTA,
             DEF_Y_DELTA
         );
     }
     
     /**
-     * Constructor
+     * Constructor.
      * 
-     * @param diameter      diameter of this ball
+     * @param radius        radius of this ball
      * @param edgeWidth     edge width of this ball
      * @param fillColor     fill color of this ball
      * @param edgeColor     edge color of this ball
-     * @param xco           x-coordinate of this ball
-     * @param yco           y-coordinate of this ball
      * @param xDelta        horizontal speed of this ball
      * @param yDelta        vertical speed of this ball
      */
     public Ball( 
-        double diameter, 
+        double radius, 
         double edgeWidth,
         Color  fillColor,
         Color  edgeColor,
-        double xco,
-        double yco,
         double xDelta,
         double yDelta
     )
     {
-        this.ballDiameter = diameter;
+        this.ballRadius = radius;
         this.ballEdgeStroke = new BasicStroke( (float)edgeWidth );
         this.ballFillColor = fillColor;
         this.ballEdgeColor = edgeColor;
-        this.ballXco = xco;
-        this.ballYco = yco;
+        this.ballXco = ballRadius;
+        this.ballYco = ballRadius;
         this.ballXDelta = xDelta;
         this.ballYDelta = yDelta;
         bouncingBall    = 
             new Arc2D.Double( 
-                ballXco,        // x-coordinate
-                ballYco,        // y-coordinate
-                ballDiameter,   // width
-                ballDiameter,   // height
-                0,              // start angle
-                360,            // extent
-                Arc2D.OPEN      // closure
+                ballXco - ballRadius,   // x-coordinate
+                ballYco - ballRadius,   // y-coordinate
+                ballRadius * 2,         // width
+                ballRadius * 2,         // height
+                0,                      // start angle
+                360,                    // extent
+                Arc2D.OPEN              // closure
             );
     }
     
@@ -192,7 +178,7 @@ public class Ball
             new CollisionPhysics( 
                 this.ballXco, this.ballYco,
                 this.ballXDelta, this.ballYDelta,
-                this.ballDiameter / 2,
+                this.ballRadius,
                 0, 0,
                 rectRight, rectBottom,
                 1.0
@@ -240,38 +226,27 @@ public class Ball
         Stroke  saveStroke  = gtx.getStroke();
         // end save gtx parameters
         
-        // Reposition the ball. If the ball is at a boundary of
-        // the window, change the direction of the ball before repositioning.
-       if ( ballXco + ballDiameter >= currWidth || ballXco <= 0 )
-           ballXDelta *= -1;
-       if ( ballYco + ballDiameter >= currHeight || ballYco <= 0 )
-           ballYDelta *= -1;
-       ballXco += ballXDelta;
-       ballYco += ballYDelta;
-       
-       // if the new position of the ball extends beyond the limits
-       // of the window, tweak the position so that the ball so that
-       // it meets the limit exactly
-       if ( ballXco < 0 )
-           ballXco = 0;
-       else if ( ballXco + ballDiameter > currWidth )
-           ballXco = currWidth - ballDiameter;
-       else
-           ;
-       
-       if ( ballYco < 0 )
-           ballYco = 0;
-       else if ( ballYco + ballDiameter > currHeight )
-           ballYco = currHeight - ballDiameter;
-       else
-           ;
-       bouncingBall.x = ballXco;
-       bouncingBall.y = ballYco;
-       gtx.setColor( ballFillColor );
-       gtx.fill( bouncingBall );
-       gtx.setColor( ballEdgeColor );
-       gtx.setStroke( ballEdgeStroke );
-       gtx.draw( bouncingBall );
+        double  collisionTime = this.earliestResponse.getCollisionTime();
+        if ( collisionTime <= 1.0 )
+        {
+            ballXco = earliestResponse.getNewX( ballXco, this.ballXDelta );
+            ballYco = earliestResponse.getNewX( ballYco, this.ballYDelta );
+            ballXDelta = earliestResponse.getNewSpeedX();
+            ballYDelta = earliestResponse.getNewSpeedY();
+        }
+        else
+        {
+            ballXco += ballXDelta;
+            ballYco += ballYDelta;
+        }
+        
+        bouncingBall.x = ballXco - ballRadius;
+        bouncingBall.y = ballYco - ballRadius;
+        gtx.setColor( ballFillColor );
+        gtx.fill( bouncingBall );
+        gtx.setColor( ballEdgeColor );
+        gtx.setStroke( ballEdgeStroke );
+        gtx.draw( bouncingBall );
         
         // Restore overwritten gtx parameters
         gtx.setColor( saveColor );
@@ -336,21 +311,21 @@ public class Ball
     }
 
     /**
-     * Gets this ball's diameter.
-     * @return the ballDiameter
+     * Gets this ball's radius.
+     * @return the ball radius
      */
-    public double getBallDiameter()
+    public double getBallRadius()
     {
-        return ballDiameter;
+        return ballRadius;
     }
 
     /**
-     * Sets this ball's diameter.
-     * @param ballDiameter the diameter of the ball
+     * Sets this ball's radius.
+     * @param ballRadius the radius of the ball
      */
-    public void setBallDiameter(double ballDiameter)
+    public void setBallRadius(double ballRadius)
     {
-        this.ballDiameter = ballDiameter;
+        this.ballRadius = ballRadius;
     }
 
     /**
