@@ -191,25 +191,6 @@ public class Ball
             earliestResponse = response;
     }
     
-    public void update()
-    {
-        if ( earliestResponse.getCollisionTime() < 1.0 )
-        {
-            // get new position and speed based on collision data
-            ballXco = earliestResponse.getNewX( ballXco, ballXDelta );
-            ballYco = earliestResponse.getNewX( ballYco, ballYDelta );
-            ballXDelta = earliestResponse.getNewSpeedX();
-            ballYDelta = earliestResponse.getNewSpeedY();
-        }
-        else
-        {
-            // no collision occurred; calculate new position
-            ballXco += ballXDelta;
-            ballYco += ballYDelta;
-        }
-        earliestResponse = new CollisionResponse();
-    }
-    
     /**
      * Updates this ball's position and redraws the ball.
      * 
@@ -239,6 +220,8 @@ public class Ball
             ballXco += ballXDelta;
             ballYco += ballYDelta;
         }
+        // collision processed; reset collision time
+        earliestResponse = new CollisionResponse();
         
         bouncingBall.x = ballXco - ballRadius;
         bouncingBall.y = ballYco - ballRadius;

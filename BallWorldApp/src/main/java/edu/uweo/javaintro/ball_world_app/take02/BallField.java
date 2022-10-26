@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -29,13 +31,15 @@ public class BallField extends JPanel
         "BallField Animation Timer";
     
     /** The default initial width of the window, in pixels. */
-    public static final int     DEF_WIDTH           = 400;
+    public static final int     DEF_WIDTH           = 300;
     /** The default initial height of the window, in pixels. */
-    public static final int     DEF_HEIGHT          = 300;
+    public static final int     DEF_HEIGHT          = 200;
     /** The default background color of the window */
     public static final Color   DEF_BG_COLOR        = new Color( 0xe52b50 );
     /** The default edge color of the window */
-    public static final Color   DEF_EDGE_COLOR      = new Color( 0x52be80  );;
+    public static final Color   DEF_EDGE_COLOR      = new Color( 0x52be80  );
+    // TODO fix the problem with the edge width. Right now the ball slides
+    // underneath the border; temporary fix: set edge width to 0.
     /** The default edge width of the window, in pixels */
     public static final int     DEF_EDGE_WIDTH      = 0;
     /** The default timer interval, in milliseconds */
@@ -204,6 +208,18 @@ public class BallField extends JPanel
         timer.start();
     }
     
+    public Rectangle getBoundingBox()
+    {
+        Insets  insets      = getBorder().getBorderInsets( this );
+        int         rectXco     = insets.left;
+        int         rectYco     = insets.top;
+        int         rectWidth   = getWidth() - insets.left - insets.right;
+        int         rectHeight  = getHeight() - insets.top - insets.bottom;
+        Rectangle   rect        = 
+            new Rectangle( rectXco, rectYco, rectWidth, rectHeight );
+        return rect;
+    }
+    
     /**
      * Redraws the canvas every time invoked.
      * This entails filling the window background, 
@@ -233,7 +249,7 @@ public class BallField extends JPanel
          * Reposition the ball.
          */
         ball.intersect( this );
-        ball.update();
+//        ball.update();
         ball.redraw( gtx, currWidth, currHeight );
         
         // boilerplate; facilitate garbage collection of graphics context

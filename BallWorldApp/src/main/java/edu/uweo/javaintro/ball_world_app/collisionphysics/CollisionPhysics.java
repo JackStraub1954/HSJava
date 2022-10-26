@@ -136,7 +136,7 @@ public class CollisionPhysics
      * </ul>
      * 
      * @param rectX x-coordinate of left or right edge of bounding rectangle
-     * @return calculate CollisionResponse
+     * @return calculated CollisionResponse
      */
     private CollisionResponse pointIntersectsRectVertical( double rectX )
     {
@@ -145,7 +145,7 @@ public class CollisionPhysics
             response = new CollisionResponse();
         else
         {
-            double  delta       = rectX > pointX ? radius : -radius;
+            double  delta       = rectX > pointX ? -radius : radius;
             double  distance    = rectX - pointX + delta;
             double  time        = distance / speedX;
             if ( time > 0 && time <= timeLimit )
@@ -182,8 +182,8 @@ public class CollisionPhysics
             response = new CollisionResponse();
         else
         {
-            double  delta       = rectY > pointY ? radius : -radius;
-            double  distance    = rectY - pointY + radius + delta;
+            double  delta       = rectY > pointY ? -radius : radius;
+            double  distance    = rectY - pointY + delta;
             double  time        = distance / speedY;
             if ( time > 0 && time < timeLimit )
                 response = 
