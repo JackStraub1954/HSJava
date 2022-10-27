@@ -9,8 +9,8 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Arc2D;
 
-import edu.uweo.javaintro.ball_world_app.collisionphysics.CollisionPhysics;
-import edu.uweo.javaintro.ball_world_app.collisionphysics.CollisionResponse;
+import edu.uweo.javaintro.ball_world_app.collisionphysics.take02.CollisionPhysics;
+import edu.uweo.javaintro.ball_world_app.collisionphysics.take02.CollisionResponse;
 
 /**
  * Encapsulates a ball and its physics in Ball World.
