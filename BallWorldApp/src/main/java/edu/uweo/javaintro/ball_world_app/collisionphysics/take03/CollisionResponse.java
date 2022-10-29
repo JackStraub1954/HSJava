@@ -1,4 +1,4 @@
-package edu.uweo.javaintro.ball_world_app.collisionphysics;
+package edu.uweo.javaintro.ball_world_app.collisionphysics.take03;
 
 /**
  * If collision occurs, this object stores the collision time and

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.uweo.javaintro.ball_world_app.take02;
+package edu.uweo.javaintro.ball_world_app.take03;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -170,7 +170,7 @@ public class Ball
             );
     }
     
-    public void intersect( BallField ballField )
+    public void intersect( BallField ballField, double timeLimit )
     {
         double              rectRight   = ballField.getWidth();
         double              rectBottom  = ballField.getHeight();
@@ -181,8 +181,7 @@ public class Ball
                 this.ballRadius,
                 0, 0,
                 rectRight, rectBottom,
-                1.0 // this argument will make more sense in the
-                    // next iteration of the tutorial
+                timeLimit
             );
         CollisionResponse   response        =
             physics.pointIntersectsRectangleOuter();
@@ -193,21 +192,21 @@ public class Ball
     }
     
     /**
-     * Updates this ball's position and redraws the ball.
+     * Updates this ball's position.
+     * A ball's position may be updated many times
+     * before the ball is redrawn
+     * at its new position.
      * 
-     * @param gtx           graphics context for drawing
      * @param currWidth     the width of the bounding rectangle
      *                      containing the ball
      * @param currHeight    the height of the bounding rectangle
      *                      containing the ball
+     * @param time          proportion of time remaining
+     *                      for the current "step" of the animation
      */
-    public void redraw( Graphics2D gtx, int currWidth, int currHeight )
+    public void 
+    update( int currWidth, int currHeight, double time )
     {
-        // Save original gtx parameters overwritten below
-        Color   saveColor   = gtx.getColor();
-        Stroke  saveStroke  = gtx.getStroke();
-        // end save gtx parameters
-        
         double  collisionTime = this.earliestResponse.getCollisionTime();
         if ( collisionTime <= 1.0 )
         {
@@ -218,12 +217,28 @@ public class Ball
         }
         else
         {
-            ballXco += ballXDelta;
-            ballYco += ballYDelta;
+            ballXco += ballXDelta * time;
+            ballYco += ballYDelta * time;
         }
         // collision processed; reset collision time
         earliestResponse = new CollisionResponse();
         
+        bouncingBall.x = ballXco - ballRadius;
+        bouncingBall.y = ballYco - ballRadius;
+    }
+    
+    /**
+     * Redraws this ball.
+     * 
+     * @param gtx           graphics context for drawing
+     */
+    public void redraw( Graphics2D gtx )
+    {
+        // Save original gtx parameters overwritten below
+        Color   saveColor   = gtx.getColor();
+        Stroke  saveStroke  = gtx.getStroke();
+        // end save gtx parameters
+                
         bouncingBall.x = ballXco - ballRadius;
         bouncingBall.y = ballYco - ballRadius;
         gtx.setColor( ballFillColor );
@@ -241,7 +256,7 @@ public class Ball
     /**
      * Gets this ball's fill color.
      * 
-     * @return the ball's fill color.
+     * @return this ball's fill color.
      */
     public Color getBallFillColor()
     {
