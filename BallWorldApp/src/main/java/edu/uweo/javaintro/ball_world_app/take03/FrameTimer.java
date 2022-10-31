@@ -20,18 +20,25 @@ import javax.swing.JComponent;
  * after reaching the part of the tutorial
  * that introduces multiple-collision processing.)
  * 
+ * <span style="text-decoration: line-through;">
  * Each time it fires it calls the <em>repaint</em> method
  * of a given JComponent (usually a JPanel).
+ * </span>
+ * 
+ * The component has been changed explicitly to a BallField,
+ * so that BallField.gameUpdate() can be invoked.
+ * Should probably change the name of this class
+ * to something more descriptive.
  * 
  * @author Jack Straub
  */
-public class AnimationTimer implements Runnable
+public class FrameTimer implements Runnable
 {
     /** 
      * The JComponent who's repaint method is to be invoked.
      * Provided by the user in the constructor.
      */
-    private final JComponent    component;
+    private final BallField    ballField;
     /**
      * The number of times, per second, that the timer should fire.
      */
@@ -57,16 +64,16 @@ public class AnimationTimer implements Runnable
      * Also establishes a name for this timer,
      * which may be useful for debugging purposes.
      * 
-     * @param component the component who's repaint method is
+     * @param ballField the component who's repaint method is
      *                  to be repeatedly invoked
      * @param name      name for this timer
      * @param delay     delay between firings, in milliseconds
      * 
      * @see #start()
      */
-    public AnimationTimer( JComponent component, String name, int updateRate )
+    public FrameTimer( BallField ballField, String name, int updateRate )
     {
-        this.component = component;
+        this.ballField  = ballField;
         this.updateRate = updateRate;
         timerThread = new Thread( this, name );
     }
@@ -84,7 +91,8 @@ public class AnimationTimer implements Runnable
         while ( execute )
         {
             frameStartTime = System.currentTimeMillis();
-            component.repaint();
+            ballField.gameUpdate();
+            ballField.repaint();
             
             timeConsumed = System.currentTimeMillis() - frameStartTime;
             timeRemaining = 1000 / updateRate - timeConsumed;
@@ -92,7 +100,7 @@ public class AnimationTimer implements Runnable
             // TODO encapsulate "5" as a named constant
             if ( timeRemaining < 5 )
                 timeRemaining = 5;
-            pause( timeRemaining );
+            Utils.pause( timeRemaining );
         }
     }
     
@@ -128,31 +136,5 @@ public class AnimationTimer implements Runnable
     public long getUpdateRate()
     {
         return updateRate;
-    }
-    
-    /**
-     * Convenience method to put this thread to sleep for the
-     * given number of milliseconds.
-     * The heart of the operation is "Thread.sleep(),"
-     * which is actually pretty simple.
-     * The minor complication is that the sleep method
-     * might throw an InterruptedException which then
-     * has to be caught.
-     * If an InterruptedException is thrown
-     * it can be safely ignored.
-     * 
-     * @param   delay   the given number of milliseconds
-     */
-    private static void pause( long delay )
-    {
-        try
-        {
-            Thread.sleep( delay );
-        }
-        catch ( InterruptedException exc )
-        {
-            // Don't really care if an InterruptedExeption
-            // is thrown, so do nothing.
-        }
     }
 }

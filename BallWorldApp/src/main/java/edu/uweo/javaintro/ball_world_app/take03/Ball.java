@@ -204,11 +204,10 @@ public class Ball
      * @param time          proportion of time remaining
      *                      for the current "step" of the animation
      */
-    public void 
-    update( int currWidth, int currHeight, double time )
+    public void update(  double time )
     {
         double  collisionTime = this.earliestResponse.getCollisionTime();
-        if ( collisionTime <= 1.0 )
+        if ( collisionTime <= time )
         {
             ballXco = earliestResponse.getNewX( ballXco, this.ballXDelta );
             ballYco = earliestResponse.getNewX( ballYco, this.ballYDelta );
@@ -251,6 +250,12 @@ public class Ball
         gtx.setColor( saveColor );
         gtx.setStroke( saveStroke );
         // end restore gtx parameters
+    }
+    
+    public double getEarliestCollisionTime()
+    {
+        double  time    = earliestResponse.getCollisionTime();
+        return time;
     }
 
     /**
@@ -328,8 +333,26 @@ public class Ball
     }
 
     /**
+     * Sets this ball's x-coordinate.
+     * This method should be used sparingly;
+     * probably once, immediately after ball construction.
+     * 
+     * TODO make setting the coordinates a part
+     * of the ball constructor
+     * 
+     * @return the ballXco
+     */
+    public double setBallXco( int xco )
+    {
+        return ballXco = xco;
+    }
+
+    /**
      * Gets this ball's x-coordinate.
+     * <span style="text-decoration: line-through">
      * This is a read-only property.
+     * </span>
+     * 
      * @return the ballXco
      */
     public double getBallXco()
@@ -338,8 +361,25 @@ public class Ball
     }
 
     /**
+     * Sets this ball's y-coordinate.
+     * This method should be used sparingly;
+     * probably once, immediately after ball construction.
+     * 
+     * TODO make setting the coordinates a part
+     * of the ball constructor
+     * 
+     * @return the ballXco
+     */
+    public double setBallYco( int xco )
+    {
+        return ballXco = xco;
+    }
+
+    /**
      * Gets this ball's y-coordinate.
+     * <span style="text-decoration: line-through">
      * This is a read-only property.
+     * </span>
      * @return the ballYco
      */
     public double getBallYco()

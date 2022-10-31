@@ -4,26 +4,28 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Rectangle;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 /**
- * First take at creating my own BallWorld.
- * Adapted from code by Chua Hock-Chuan (ehchua@ntu.edu.sg).
+ * Re-tool earlier code.
+ * The update logic (which updates the position and direction of the balls)
+ * needs to be separated from the repaint logic.
+ * In particular, each update needs to consume
+ * a full time step.
+ * TODO need to understand this better
  * 
- * This next step in Chua's tutorial refines the timing mechanism
- * to provide greater control over synchronization of animation steps.
+ * Adapted from code by Chua Hock-Chuan (ehchua@ntu.edu.sg).
  *
  * 
  * @author Jack Straub
- * @see  <a href="https://www3.ntu.edu.sg/home/ehchua/programming/java/J8a_GameIntro-BouncingBalls.html">
+ *@see  <a href="https://www3.ntu.edu.sg/home/ehchua/programming/java/J8a_GameIntro-BouncingBalls.html">
  *          The World Of Bouncing Balls
- *       </a>
- *       by Chua Hock-Chuan (ehchua@ntu.edu.sg)
+ *      </a>
+ *      by Chua Hock-Chuan (ehchua@ntu.edu.sg)
  *
  */
 @SuppressWarnings("serial")
@@ -45,17 +47,40 @@ public class BallField extends JPanel
     // underneath the border; temporary fix: set edge width to 0.
     /** The default edge width of the window, in pixels */
     public static final int     DEF_EDGE_WIDTH      = 0;
-    /** The default timer interval, in milliseconds */
-    public static final long    DEF_TIMER_DELTA     = 60;
+    /** 
+     * Default update rate, frames per second.
+     * TODO justify this value
+     * @see #updateRate
+     */
+    public static final int     DEF_UPDATE_RATE     = 30;
+    /** 
+     * Default epsilon time.
+     * TODO justify this value
+     * @see #epsilonTime
+     */
+    public static final double  DEF_EPSILON_TIME    = .001;
+    
+    /**
+     * Update rate, in frames-per-second.
+     * Determines how quickly the animation timer fires. 
+     */
+    private int     updateRate      = DEF_UPDATE_RATE;
+    
+    /**  
+     * The time-step is considered fully consumed
+     * when the "time left" falls below this value.
+     */
+    private double  epsilonTime     = DEF_EPSILON_TIME;
 
     /** Background color of the window */
     private Color   bgColor;    
 
     /**
      * This timer will cause the Canvas's repaint method
-     * to be invoked every two seconds.
+     * to be invoked every <em>updateRate</em>
+     * times per second.
      */
-    private AnimationTimer      timer;
+    private FrameTimer  timer;
     
     /** 
      * The graphics context; set every time paintComponent is invoked.
@@ -78,10 +103,8 @@ public class BallField extends JPanel
      */
     private int         currHeight  = 0;
     
-    /**
-     * Encapsulation of the bouncing ball.
-     */
-    private Ball        ball        = new Ball();
+    /** The single bouncing ball in this stage of the tutorial. */
+    private Ball        ball        = null;
     
     /**
      * Default constructor. Sets the initial size of the window,
@@ -90,14 +113,14 @@ public class BallField extends JPanel
      */
     public BallField()
     {
-    	this(
-    	    DEF_WIDTH,
-    	    DEF_HEIGHT,
-    	    DEF_BG_COLOR,
-    	    DEF_EDGE_COLOR,
-    	    DEF_EDGE_WIDTH,
-    	    DEF_TIMER_DELTA
-	    );
+        this(
+            DEF_WIDTH,
+            DEF_HEIGHT,
+            DEF_BG_COLOR,
+            DEF_EDGE_COLOR,
+            DEF_EDGE_WIDTH,
+            DEF_UPDATE_RATE
+        );
     }
     
     /**
@@ -117,7 +140,7 @@ public class BallField extends JPanel
             DEF_BG_COLOR,
             DEF_EDGE_COLOR,
             DEF_EDGE_WIDTH,
-            DEF_TIMER_DELTA
+            DEF_UPDATE_RATE
         );
     }
     
@@ -128,9 +151,9 @@ public class BallField extends JPanel
      * is specified by the caller;
      * all other properties default.
      * 
-     * @param   timerDelta  the timer timeout interval
+     * @param   updateRate  the timer timeout interval
      */
-    public BallField( long timerDelta )
+    public BallField( int updateRate )
     {
         this(
             DEF_WIDTH,
@@ -138,7 +161,7 @@ public class BallField extends JPanel
             DEF_BG_COLOR,
             DEF_EDGE_COLOR,
             DEF_EDGE_WIDTH,
-            timerDelta
+            updateRate
         );
     }
     
@@ -152,9 +175,9 @@ public class BallField extends JPanel
      * 
      * @param   width       the initial width of the window
      * @param   height      the initial height of the window
-     * @param   timerDelta  the refresh rate
+     * @param   updateRate  the refresh rate
      */
-    public BallField( int width, int height, long timerDelta )
+    public BallField( int width, int height, int updateRate )
     {
         this(
             width,
@@ -162,7 +185,7 @@ public class BallField extends JPanel
             DEF_BG_COLOR,
             DEF_EDGE_COLOR,
             DEF_EDGE_WIDTH,
-            timerDelta
+            updateRate
         );
     }
     
@@ -179,7 +202,7 @@ public class BallField extends JPanel
      * @param bgColor       background color of the window
      * @param edgeColor     edge color of the window
      * @param edgeWidth     edge width of the window
-     * @param timerDelta    window refresh rate
+     * @param updateRate    window refresh rate
      */
     public BallField( 
         int     width,
@@ -187,7 +210,7 @@ public class BallField extends JPanel
         Color   bgColor,
         Color   edgeColor,
         int     edgeWidth,
-        long    timerDelta
+        int     updateRate
     )
     {
         // The initial width and height of a window is set using 
@@ -205,22 +228,24 @@ public class BallField extends JPanel
             BorderFactory.createLineBorder( edgeColor, edgeWidth );
         setBorder( border );
         
+        this.updateRate = updateRate;
+        
+        // Generate a random starting position for the ball.
+        Random  randy   = new Random();
+        int     radius  = (int)(Ball.DEF_RADIUS + .5);
+        int     diam    = radius * 2;
+        int     xco     = randy.nextInt( width - diam ) + radius;
+        int     yco     = randy.nextInt( height - diam ) + radius;
+        ball = new Ball();
+        ball.setBallXco( xco );
+        ball.setBallYco( yco );
+        System.out.println( xco + "," + yco );
+        // TODO give the ball a random slope
+        
         // Start the timer which will cause this Canvas's repaint method
         // to be called every 10 milliseconds.
-        timer = new AnimationTimer( this, TIMER_NAME, timerDelta );
+        timer = new FrameTimer( this, TIMER_NAME, updateRate );
         timer.start();
-    }
-    
-    public Rectangle getBoundingBox()
-    {
-        Insets  insets      = getBorder().getBorderInsets( this );
-        int         rectXco     = insets.left;
-        int         rectYco     = insets.top;
-        int         rectWidth   = getWidth() - insets.left - insets.right;
-        int         rectHeight  = getHeight() - insets.top - insets.bottom;
-        Rectangle   rect        = 
-            new Rectangle( rectXco, rectYco, rectWidth, rectHeight );
-        return rect;
     }
     
     /**
@@ -248,57 +273,60 @@ public class BallField extends JPanel
         gtx.fillRect( 0, 0, currWidth, currHeight );
         // end boilerplate
         
-        /* 
-         * Reposition the ball.
-         */
-        ball.intersect( this );
-//        ball.update();
-        ball.redraw( gtx, currWidth, currHeight );
+        ball.redraw( gtx );
         
         // boilerplate; facilitate garbage collection of graphics context
         gtx.dispose();
         // end boilerplate
     }
 
-    /**
-     * Gets the background color of this window.
+    /** 
+     * One game time-step. 
+     * Update the game objects, with proper collision detection and response.
      * 
-     * @return the the background color of this window.
+     * TODO this logic needs to be better understood
      */
-    public Color getBgColor()
+    public void gameUpdate()
     {
-        return bgColor;
+       float timeLeft = 1.0f;  // 100% of one time-step left to be exceuted
+       
+       // loop until a full time-step is consumed
+       do
+       {
+           // Need to find the earliest collision time among all objects
+           double   earliestCollisionTime   = timeLeft;
+           ball.intersect( this, timeLeft );
+           double   testCollisionTime       = ball.getEarliestCollisionTime();
+           if ( testCollisionTime < earliestCollisionTime )
+               earliestCollisionTime = testCollisionTime;
+           
+           // update all objects for earliest collision time;
+           // at this stage of the tutorial there is only one such object.
+           ball.update( earliestCollisionTime );
+           
+           
+           //////////////////////////
+           //
+           // TESTING ONLY
+           // Show the new collision position, but only if the earliest
+           // collision time exceeds a small threshold.
+           //
+           if ( earliestCollisionTime < .05 )
+               repaint();
+           //
+           // END TESTING ONLY
+           //
+           //////////////////////////
+           
+           // Consume a fractional proportion of the time-step.
+           // TODO need to better understand this;
+           // "1000" = 1 second, in milliseconds
+           long sleepDelta  = (long)(1000 / updateRate * earliestCollisionTime);
+           Utils.pause(sleepDelta);
+           
+           // update proportion of time-step consumed
+           timeLeft -= earliestCollisionTime;
+       } while ( timeLeft > epsilonTime );
     }
 
-    /**
-     * Sets the background color of this window.
-     * 
-     * @param bgColor the new background color for this window
-     */
-    public void setBgColor(Color bgColor)
-    {
-        this.bgColor = bgColor;
-    }
-
-    /**
-     * Gets the timer refresh rate.
-     * 
-     * @return the timer refresh rate
-     */
-    public long getTimerDelta()
-    {
-        long    timerDelta  = timer.getDelay();
-        return timerDelta;
-    }
-
-    /**
-     * Sets the timer refresh rate.
-     * 
-     * @param timerDelta    the new timer refresh rate
-     */
-    public void setTimerDelta( long timerDelta )
-    {
-        timer.stop();
-        timer = new AnimationTimer( this, TIMER_NAME, timerDelta );
-    }
 }
