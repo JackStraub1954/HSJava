@@ -107,6 +107,12 @@ public class FrameTimer implements Runnable
                     timeRemaining = 5;
                 Utils.pause( timeRemaining );
             }
+            else
+            {
+            	// Animation is paused. Sleep for a bit,
+            	// then wake up and check the pause state again.
+            	Utils.pause( 250 );
+            }
         }
     }
     

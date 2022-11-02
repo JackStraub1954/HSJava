@@ -1,7 +1,10 @@
 package edu.uweo.javaintro.ball_world_app.take04;
 
 import java.awt.BorderLayout;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -23,6 +26,9 @@ public class Root implements Runnable
     private JPanel  contentPane = null;
     /** The window that we will be drawing on. */
     private JPanel  userPanel   = null;
+    
+    /** Additional panels to add to the content pane */
+    Map<String,JComponent>	otherPanels	= new HashMap<>();
     
     /**
      * Constructor.
@@ -84,11 +90,36 @@ public class Root implements Runnable
         
         /* Make the Canvas a child of the content pane. */
         contentPane.add( userPanel, BorderLayout.CENTER );
+        /* Add additional panels to the content pane */
+        for ( Map.Entry<String,JComponent> entry : otherPanels.entrySet() )
+        	contentPane.add( entry.getValue(), entry.getKey() );
+        
         /* Set the content pane in the frame. */
         frame.setContentPane( contentPane );
         /* Initiate frame sizing, positioning etc. */
         frame.pack();
         /* Make the frame visible. */
         frame.setVisible( true );
+    }
+    
+    /**
+     * Adds a panel to the root frame.
+     * The frame's content pane is controlled by a BorderLayout,
+     * and the user must specify to which border the panel
+     * is to be added,
+     * BorderLayout.NORTH,
+     * BorderLayout.SOUTH,
+     * BorderLayout.EAST or 
+     * BorderLayout.WEST.
+     * 
+     * Calling this method after calling the start method
+     * has no effect on the frame.
+     * 
+     * @param panel	the panel to add
+     * @param side	the side to which to add the panel
+     */
+    public void addPanel( JComponent panel, String side )
+    {
+    	otherPanels.put( side, panel );
     }
 }

@@ -311,8 +311,8 @@ public class BallField extends JPanel
            // Show the new collision position, but only if the earliest
            // collision time exceeds a small threshold.
            //
-           if ( earliestCollisionTime < .05 )
-               repaint();
+//           if ( earliestCollisionTime < .05 )
+//               repaint();
            //
            // END TESTING ONLY
            //
