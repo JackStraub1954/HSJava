@@ -240,6 +240,8 @@ public class Ball
                 
         bouncingBall.x = ballXco - ballRadius;
         bouncingBall.y = ballYco - ballRadius;
+        bouncingBall.width = 2 * ballRadius;
+        bouncingBall.height = 2 * ballRadius;
         gtx.setColor( ballFillColor );
         gtx.fill( bouncingBall );
         gtx.setColor( ballEdgeColor );
