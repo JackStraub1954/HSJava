@@ -1,4 +1,4 @@
-package edu.uweo.javaintro.cartesian_plane;
+package judah.com.mailco.plane;
 
 import java.awt.geom.Point2D;
 
