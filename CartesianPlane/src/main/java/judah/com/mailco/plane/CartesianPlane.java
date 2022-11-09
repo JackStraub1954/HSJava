@@ -3,6 +3,7 @@ package judah.com.mailco.plane;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
@@ -51,7 +52,55 @@ public class CartesianPlane extends JPanel
     /** The width of the x- and y-axes */
     private double      axisWidth           = ticMajorWidth;
     /** The color of the grid lines */
-    private double      gridLineWidth    = 1;
+    private double      gridLineWidth       = 1;
+    
+    /** True to display a legend, false to leave it off. */
+    private boolean     showLegend          = true;
+    /**
+     * Width of the legend in pixels;
+     * may be negative, in which case the width is calculated 
+     * from the font size and the font units.
+     * @see #fontSize
+     * @see #fontUnits
+     * @see #legendWidth
+     */
+    private double      legendPixels        = -1;
+    /**
+     * Width of the legend.
+     * This is equal to legendPixels, unless legendPixels is negative,
+     * in which case the width is calculated from the font.
+     * @see #fontSize
+     * @see #fontUnits
+     * @see #legendPixels
+     * @see #fontDecimals
+     */
+    private double      legendWidth         = 0;
+    /** The name of the font used for the legend */
+    private String      fontName            = "fixed";
+    /** 
+     * Units for calculating font size; "em" (case-insensitive) is
+     * interpreted as EMS, anything else is interpreted as points.
+     * @see #fontSize
+     */
+    private String      fontUnits           = "em";
+    /** 
+     * Size of the font in the given units.
+     * @see #fontUnits
+     */
+    private double      fontSize            = 5;
+    /** Number of decimal points to use in legend numbers. */
+    private int         fontDecimals        = 2;
+    /** 
+     * Number of places consumed by a number in the legend,
+     * including the decimal point.
+     */
+    private int         fontFieldWidth      = 3;
+    /** 
+     * Font style. Specified by one of the constants
+     * in the font class. 
+     * The default is Font.PLAIN.
+     */
+    private int         fontStyle           = Font.PLAIN;
     
     /** The graphics context; set every time paintComponent is invoked */
     private Graphics2D  gtx         = null;
@@ -79,6 +128,9 @@ public class CartesianPlane extends JPanel
         // setPreferredSize. Remember that the actual size of the
         // window may be different after being displayed.
         this.setPreferredSize( size );
+        
+        // Set the font to be used in the legend.
+        Font    font    = new Font( fontName, fontSize );
     }
     
     @Override
