@@ -34,7 +34,7 @@ public class LineIteratorDemo2 extends JPanel
         gtx.setColor( Color.WHITE );
         gtx.fillRect( 0, 0, getWidth(), getHeight() );
         
-        Rectangle2D rect    = new Rectangle2D.Double( 50, 50, 400, 500 );
+        Rectangle2D rect    = new Rectangle2D.Double( 50, 50, 400, 550 );
         gtx.setColor( Color.BLACK );
         gtx.draw( rect );
         
@@ -42,6 +42,8 @@ public class LineIteratorDemo2 extends JPanel
         
         // Draw the horizontal grid lines
         GridIterator        lineIter    = new GridIterator( rect, distance );
+        System.out.println( lineIter.getRange( GridIterator.HORIZONTAL ) );
+        System.out.println( lineIter.getRange( GridIterator.VERTICAL ) );
         gtx.setColor( Color.RED );
         GridLines   lines   = 
             lineIter.getGridLines( -1, GridIterator.HORIZONTAL );

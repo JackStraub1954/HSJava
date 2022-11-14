@@ -5,7 +5,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class GridIterator2
+public class GridIterator_orig
 {
     public static final int HORIZONTAL  = 0;
     public static final int VERTICAL    = 1;
@@ -18,7 +18,7 @@ public class GridIterator2
     private final double    centerYco;
     private final double    distance;
     
-    public GridIterator2( Rectangle2D rect, double distance )
+    public GridIterator_orig( Rectangle2D rect, double distance )
     {
         firstXco = rect.getMinX();
         firstYco = rect.getMinY();

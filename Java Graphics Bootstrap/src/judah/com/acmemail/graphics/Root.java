@@ -1,4 +1,4 @@
-package judah.com.acmemail.graphics.sandbox;
+package judah.com.acmemail.graphics;
 
 import java.awt.BorderLayout;
 

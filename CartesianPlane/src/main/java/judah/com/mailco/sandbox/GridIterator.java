@@ -5,6 +5,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import judah.com.mailco.graph_utils.Range;
+
 public class GridIterator
 {
     public static final int HORIZONTAL  = 0;
@@ -27,6 +29,17 @@ public class GridIterator
         centerXco = rect.getCenterX();
         centerYco = rect.getCenterY();
         this.distance = distance;
+    }
+    
+    public Range<Integer> getRange( int orientation )
+    {
+        double  rangeWidth  =
+            orientation == HORIZONTAL ?
+            lastXco - firstXco : lastYco - firstYco;
+        int     numLines    = (int)(rangeWidth / distance);
+        int     halfRange   = numLines / 2;
+        Range<Integer>  range   = new Range<>( -halfRange, halfRange );
+        return range;
     }
     
     public GridLines getGridLines( double lineLen, int orientation )
