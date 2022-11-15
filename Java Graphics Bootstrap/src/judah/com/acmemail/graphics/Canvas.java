@@ -38,7 +38,7 @@ public class Canvas extends JPanel
     @Override
     public void paintComponent( Graphics graphics )
     {
-        // begin boiler plate
+        // begin boilerplate
         super.paintComponent( graphics );
         currWidth = getWidth();
         currHeight = getHeight();
