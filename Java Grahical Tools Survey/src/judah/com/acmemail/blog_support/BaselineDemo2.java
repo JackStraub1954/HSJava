@@ -53,6 +53,8 @@ public class BaselineDemo2 extends JPanel
         // end boilerplate
         
         drawString( "Brique peter junquet", 30, 100 );
+        drawString( "9999999999", 30, 140 );
+        drawString( "iiiiiiiiii", 30, 180 );
 
         // begin boilerplate
         gtx.dispose();
@@ -65,12 +67,14 @@ public class BaselineDemo2 extends JPanel
         fontMetrics = gtx.getFontMetrics();
         Rectangle2D strRect     = 
             fontMetrics.getStringBounds( str, gtx );
-        float       leading     = fontMetrics.getLeading();
+        float       ascent      = 0;//fontMetrics.getAscent();
         
+        System.out.println( strRect );
         float       rectXco     = xco + (float)strRect.getX();
-        float       rectYco     = yco + (float)strRect.getY() + leading;
+        float       rectYco     = yco + (float)strRect.getY();
         float       rectWidth   = (float)strRect.getWidth();
-        float       rectHeight  = (float)strRect.getHeight() - leading;
+        float       rectHeight  = (float)strRect.getHeight();// - ascent;
+        System.out.println( rectHeight );
         
         strRect.setRect( rectXco, rectYco, rectWidth, rectHeight );
         gtx.setColor( Color.BLACK );
