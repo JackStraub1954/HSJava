@@ -4,10 +4,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
@@ -21,9 +22,14 @@ public class BaselineDemo extends JPanel
     private int             currWidth;
     private int             currHeight;
     private Graphics2D      gtx;
-    private FontMetrics     fontMetrics;
+    /** The font to use to draw the sample string. */
     private Font            strFont;
+    /** Font to draw labels on the baseline graphic and coordinates. */
     private Font            labelFont;
+    /** FontRenderContext for string font */
+    private FontRenderContext   strFRC;
+    /** FontRenderContext for label font */
+    private FontRenderContext   labelFRC;
     
     public static void main( String[] args )
     {
@@ -36,7 +42,7 @@ public class BaselineDemo extends JPanel
     {
         Dimension   dim = new Dimension( width, height );
         setPreferredSize( dim );
-        strFont = new Font( "monospaced", Font.BOLD, 18 );
+        strFont = new Font( "monospaced", Font.BOLD, 20 );
         labelFont = new Font( "dialog", Font.PLAIN, 12 );
     }
     
@@ -52,7 +58,8 @@ public class BaselineDemo extends JPanel
         gtx.fillRect( 0,  0, currWidth, currHeight );
         // end boilerplate
         
-        drawString( "Brique peter junquet", 30, 100 );
+        drawString( "Brique peter junquet", 50, 75 );
+        drawString( "11.21", 50, 150 );
 
         // begin boilerplate
         gtx.dispose();
@@ -61,26 +68,34 @@ public class BaselineDemo extends JPanel
     
     private void drawString( String str, int xco, int yco )
     {
+        gtx.setColor( Color.BLACK );
         gtx.setFont( strFont );
-        fontMetrics = gtx.getFontMetrics();
-        Rectangle2D strRect     = 
-            fontMetrics.getStringBounds( str, gtx );
+        
+        // draw the string
+        gtx.drawString( str, xco, yco );
+        
+        // Draw the baseline, from xco to a little past
+        // the end of the string
+        strFRC = gtx.getFontRenderContext();
+        TextLayout  strLayout   = new TextLayout( str, strFont, strFRC );
+        Rectangle2D strRect     = strLayout.getBounds();
+        strLayout.draw( gtx, xco, yco );
         float       strWidth    = (float)strRect.getWidth();
-        float       strHeight   = (float)strRect.getHeight();
-        float       leading     = fontMetrics.getLeading();
         
-        String      strCoords   = String.format( "(x=%d,y=%d)", xco, yco );
-        float       baseXco1    = xco - 20;
+        float       baseXco1    = xco;
         float       baseXco2    = baseXco1 + strWidth + 40;
-        float       rectXco     = xco + (float)strRect.getX();
-        float       rectYco     = yco + (float)strRect.getY() + leading;
-        float       rectWidth   = (float)strRect.getWidth();
-        float       rectHeight  = (float)strRect.getHeight() - leading;
-        
-        strRect.setRect( rectXco, rectYco, rectWidth, rectHeight );
-        
         Line2D      baseline    = 
             new Line2D.Float( baseXco1, yco, baseXco2, yco );
+        gtx.setStroke( new BasicStroke( 1 ) );
+        gtx.draw( baseline );
+        
+        // Draw the bounding box around the string
+        float       rectXco     = xco + (float)strRect.getX();
+        float       rectYco     = yco + (float)strRect.getY();
+        float       rectWidth   = (float)strRect.getWidth();
+        float       rectHeight  = (float)strRect.getHeight();
+        Rectangle2D rect        = 
+            new Rectangle2D.Float( rectXco, rectYco, rectWidth, rectHeight );        
         Stroke      dashes  =
             new BasicStroke(
                 1,
@@ -92,11 +107,39 @@ public class BaselineDemo extends JPanel
             );
         gtx.setColor( Color.BLACK );
         gtx.setStroke( new BasicStroke( 1 ) );
-        gtx.drawString( str, xco, yco );
-        gtx.draw( baseline );
-        
         gtx.setColor( Color.RED );
         gtx.setStroke( dashes );
-        gtx.draw( strRect );
+        gtx.draw( rect );
+        
+        // draw the baseline label
+        gtx.setFont( labelFont );
+        labelFRC = gtx.getFontRenderContext();
+        gtx.setColor( Color.BLACK );
+        String      baseLabelStr    = "baseline";
+        TextLayout  baseLabelLayout = 
+            new TextLayout( baseLabelStr, labelFont, labelFRC );
+        Rectangle2D baseLabelRect   = baseLabelLayout.getBounds();
+        float       baseLabelXco    = baseXco2 + 5;
+        float       baseLabelYco    = 
+            yco + (float)baseLabelRect.getHeight() / 2;
+        baseLabelLayout.draw( gtx, baseLabelXco, baseLabelYco );
+        
+        // draw the coordinates, below and to the left
+        // of the start of the string
+        String      xyStr       = String.format( "(x=%d,y=%d)", xco, yco );
+        TextLayout  xyLayout    = 
+            new TextLayout( xyStr, labelFont, labelFRC );
+        Rectangle2D xyRect      = xyLayout.getBounds();
+        float       xyXco       = xco - (float)xyRect.getWidth() / 2;
+        float       xyYco       = yco + (float)xyRect.getHeight() + 3;
+        xyLayout.draw( gtx, xyXco, xyYco );
+        
+        // draw the label to the right of the bounding box
+        String      boxLabel    = "bounding rectangle";
+        TextLayout  boxLayout   = 
+            new TextLayout( boxLabel, labelFont, labelFRC );
+        float       boxLabelXco = rectXco + rectWidth - strWidth / 2;
+        float       boxLabelYco = rectYco - 5;
+        boxLayout.draw( gtx, boxLabelXco, boxLabelYco );
     }
 }
