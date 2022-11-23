@@ -26,10 +26,6 @@ public class BaselineDemo extends JPanel
     private Font            strFont;
     /** Font to draw labels on the baseline graphic and coordinates. */
     private Font            labelFont;
-    /** FontRenderContext for string font */
-    private FontRenderContext   strFRC;
-    /** FontRenderContext for label font */
-    private FontRenderContext   labelFRC;
     
     public static void main( String[] args )
     {
@@ -70,23 +66,21 @@ public class BaselineDemo extends JPanel
     {
         gtx.setColor( Color.BLACK );
         gtx.setFont( strFont );
+        gtx.setStroke( new BasicStroke( 1 ) );
         
-        // draw the string
-        gtx.drawString( str, xco, yco );
-        
-        // Draw the baseline, from xco to a little past
-        // the end of the string
-        strFRC = gtx.getFontRenderContext();
+        // Draw the string at (xco, yco)
+        FontRenderContext   strFRC = gtx.getFontRenderContext();
         TextLayout  strLayout   = new TextLayout( str, strFont, strFRC );
         Rectangle2D strRect     = strLayout.getBounds();
         strLayout.draw( gtx, xco, yco );
         float       strWidth    = (float)strRect.getWidth();
         
+        // Draw the baseline, from xco to a little past
+        // the end of the string
         float       baseXco1    = xco;
         float       baseXco2    = baseXco1 + strWidth + 40;
         Line2D      baseline    = 
             new Line2D.Float( baseXco1, yco, baseXco2, yco );
-        gtx.setStroke( new BasicStroke( 1 ) );
         gtx.draw( baseline );
         
         // Draw the bounding box around the string
@@ -105,15 +99,13 @@ public class BaselineDemo extends JPanel
                 new float[] { 6 },
                 5f
             );
-        gtx.setColor( Color.BLACK );
-        gtx.setStroke( new BasicStroke( 1 ) );
         gtx.setColor( Color.RED );
         gtx.setStroke( dashes );
         gtx.draw( rect );
         
         // draw the baseline label
         gtx.setFont( labelFont );
-        labelFRC = gtx.getFontRenderContext();
+        FontRenderContext   labelFRC = gtx.getFontRenderContext();
         gtx.setColor( Color.BLACK );
         String      baseLabelStr    = "baseline";
         TextLayout  baseLabelLayout = 
