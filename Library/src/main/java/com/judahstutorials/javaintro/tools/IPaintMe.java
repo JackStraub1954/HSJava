@@ -1,4 +1,4 @@
-package edu.uweo.javaintro.tools;
+package com.judahstutorials.javaintro.tools;
 
 import java.awt.Graphics2D;
 

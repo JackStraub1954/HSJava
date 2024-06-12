@@ -1,4 +1,4 @@
-package edu.uweo.javaintro.tools;
+package com.judahstutorials.javaintro.tools;
 
 // <pre>
 // Copy this file in its entirety to a file named Turtlet.java.

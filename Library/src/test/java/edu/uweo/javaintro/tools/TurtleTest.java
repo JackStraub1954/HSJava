@@ -2,6 +2,8 @@ package edu.uweo.javaintro.tools;
 
 import org.junit.jupiter.api.Test;
 
+import com.judahstutorials.javaintro.tools.Turtle;
+
 public class TurtleTest {
 
 	@Test
