@@ -1,4 +1,4 @@
-package judah.com.acmemail.blog_support;
+package com.acmemail.judah.blog_support;
 
 public class MainIntegerLines
 {

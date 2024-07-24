@@ -1,4 +1,4 @@
-package judah.com.acmemail.blog_support;
+package com.acmemail.judah.blog_support;
 
 import java.awt.BorderLayout;
 
