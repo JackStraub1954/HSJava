@@ -1,4 +1,4 @@
-package edu.uweo.javaintro.tools;
+package com.judahstutorials.javaintro.tools;
 
 import org.junit.jupiter.api.Test;
 
