@@ -10,12 +10,14 @@ package com.judahstutorials.javaintro.tools;
 // obtain the starting point of your Turtlet.
 
 import java.awt.Color;
-import java.awt.image.ImageObserver;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.ImageObserver;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Turtlet extends Object
 {
@@ -60,9 +62,11 @@ public class Turtlet extends Object
 		URL	url;
         try
 		{
-			url = new URL( path );
+//			url = new URL( path ); DEPRECATED
+        	URI	uri	= new URI( path );
+        	url = uri.toURL();
 		}
-		catch ( MalformedURLException exc )
+		catch ( URISyntaxException |  MalformedURLException exc )
 		{
 			url = null;
 		}
