@@ -1,5 +1,7 @@
 package com.judahstutorials.javaintro.tictactoe.sandbox;
 
+import java.awt.Color;
+
 import com.judahstutorials.javaintro.tictactoe.TicTacToeBoard;
 import com.judahstutorials.javaintro.tictactoe.TicTacToeUser;
 
@@ -20,10 +22,19 @@ import com.judahstutorials.javaintro.tictactoe.TicTacToeUser;
  */
 public class TicTacToeDemo implements TicTacToeUser
 {
+    private static TicTacToeBoard  board;
+    
+    /**
+     * Application entry point.
+     * 
+     * @param args  not used
+     */
     public static void main( String[] args )
     {
         TicTacToeDemo   demo    = new TicTacToeDemo();
-        TicTacToeBoard  board   = TicTacToeBoard.getTicTacToeBoard( demo );
+        board = TicTacToeBoard.getTicTacToeBoard( demo );
+        board.setBGColor( 1, 1, Color.YELLOW );
+        board.setFGColor( 1, 1, Color.BLUE );
         board.setOwner( 1, 1, 'x' );
         board.setOwner( 0, 2, 'o' );
         board.setOwner( 0, 0, 'x' );
@@ -41,5 +52,9 @@ public class TicTacToeDemo implements TicTacToeUser
         String  feedback    = 
             "Clicked: row " + row + ", col " + col + ", owner: " + owner;
         System.out.println( feedback );
+        // This is where you update the state of your GUI,
+        // depending on the nature of the click.
+        // Don't forget to call repaint
+        board.repaint();
     }
 }

@@ -2,6 +2,10 @@ package com.judahstutorials.javaintro.tools;
 
 import java.awt.Color;
 
+/**
+ * Application that demonstrates
+ * 'use of the HSB color model.
+ */
 public class ColorWheel
 {
     private static final    double   degreeIncr     = .2;

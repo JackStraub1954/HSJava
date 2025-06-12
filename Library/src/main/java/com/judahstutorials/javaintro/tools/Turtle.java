@@ -126,7 +126,7 @@ public class Turtle extends Turtlet
 	 *  remain unchanged.
 	 *  <p>
 	 *  Example:
-	 *  <code><pre>
+	 *  <pre>
 public static void main( String[] args )
 {
     URL	path = Turtlet.getURL( "http://faculty.washington.edu/jstraub/flowers.jpg" );
@@ -135,7 +135,7 @@ public static void main( String[] args )
         Turtle	pokey	= new Turtle();
         pokey.drawImage( path );
     }
-}</pre></code>
+}</pre>
 	 *
 	 *  @param	path File from which to obtain the image data.
 	 *  @return	reference to stored image. This only needs to be saved

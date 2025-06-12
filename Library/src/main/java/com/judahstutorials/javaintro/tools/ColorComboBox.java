@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 /**
- *  This class encapsulates a JComboBox<Color>. It uses
+ *  This class encapsulates a JComboBox&lt;Color>. It uses
  *  a custom ComboBoxModel to manage the contents of the
  *  JComboBox, displaying each item in the color it
  *  represents.

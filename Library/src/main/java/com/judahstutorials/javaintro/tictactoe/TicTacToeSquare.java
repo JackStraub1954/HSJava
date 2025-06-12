@@ -1,4 +1,4 @@
-package com.judahstutorials.javaintro.tools;
+package com.judahstutorials.javaintro.tictactoe;
 
 import java.awt.Color;
 
@@ -75,7 +75,5 @@ public class TicTacToeSquare
     public void setOwner(char owner)
     {
         this.owner = Character.toUpperCase( owner );
-    }
-    
-    
+    }   
 }

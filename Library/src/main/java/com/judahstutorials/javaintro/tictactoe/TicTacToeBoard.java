@@ -19,9 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import com.judahstutorials.javaintro.tools.TicTacToeSquare;
+import com.judahstutorials.javaintro.tictactoe.sandbox.TicTacToeDemo;
 
-/**
 /**
  * This class encapsulates a tic-tac-toe board.
  * Upon instantiation, it displays a board containing nine squares.
@@ -262,7 +261,7 @@ public class TicTacToeBoard extends JPanel
      * 
      * @return  the owner of the square at the given row and column
      */
-    public char getOwner(  int row, int col )
+    public char getOwner( int row, int col )
     {
         char    owner   = squares[row][col].getOwner();
         return owner;
