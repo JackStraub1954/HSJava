@@ -35,10 +35,10 @@ public class TicTacToeDemo implements TicTacToeUser
         board = TicTacToeBoard.getTicTacToeBoard( demo );
         board.setBGColor( 1, 1, Color.YELLOW );
         board.setFGColor( 1, 1, Color.BLUE );
-        board.setOwner( 1, 1, 'x' );
-        board.setOwner( 0, 2, 'o' );
-        board.setOwner( 0, 0, 'x' );
-        board.setOwner( 2, 2, 'o' );
+        board.setOwner( 1, 1, 'X' );
+        board.setOwner( 0, 2, 'O' );
+        board.setOwner( 0, 0, 'X' );
+        board.setOwner( 2, 2, 'O' );
         board.repaint();
     }
     
@@ -50,7 +50,9 @@ public class TicTacToeDemo implements TicTacToeUser
     public void clicked( int row, int col, char owner )
     {
         String  feedback    = 
-            "Clicked: row " + row + ", col " + col + ", owner: " + owner;
+            "Clicked: row " + row 
+            + ", col " + col
+            + ", owner: " + owner;
         System.out.println( feedback );
         // This is where you update the state of your GUI,
         // depending on the nature of the click.
