@@ -11,6 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/**
+ * Encapsulates an application for displaying a 
+ * {@link ColorWheel}.
+ */
 public class ColorWheelPanel extends JPanel
 {
     private static final long serialVersionUID = 1L;
@@ -49,6 +53,10 @@ public class ColorWheelPanel extends JPanel
         }
     }
     
+    /**
+     * Constructor.
+     * Sets the preferred size of the encapsulating GUI.
+     */
     public ColorWheelPanel()
     {
         int         dim             = (int)(side + 2 * margin );
@@ -74,6 +82,9 @@ public class ColorWheelPanel extends JPanel
         gtx.dispose();
     }
     
+    /**
+     * Put the application thread to sleep for a little while
+     */
     private static void pause()
     {
         try
@@ -86,14 +97,64 @@ public class ColorWheelPanel extends JPanel
         }
     }
     
+    /**
+     * Encapsulates the logic to increment/decrement the value of a color.
+     * It does this by representing a color in the HSB model.
+     * To change the value of a color:
+     * <ol>
+     *      <li>
+     *          Increment or decrement the saturation.
+     *          If the saturation goes out of bounds:
+     *      </li>
+     *      <li>
+     *          Return the saturation to its base value
+     *          (0 for incrementing, 1 for decrementing)
+     *          and increment or decrement the brightness.
+     *          If the brightness goes out of bounds:
+     *      </li>
+     *      <li>
+     *          Return the brightness to its base value
+     *          (0 for incrementing, 1 for decrementing)
+     *          and increment or decrement the hue.
+     *          If the hue goes out of bounds:
+     *      </li>
+     *      <li>
+     *          Return the hue to its base value
+     *          (0 for incrementing, 1 for decrementing)
+     *          and increment or decrement the hue.
+     *          Reverse the direction of change.
+     *      </li>
+     * </ol>
+     */
     private static class ColorManager
     {
+        /**
+         * Hue of the current color.
+         */
         private float   hue         = 0;
+        /**
+         * Saturation of the current color.
+         */
         private float   saturation  = 0;
+        /**
+         * Brightness of the current color.
+         */
         private float   brightness  = 0;
-        private float   incr        = .1f;
+        /**
+         * Value by which to increment/decrement a color component.
+         */
+        private float   incr        = .05f;
+        /**
+         * Direction of change: positive value to increment,
+         * negative value to decrement.
+         */
         private int     direction   = 1;
         
+        /**
+         * Gets the next color in the sequence.
+         * 
+         * @return  the next color in the sequence
+         */        
         public Color nextColor()
         {
             if ( direction == 1 )
@@ -105,6 +166,9 @@ public class ColorWheelPanel extends JPanel
             return color;
         }
         
+        /**
+         * Increment the color value.
+         */
         private void forward()
         {
             brightness += incr;
@@ -127,6 +191,9 @@ public class ColorWheelPanel extends JPanel
             }
         }
         
+        /**
+         * Decrement the color value.
+         */
         private void back()
         {
             brightness -= incr;

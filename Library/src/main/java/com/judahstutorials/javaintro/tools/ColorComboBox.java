@@ -76,6 +76,9 @@ public class ColorComboBox
 		setModel( model );
 	}
 
+    /**
+     * Initializes an object of this class.
+     */
     private void initialize()
     {
         setRenderer( new ColorCellRenderer() );
@@ -83,10 +86,19 @@ public class ColorComboBox
         setEditable( true );
     }
 
+    /**
+     * Class to use as a cell renderer in a ColorComboBox.
+     */
     private class ColorCellRenderer
         implements ListCellRenderer<Color>
     {
+        /**
+         * Default size of the renderer.
+         */
         private Dimension preferredSize_ = new Dimension( 200, 20 );
+        /**
+         * Base of the renderer.
+         */
         private DefaultListCellRenderer defaultRenderer_ =
             new DefaultListCellRenderer();
 

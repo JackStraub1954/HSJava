@@ -220,7 +220,7 @@ public class Vic
 
 	/** Replace random initialization of rows and stack with user-specified arrangement.
 		<p>
-		Parameter <tt>args</tt> is an array of up to five strings:
+		Parameter <em>args</em> is an array of up to five strings:
 			
 		A string beginning with a pound sign (#) must be followed by
 		a valid integer between 0 and 8, inclusive, and indicates 
