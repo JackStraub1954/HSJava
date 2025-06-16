@@ -93,6 +93,14 @@ public class ColorComboBox
         implements ListCellRenderer<Color>
     {
         /**
+         * Default constructor; not used.
+         */
+        private ColorCellRenderer()
+        {
+            // not used
+        }
+        
+        /**
          * Default size of the renderer.
          */
         private Dimension preferredSize_ = new Dimension( 200, 20 );
@@ -127,10 +135,27 @@ public class ColorComboBox
         }
     }
 
+    /**
+     * The editor used by the ColorComboBox.
+     */
     private class CBoxEditor
         implements ComboBoxEditor
     {
+        /**
+         * Default constructor; not used.
+         */
+        private CBoxEditor()
+        {
+            // not used
+        }
+        
+        /**
+         * The edit button.
+         */
         private JButton editor_ = new JButton();
+        /**
+         * The selected item.
+         */
         private Object  item_   = null;
 
         @Override

@@ -14,19 +14,50 @@ import javax.swing.SwingUtilities;
 /**
  * Encapsulates an application for displaying a 
  * {@link ColorWheel}.
+ * Iteratively draws arcs of incremental color
+ * at incremental degrees from a point of origin.
  */
 public class ColorWheelPanel extends JPanel
 {
+    /**
+     * Default serial version UID.
+     */
     private static final long serialVersionUID = 1L;
+    
+    /**
+     * Acount to increment degrees with each iteration.
+     */
     private static final    double  degreeIncr      = 2;
+    /**
+     * The length of the side of the enclosing window.
+     */
     private static final    double  side            = 512;
+    /**
+     * The size of the margin around the enclosing window.
+     */
     private static final    int     margin          = 10;
+    /**
+     * The length of time to pause between iteration.
+     */
     private static final    long    pauseTime       = 10;
+    /**
+     * The main window for the color wheel.
+     */
     private static ColorWheelPanel  panel;
     
+    /**
+     * Helpful class for generating incremental colors.
+     */
     private final ColorManager  colorMgr    = new ColorManager();
+    /**
+     * Start angle for drawing the arcs.
+     */
     private double              start       = 0;
-    private Arc2D               arc         =
+    /**
+     * Base shape to use for drawing arcs; 
+     * must be updated with every iteration.
+     */
+    private final Arc2D         arc         =
         new Arc2D.Double( margin, margin, side, side, start, degreeIncr, Arc2D.PIE );
     
     /**
@@ -128,6 +159,14 @@ public class ColorWheelPanel extends JPanel
      */
     private static class ColorManager
     {
+        /**
+         * Default constructor; not used
+         */
+        private ColorManager()
+        {
+            // not used
+        }
+        
         /**
          * Hue of the current color.
          */

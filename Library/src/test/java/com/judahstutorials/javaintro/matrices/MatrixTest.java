@@ -8,6 +8,38 @@ import org.junit.jupiter.api.Test;
 
 public class MatrixTest
 {
+    private static final double[][] detTestA        =
+    {
+        {   55,   55,   55,   55,   55,   55 },
+        {   55,   56,   55,   55,   55,   55 },
+        {   55,   55,   57,   55,   55,   55 },
+        {   55,   55,   55,   58,   55,   55 },
+        {   55,   55,   55,   55,   59,   55 },
+        {   55,   55,   55,   55,   55,   60 },
+    };
+    private static final double     detTestASol     = 6600;
+    
+    private static final double[][] detTestB        =
+    {
+        { 20, 21 },
+        { 30, 31 }
+    };
+    private static final double     detTestBSol     = -10;
+    
+    private static final double[][] detTestC        =
+    {
+        { 10, 11, 12 },
+        { 20, 21, 22 },
+        { 31, 32, 35 }
+    };
+    private static final double     detTestCSol     = -20;
+        
+    private static final double[][] detTestD        =
+    {
+        { -3.14 },
+    };
+    private static final double     detTestDSol     = -3.14;
+    
     private static final double[][] testArrSquare   =
     { 
         { 10, 11, 12 },
@@ -41,6 +73,7 @@ public class MatrixTest
         validateCopy( testArr4By3, matrix );
     }
     
+    @Test
     public void testProduct()
     {
         double[][]  leftData    =
@@ -71,6 +104,7 @@ public class MatrixTest
         validateData( expectedData, product );
     }
     
+    @Test
     public void testNegate()
     {
         double[][]  data        = 
@@ -90,13 +124,47 @@ public class MatrixTest
         validateData( expected, negation );
     }
     
+    @Test
+    public void testDeterminant()
+    {
+        testDeterminant( detTestA, detTestASol );
+        testDeterminant( detTestB, detTestBSol );
+        testDeterminant( detTestC, detTestCSol );
+        testDeterminant( detTestD, detTestDSol );
+    }
+    
+    @Test
+    public void testGetDataColumn()
+    {
+        double[][]  data    =
+        {
+            { 0, 0, 1, 0 },
+            { 0, 0, 2, 0 },
+            { 0, 0, 3, 0 },
+        };
+        Matrix      matrix  = new Matrix( data );
+        double[]    col     = matrix.getDataColumn( 2 );
+        assertEquals( 3, col.length );
+        assertEquals( 1, col[0] );
+        assertEquals( 2, col[1] );
+        assertEquals( 3, col[2] );
+    }
+    
+    private static void 
+    testDeterminant( double[][] data, double expectedSolution )
+    {
+        Matrix  matrix          = new Matrix( data );
+        double  actualSolution  = matrix.determinant();
+        assertEquals( expectedSolution, actualSolution );
+    }
+    
     /**
      * Validate the content and uniqueness of a matrix.
      * 
      * @param expected  the expected content
-     * @param actual    
+     * @param actual    the actual content
      */
-    private void validateCopy( double[][] expected, Matrix actual )
+    private static void validateCopy( double[][] expected, Matrix actual )
     {
         validateData( expected, actual );
         validateUniqueness( expected, actual );
@@ -109,7 +177,7 @@ public class MatrixTest
      * @param expected  the original data
      * @param actual    the matrix to validate
      */
-    private void validateUniqueness( double[][] expected, Matrix actual )
+    private static void validateUniqueness( double[][] expected, Matrix actual )
     {
         validateUniqueness( expected, actual.getData() );
     }
@@ -118,10 +186,10 @@ public class MatrixTest
      * Validate that a copy of a double[][] array
      * is not a reference to the original data.
      * 
-     * @param expected  the original data
-     * @param actual    the matrix to validate
+     * @param arrA  the original data
+     * @param arrB    the matrix to validate
      */
-    private void validateUniqueness( double[][] arrA, double[][] arrB )
+    private static void validateUniqueness( double[][] arrA, double[][] arrB )
     {
         assertNotEquals( arrA, arrB );
         for ( int inx = 0 ; inx < arrA.length ; ++inx )
@@ -135,7 +203,7 @@ public class MatrixTest
      * @param expected  the expected data
      * @param actual    the given matrix
      */
-    private void validateData( double[][] expected, Matrix actual )
+    private static void validateData( double[][] expected, Matrix actual )
     {
         validateData( expected, actual.getData() );
     }
@@ -146,7 +214,7 @@ public class MatrixTest
      * @param expected  the expected content
      * @param actual    the given array
      */
-    private void validateData( double[][] expected, double[][] actual )
+    private static void validateData( double[][] expected, double[][] actual )
     {
         assertEquals( expected.length, actual.length );
         int     numRows     = expected.length;

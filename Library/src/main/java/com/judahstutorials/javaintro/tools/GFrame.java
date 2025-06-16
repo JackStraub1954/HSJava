@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
 
 /**
  * This class encapsulates a simple JFrame
- * to support the implementation of graphics application.
+ * to support the implementation of graphics applications.
  * To use it the programmer passes an object
  * that implements {@link GUser} to {@link #getGFrame(GUser)}.
  * The GFrame that it returns encapsulates a visible JFrame
@@ -28,11 +28,26 @@ import javax.swing.SwingUtilities;
  */
 public class GFrame
 {
+    /**
+     * The application frame.
+     */
     private final JFrame    frame;
+    /**
+     * The main application window.
+     */
     private final IntPanel  panel;
+    /**
+     * The GUser assigned to this frame.
+     */
     private final GUser     gUser;
+    /**
+     * Single instance of this class.
+     */
     private static GFrame   gFrame;
 
+    /**
+     * Temporary variable for supporrting the use of lambdas.
+     */
     private volatile String     tempString;
     
     /**

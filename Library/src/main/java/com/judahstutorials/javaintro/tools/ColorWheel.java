@@ -8,7 +8,22 @@ import java.awt.Color;
  */
 public class ColorWheel
 {
+    /**
+     * Default constructor; not used.
+     */
+    private ColorWheel()
+    {
+        // not used
+    }
+    
+    /**
+     * The amount to increment the angle of a line drawn by the application
+     * with each iteration.
+     */
     private static final    double   degreeIncr     = .2;
+    /**
+     * The length of time (milliseconds) to pause between iterations.
+     */
     private static final    long     pauseTime      = 1;
     /**
      * Application entry point.
@@ -80,6 +95,14 @@ public class ColorWheel
      */
     private static class ColorManager
     {
+        /**
+         * Default constructor; not used.
+         */
+        private ColorManager()
+        {
+            // not used
+        }
+        
         /**
          * Hue of the current color.
          */
