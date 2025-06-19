@@ -1,4 +1,4 @@
-package cartesian_plane;
+package com.judahstutorials.javaintro.cartesian_plane;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -207,7 +207,7 @@ public class LinePainter
             new TextLayout( "1.0", textFont, textFRC );
         double      yOffset     = testLayout.getBounds().getHeight() / 2;
 
-        double  valIncr = 1 / type.getPerUnit();
+        double  valIncr = 1.0 / type.getPerUnit();
         float   xco     = (float)(centerXco + length / 2 + textOffset);
         Stream.of( true, false ).forEach( b -> {
             double  incr    = b ? valIncr : -valIncr;
@@ -276,7 +276,7 @@ public class LinePainter
         double      yOffset     = 
             length / 2 + testLayout.getBounds().getHeight() + textOffset;
 
-        double      valIncr     = 1 / type.getPerUnit();
+        double      valIncr     = 1.0 / type.getPerUnit();
         float       yco         = (float)(centerYco + yOffset);
         Stream.of( true, false ).forEach( b -> {
             double              incr    = b ? -valIncr : valIncr;

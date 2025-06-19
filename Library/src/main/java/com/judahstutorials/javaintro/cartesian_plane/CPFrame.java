@@ -1,4 +1,4 @@
-package cartesian_plane;
+package com.judahstutorials.javaintro.cartesian_plane;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.lang.reflect.InvocationTargetException;

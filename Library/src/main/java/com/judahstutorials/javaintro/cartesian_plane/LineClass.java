@@ -1,4 +1,4 @@
-package cartesian_plane;
+package com.judahstutorials.javaintro.cartesian_plane;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -43,10 +43,6 @@ public class LineClass
      */
     private double  length      = -1;
     /**
-     * Number of lines per unit.
-     */
-    private double  perUnit     = 1;
-    /**
      * Width of the line.
      */
     private float   width       = 1f;    
@@ -54,6 +50,10 @@ public class LineClass
      * If true, this type of line will be drawn on the Cartesian plane.
      */
     private boolean draw        = true;
+    /**
+     * Number of lines per unit.
+     */
+    private int     perUnit     = 1;
     /**
      * The Stroke for this line.
      * To change the Stroke, change the line width.
@@ -126,7 +126,7 @@ public class LineClass
      * 
      * @return the instances-per-unit of this type of line
      */
-    public double getPerUnit()
+    public int getPerUnit()
     {
         return perUnit;
     }
@@ -137,7 +137,7 @@ public class LineClass
      * 
      * @param perUnit the perUnit to set
      */
-    public void setPerUnit(double perUnit)
+    public void setPerUnit( int perUnit )
     {
         this.perUnit = perUnit;
     }
@@ -188,7 +188,9 @@ public class LineClass
     }
 
     /**
-     * @return the type
+     * Gets the type of this class of line.
+     * 
+     * @return the type of this class of line.
      */
     public int getType()
     {
