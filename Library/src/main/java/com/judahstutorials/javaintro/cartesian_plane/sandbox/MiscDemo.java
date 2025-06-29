@@ -1,7 +1,5 @@
 package com.judahstutorials.javaintro.cartesian_plane.sandbox;
 
-import java.awt.Dimension;
-
 import javax.swing.JOptionPane;
 
 import com.judahstutorials.javaintro.cartesian_plane.CPFrame;

@@ -29,7 +29,7 @@ public class LinePainter
     /**
      * Area in which lines are to be drawn.
      */
-    private transient Rectangle2D   rect;
+//    private transient Rectangle2D   rect;
     /**
      * Left side of the drawing area;
      * derived from {@linkplain #rect}
@@ -110,7 +110,6 @@ public class LinePainter
         double unitLength    )
     {
         this.gtx = gtx;
-        this.rect = rect;
         this.unitLength = unitLength;
         rectXco = rect.getX();
         rectYco = rect.getY();

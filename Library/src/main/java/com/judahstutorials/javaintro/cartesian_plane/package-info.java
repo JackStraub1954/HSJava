@@ -3,11 +3,11 @@
  * to draw a representation of the Cartesian plane,
  * including points plotted by the client.
  * The intent is to provide students
- * with a utility that allows then to plot equations
+ * with a utility that allows them to plot equations
  * without worrying about the complexity
  * of a user interface.
- * Following is a discussion of some of the 
- * features and properties of the implementation.
+ * The following discussion outlines some of the key features
+ * and properties of the implementation.
  * <h2>The Plane Class</h2>
  * <div style="float:right; width:35%;">
  *      <figure>
@@ -24,17 +24,17 @@
  * <p>
  * The <em>Plane class</em>
  * is the only class of interest to the client.
- * To create a <em>Plane</em> object
- * invoke <em>CPFrame.getPlane()</em>.
- * This will instantiate and display the GUI
- * encapsulating the Cartesian plane grid
- * and return to you and object
- * that can be used to manipulate the GUI.
+ * To create a <em>Plane</em> object,
+ * invoke <em>CPFrame.getPlane()</em>,
+ * which will instantiate and display 
+ * the GUI encapsulating the Cartesian plane grid 
+ * and return to you an object 
+ * that you can use to manipulate the GUI.
  * </p>
  * <h2>The Unit Length</h2>
  * <p>
- * The <em>unit length</em> determines how many pixel
- * of your screen are spanned by one unit on the Cartesian plane grid.
+ * The <em>unit length</em> determines how many pixels
+ * of a screen are spanned by one unit on the Cartesian plane grid.
  * The figures below depict a grid with a large unit length
  * and one with a small unit length.
  * </p>
@@ -77,20 +77,20 @@
  * <ul>
  *      <li>
  *          LineClass.AXIS:
- *          the x- and y-axes.
+ *          The x- and y-axes.
  *      </li>
  *      <li>
  *          LineClass.GRIDLINE:
- *          the gridlines that typically span the length and width of the grid.
+ *          The gridlines that typically span the length and width of the grid.
  *          By default, they are thin lines that occur at every unit mark.
  *      </li>
  *      <li>
  *          LineClass.MAJOR_TICK:
- *          the longer tick marks on the x- and y-axes.
+ *          The longer tick marks on the x- and y-axes.
  *      </li>
  *      <li>
  *          LineClass.MINOR_TICK:
- *          the shorter tick marks on the x- and y-axes.
+ *          The shorter tick marks on the x- and y-axes.
  *      </li>
  * </ul>
  * <p>
@@ -99,19 +99,20 @@
  * <ul>
  *      <li>
  *          boolean draw:
- *          if this property is true the lines in the given class
- *          will be displayed.
- *          To suppress display of a class of line
- *          change this property to false.
+ *           If this property is true, 
+ *           the Cartesian plane facility will display 
+ *           the lines in the given class. 
+ *           To suppress the display of a class of lines, 
+ *           change this property to false.
  *      </li>
  *      <li>
  *          Color color:
- *          the color of every line in the class.
+ *          The color of every line in the class.
  *      </li>
  *      <li>
  *          double length:
- *          the length of every line in the class.
- *          If this property has a value of -1
+ *          The length of every line in the class.
+ *          If this property has a value of -1,
  *          the lines will span the width and height
  *          of the grid.
  *          Gridlines typically have a length of -1;
@@ -119,11 +120,12 @@
  *      </li>
  *      <li>
  *          double width:
- *          the width of every line in the class.
+ *          The width of every line in the class.
  *      </li>
  *      <li>
  *          int perUnit:
- *          the number of lines that are drawn per unit of the grid.
+ *          The number of lines that the Cartesian plane facility 
+ *          will draw per unit of the grid.
  *          In the figure on the left below,
  *          gridlines have a per-unit value of 1,
  *          major tick marks have a per-unit value of 1,
@@ -166,11 +168,11 @@
  *      </tr>
  * </table>
  * <p>
- *      Line properties can be interrogated and changed
- *      using methods in the <em>Plane</em>.
+ *      The client can interrogate and change line properties 
+ *      using methods in the <em>Plane</em> class.
  *      Invoke the getter or setter for the property,
  *      specifying the target line class
- *      (e.g. LineClass.MAJOR_TICK).
+ *      (e.g., LineClass.MAJOR_TICK).
  *      The <em>Plane</em> methods are:
  * </p>
  * <dl>
@@ -208,14 +210,14 @@
  *          </strong>
  *      </dt>
  *      <dd>
- *          Get or set the lines-per-unit value a line class.<br>&nbsp;
+ *          Get or set the lines-per-unit value of a line class.<br>&nbsp;
  *      </dd>
  * </dl>
  * <h2>Other Plane Class Methods and Properties</h2>
  * <p>
- *      Other methods in the <em>Plane</em> class
- *      are used to plot points,
- *      and to control the properties of the encapsulating grid.
+ *      The client can utilize other methods in the <em>Plane</em> class
+ *      to plot points and control the properties 
+ *      of the encapsulating grid.
  *      To plot points, use the following methods:
  * </p>
  * <dl>
@@ -242,11 +244,11 @@
  *          </strong>
  *      </dt>
  *      <dd>
- *          Any time you make a modification to the grid,
- *          whether you are changing the list of points
- *          or the appearance of the grid,
- *          you must call this method before you can see your changes
- *          in the GUI.
+ *          Whenever you modify the grid, 
+ *          whether to change the list of points 
+ *          or the appearance of the grid, 
+ *          you must call this method 
+ *          before the changes take effect in the GUI.
  *      </dd>
  * </dl>
  * <p>
@@ -259,8 +261,8 @@
  *          private int fontStyle</strong><br>
  *          These properties control the appearance of text on the grid.
  *          To interrogate or modify one of these properties,
- *          use one the <em>Plane</em> class methods,
- *          <em>getFontX</em> or <em>getFontX</em>
+ *          use one of the <em>Plane</em> class methods,
+ *          such as <em>getFontX</em> or <em>setFontX,</em>
  *          where X is the name of the property,
  *          for example, <em>getFontSize</em> and <em>setFontSize.</em>
  *      </li>
@@ -268,31 +270,31 @@
  *          <strong>Color textColor</strong><br>
  *          This property determines the color of text
  *          displayed on the grid.
- *          You can interrogate or change this value
- *          using <em>getTextColor</em> and <em>setTextColor.</em>
+ *          The client can interrogate or change this value
+ *          using the <em>getTextColor</em> and <em>setTextColor</em> methods.
  *      </li>
  *      <li>
  *          <strong>boolean drawText</strong><br>
  *          Set this property to false 
- *          to suppress displaying labels on the grid.
+ *          to suppress the display of labels on the grid.
  *          Use the methods <em>getTextDraw</em> and <em>setTextDraw</em>
  *          to get or set the value of this property.    
  *      </li>
  *      <li>
  *          <strong>double pointDiam<br>
  *          Color pointColor</strong><br>
- *          Points on the Cartesian plane
- *          are represented as circles.
+ *          The facility represents points 
+ *          on the Cartesian plane as circles. 
  *          These properties control the diameter
  *          and color of the circles.
  *          Interrogate and modify these properties
  *          using <em>getPointColor, setPointColor,
- *          getPointDiam</em> and <em>setPointDiam.</em>
+ *          getPointDiam,</em> and <em>setPointDiam.</em>
  *      </li>
  *      <li>
  *          <strong>Color backgroundColor</strong><br>
  *          This property controls the background color
- *          of the window that contains the grid;
+ *          of the window that contains the grid.
  *          Use the methods <em>getBackgroundColor</em> 
  *          and <em>setBackgroundColor</em>
  *          to get or set the value of this property.    
@@ -310,7 +312,7 @@
  *          As discussed earlier,
  *          this property controls the number of pixels 
  *          occupied by a unit on the grid.
- *          You can get it and set it using
+ *          The client can get it and set it using
  *          the methods <em>getUnitLength</em> 
  *          and <em>setUnitLength</em>.    
  *      </li>
@@ -318,22 +320,57 @@
  * <h2>Sample Code</h2>
  * <h3>CartesianPlaneDemo1</h3>
  * <p>
- * This program shows you how to instantiate 
- * and utilize <em>Plane</em> object.
+ * This program demonstrates how to instantiate 
+ * and utilize <em>Plane</em> objects.
  * It plots a straight line
  * using points with x-coordinates 
  * spaced at .5 units.
- * All defaults for the appearance of the GUI are accepted.
+ * All defaults for the GUI appearance are accepted.
  * </p>
 <pre>public static void main(String[] args)
 {
     Plane   plane   = CPFrame.getPlane();
-    for ( double coo = -2 ; coo <= 2 ; coo += .5 )
+    for ( double coo = -2 ; coo &lt;= 2 ; coo += .5 )
         plane.addPoint( coo, coo );
     plane.repaint();
 }</pre>
+ * <h3>CartesianPlaneDemo2</h3>
+ * <p>
+ * This application modifies specific properties 
+ * that control the GUI's appearance, 
+ * then plots a parabola between -1.5 and +1.5 
+ * in increments of 0.01.
+ * </p>
+<pre>public static void main(String[] args)
+{
+    Color   darkGreen   = new Color( 0x006400 );
+    Plane   plane       = CPFrame.getPlane();
+    plane.setMargin( 35 );
+    plane.setBackground( Color.ORANGE );
+    plane.setPitchColor( Color.CYAN );
+    plane.setPointColor( Color.BLUE );
+    plane.setColor( LineClass.AXIS, darkGreen );
+    plane.setColor( LineClass.MAJOR_TICK, Color.RED );
+    plane.setUnitLength( 100 );
+    plane.setPointDiam( 3 );
+    plane.setPerUnit( LineClass.MAJOR_TICK, 4 );
+    plane.setPerUnit( LineClass.MINOR_TICK, 8 );
+    plane.setFontSize( 8 );
+    for ( double coo = -1.5 ; coo &lt;= 1.5 ; coo += .01 )
+        plane.addPoint( coo, Math.pow( coo,  2 ) );
+    plane.repaint();
+}</pre>
+ * <h2>Further Suggestions</h2>
+ * <p>
+ * As part of a project,
+ * the student can use this facility to:
+ * </p>
+ * <ul>
+ *      <li>Plot polynomials, trigonometric, and other simple equations</li>
+ *      <li>Plot polar equations</li>
+ *      <li>Plot parametric equations</li>
+ *      <li>Draw geometric figures</li>
+ *      <li>Implement rotation, translation, and scaling features</li>
+ * </ul>
  */
 package com.judahstutorials.javaintro.cartesian_plane;
-
-import java.awt.Color;
-import java.awt.Font;

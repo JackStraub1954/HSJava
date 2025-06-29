@@ -3,7 +3,6 @@ package com.judahstutorials.javaintro.cartesian_plane;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
-import java.util.Iterator;
 
 /**
  * Encapsulates the properties of a class of line

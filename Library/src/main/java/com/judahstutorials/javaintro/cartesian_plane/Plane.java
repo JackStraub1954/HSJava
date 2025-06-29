@@ -27,6 +27,10 @@ import javax.swing.JPanel;
 public class Plane extends JPanel
 {
     /**
+     * Generated serial version UID.
+     */
+    private static final long serialVersionUID = -2760278402015336758L;
+    /**
      * If true, labels will be drawn on the major ticks
      * of the x- and y-axes.
      */
@@ -607,8 +611,6 @@ public class Plane extends JPanel
         Ellipse2D.Double    point       =
             new Ellipse2D.Double( 0, 0, pointDiam, pointDiam );
         double              halfOffset  = pointDiam / 2;
-        double              xOffset     = centerXco - halfOffset;
-        double              yOffset     = centerYco + halfOffset;
         for ( Point2D next : allPoints )
         {
             double  xco = 
