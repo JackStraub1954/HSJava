@@ -7,10 +7,14 @@ package com.judahstutorials.javaintro.tools;
  *  This class draws to an Image object and lets the frame's paint method
  *  show the Image whenever the frame repaints itself. It is for
  *  Turtle commands that are given in or from a main application. */
-
-import java.awt.*;
-import java.net.URL;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.ImageObserver;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+
+import javax.swing.SwingUtilities;
 
 public class Turtle extends Turtlet
 {
@@ -187,7 +191,19 @@ public static void main( String[] args )
 
 	private static Graphics makePage (boolean makeNewWorld, int w, int h)
 	{	if (theWorld == null || makeNewWorld)
-			theWorld = new TurtleWorld (w, h);
+	    {
+    	    try
+    	    {
+    	        SwingUtilities.invokeAndWait(() ->
+    			    theWorld = new TurtleWorld (w, h)
+			    );
+    	    }
+    	    catch ( InvocationTargetException | InterruptedException exc )
+    	    {
+    	        exc.printStackTrace();
+    	        System.exit( 1 );
+    	    }
+	    }
 		return theWorld.getPage();
 	}	//======================
 }
