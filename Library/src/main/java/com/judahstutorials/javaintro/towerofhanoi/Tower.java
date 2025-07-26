@@ -207,7 +207,7 @@ public class Tower
      */
     public static double getRodYco()
     {
-        return margin;
+        return margin + 2 * componentHeight;
     }
     
     /**

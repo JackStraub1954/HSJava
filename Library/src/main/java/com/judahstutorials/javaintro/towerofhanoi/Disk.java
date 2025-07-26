@@ -1,6 +1,8 @@
 package com.judahstutorials.javaintro.towerofhanoi;
 
 import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Encapsulates the properties of a disk
@@ -11,11 +13,16 @@ public class Disk
     /**
      * The width of the disk.
      */
-    private final double    width;
+    private final double            width;
     /**
      * The color of the disk.
      */
-    private final Color     color;
+    private final Color             color;
+    
+    /**
+     * The shape representing this Disk.
+     */
+    private final Rectangle2D       shape   = new Rectangle2D.Double();
     
     /**
      * Constructor.
@@ -28,6 +35,7 @@ public class Disk
     {
         this.width = width;
         this.color = color;
+        shape.setRect( 0, 0, width, Tower.getComponentHeight() );
     }
 
     /**
@@ -48,5 +56,47 @@ public class Disk
     public Color getColor()
     {
         return color;
+    }
+    
+    /**
+     * Get a Shape representing this Disk
+     * and located at the given coordinates.
+     * 
+     * @param xco   the given x-coordinate
+     * @param yco   the given y-coordinate
+     * 
+     * @return  a Shape representing this Disk
+     */
+    public Rectangle2D getShape( double xco, double yco )
+    {
+        shape.setRect( xco, yco, width, Tower.getComponentHeight() );
+        return shape;
+    }
+    
+    /**
+     * Get a Shape representing this Disk.
+     * The coordinates of the Shape
+     * are copied from the Shape's previous location.
+     * 
+     * @param xco   the given x-coordinate
+     * @param yco   the given y-coordinate
+     * 
+     * @return  a Shape representing this Disk
+     */
+    public Rectangle2D getShape()
+    {
+        return shape;
+    }
+    
+    /**
+     * Sets the location of this Disk
+     * to the given coordinates.
+     * 
+     * @param xco   the given x-coordinate
+     * @param yco   the given y-coordinate
+     */
+    public void setLocation( double xco, double yco )
+    {
+        getShape( xco, yco );
     }
 }

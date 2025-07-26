@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import javax.swing.JPanel;
@@ -24,11 +27,17 @@ public class Pitch extends JPanel
     /**
      * The number of rods contained in the GUI.
      */
-    private final int       numRods     = Tower.getNumRods();
+    private final int           numRods     = Tower.getNumRods();
     /**
      * All the rods contained in the GUI.
      */
-    private final Rod[]     rods        = new Rod[numRods];
+    private final Rod[]         rods        = new Rod[numRods];
+
+    /**
+     * Extra shapes to be drawn with each repaint;
+     * explicitly added to support animations.
+     */
+    private final List<Disk>   auxDisks     = new ArrayList<>();
     
     /**
      * Constructor.
@@ -38,10 +47,11 @@ public class Pitch extends JPanel
     public Pitch()
     {
         double  rodHeight       = Tower.getRodHeight();
+        double  rodYco          = Tower.getRodYco();
         double  plinthHeight    = Tower.getComponentHeight();
         double  margin          = Tower.getMargin();
         int     height          = 
-            (int)(rodHeight + plinthHeight + 2 * margin + .5);
+            (int)(rodYco + rodHeight + plinthHeight + 2 * margin + .5);
         
         double  plinthWidth     = Tower.getPlinthWidth();
         int     numRods         = Tower.getNumRods();
@@ -69,7 +79,7 @@ public class Pitch extends JPanel
     public void paintComponent( Graphics graphics )
     {
         super.paintComponent( graphics );
-        Graphics2D  gtx     = (Graphics2D)graphics.create();
+        Graphics2D  gtx     = (Graphics2D)graphics;
         
         double  rodYco          = Tower.getRodYco();
         double  plinthYco       = Tower.getPlinthYco();
@@ -102,7 +112,14 @@ public class Pitch extends JPanel
         IntStream.iterate( 0, i -> i < numRods , i -> i + 1 )
             .forEach( i -> drawDisks( gtx, i ) );
         
-        gtx.dispose();
+        for ( Disk disk : auxDisks )
+        {
+            Shape   shape   = disk.getShape();
+            gtx.setColor( disk.getColor() );
+            gtx.fill( shape );
+            gtx.setColor( edgeColor );
+            gtx.draw( shape );
+        }
     }
     
     /**
@@ -162,6 +179,12 @@ public class Pitch extends JPanel
         return isEmpty;
     }
     
+    public int getDiskCount( int rodNum )
+    {
+        int count   = rods[rodNum].getDiskCount();
+        return count;
+    }
+
     /**
      * Pauses the application for the given number of milliseconds.
      * @param millis    the given number of milliseconds
@@ -179,6 +202,28 @@ public class Pitch extends JPanel
     }
     
     /**
+     * Add the given shape to the auxiliary shapes list.
+     * Explicitly intended to support animation.
+     *  
+     * @param disk the given shape
+     */
+    public void addAuxDisk( Disk disk )
+    {
+        auxDisks.add( disk );
+    }
+    
+    /**
+     * Removes the given shape from the auxiliary shapes list.
+     * Explicitly intended to support animation.
+     *  
+     * @param disk the given shape
+     */
+    public void removeAuxDisk( Disk disk )
+    {
+        auxDisks.remove( disk );
+    }
+    
+    /**
      * Draws the disks assigned to the rod
      * with the given index number.
      * 
@@ -190,18 +235,15 @@ public class Pitch extends JPanel
         Rod     rod         = rods[rodNum];
         Color   edgeColor   = Tower.getEdgeColor();
         int     diskNum     = 0;
-        double  height      = Tower.getComponentHeight();
         for ( Disk disk : rod )
         {
             double      xco = Tower.getDiskXco( disk, rodNum );
             double      yco = Tower.getDiskYco( diskNum );
-            double      width = disk.getWidth();
-            Rectangle2D rect    =
-                new Rectangle2D.Double( xco, yco, width, height );
+            Shape       shape = disk.getShape( xco, yco );
             gtx.setColor( disk.getColor() );
-            gtx.fill( rect );
+            gtx.fill( shape );
             gtx.setColor( edgeColor );
-            gtx.draw( rect );
+            gtx.draw( shape );
             ++diskNum;
         }
     }
