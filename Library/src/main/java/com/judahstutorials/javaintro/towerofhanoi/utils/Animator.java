@@ -11,15 +11,14 @@ public class Animator
     private static final int    unengaged       = 0;
     private static final int    rising          = 1;
     private static final int    falling         = 2;
-    private static final int    traversingRight   = 3;
-    private static final int    traversingLeft    = 4;
+    private static final int    traversingRight = 3;
+    private static final int    traversingLeft  = 4;
     
     private final Pitch         pitch;
     private final Disk          disk;
     private final Rectangle2D   rect        = new Rectangle2D.Double();
     private final Rectangle2D   auxRect     = new Rectangle2D.Double();
     private final int           direction;
-    private final double        width;
     private final double        height;
     private final double        beginXco;
     private final double        beginYco;
@@ -46,12 +45,13 @@ public class Animator
         beginYco = Tower.getDiskYco( fromTop );
         endXco = Tower.getDiskXco( disk, toRod );
         endYco = Tower.getDiskYco( toTop );
-        width = disk.getWidth();
         height = Tower.getComponentHeight();
         nextXco = beginXco;
         nextYco = beginYco;
         traverseYco = Tower.getRodYco() - 1.5 * height;
-        rect.setRect( disk.getShape( nextXco, nextYco ) );
+//        disk.setXco( nextXco );
+//        disk.setYco( nextYco );
+        disk.setLocation( nextXco, nextYco );
         state = rising;
     }
     
@@ -106,7 +106,8 @@ public class Animator
     {
         computeNextCoordinates();
         auxRect.setRect( rect );
-        rect.setRect( disk.getShape( nextXco, nextYco ) );
+        rect.setRect( disk.getBounds() );
+        disk.setLocation( nextXco, nextYco );
         Rectangle2D union   = rect.createUnion( auxRect );
         pitch.repaint(
             (int)union.getX() - 1,

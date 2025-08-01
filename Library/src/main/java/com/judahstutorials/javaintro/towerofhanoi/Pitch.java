@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,13 +112,7 @@ public class Pitch extends JPanel
             .forEach( i -> drawDisks( gtx, i ) );
         
         for ( Disk disk : auxDisks )
-        {
-            Shape   shape   = disk.getShape();
-            gtx.setColor( disk.getColor() );
-            gtx.fill( shape );
-            gtx.setColor( edgeColor );
-            gtx.draw( shape );
-        }
+            disk.draw( gtx );
     }
     
     /**
@@ -179,6 +172,14 @@ public class Pitch extends JPanel
         return isEmpty;
     }
     
+    /**
+     * Gets the count of disks
+     * currently push on to the given rod.
+     * 
+     * @param rodNum    the given rod
+     * 
+     * @return  the number of disks on the given rod
+     */
     public int getDiskCount( int rodNum )
     {
         int count   = rods[rodNum].getDiskCount();
@@ -202,10 +203,10 @@ public class Pitch extends JPanel
     }
     
     /**
-     * Add the given shape to the auxiliary shapes list.
-     * Explicitly intended to support animation.
+     * Add the given disk to the auxiliary disks list.
+     * This method is explicitly intended to support animation.
      *  
-     * @param disk the given shape
+     * @param disk the given disk
      */
     public void addAuxDisk( Disk disk )
     {
@@ -213,10 +214,10 @@ public class Pitch extends JPanel
     }
     
     /**
-     * Removes the given shape from the auxiliary shapes list.
-     * Explicitly intended to support animation.
+     * Removes the given disk from the auxiliary disks list.
+     * This method is explicitly intended to support animation.
      *  
-     * @param disk the given shape
+     * @param disk the given disk
      */
     public void removeAuxDisk( Disk disk )
     {
@@ -233,17 +234,13 @@ public class Pitch extends JPanel
     private void drawDisks( Graphics2D gtx, int rodNum )
     {
         Rod     rod         = rods[rodNum];
-        Color   edgeColor   = Tower.getEdgeColor();
         int     diskNum     = 0;
         for ( Disk disk : rod )
         {
-            double      xco = Tower.getDiskXco( disk, rodNum );
-            double      yco = Tower.getDiskYco( diskNum );
-            Shape       shape = disk.getShape( xco, yco );
-            gtx.setColor( disk.getColor() );
-            gtx.fill( shape );
-            gtx.setColor( edgeColor );
-            gtx.draw( shape );
+            double      xco     = Tower.getDiskXco( disk, rodNum );
+            double      yco     = Tower.getDiskYco( diskNum );
+            disk.setLocation( xco, yco );
+            disk.draw( gtx );
             ++diskNum;
         }
     }

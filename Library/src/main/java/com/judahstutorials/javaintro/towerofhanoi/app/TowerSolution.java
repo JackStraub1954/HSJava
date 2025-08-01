@@ -1,9 +1,32 @@
 package com.judahstutorials.javaintro.towerofhanoi.app;
 
 import com.judahstutorials.javaintro.towerofhanoi.*;
+
+/**
+ * This application encapsulates a solution to the Tower of Hanoi puzzle.
+ * Students are encouraged to develop their own solution
+ * before looking at the code.
+ */
 public class TowerSolution
 {
+    /**
+     * The Pitch where the puzzle graphic is formulated.
+     */
     private Pitch pitch;
+    
+    /**
+     * Default constructor, not used.
+     */
+    private TowerSolution()
+    {
+        // not used
+    }
+
+    /**
+     * Application entry point.
+     * 
+     * @param args  command-line arguments, not used.
+     */
     public static void main(String[] args)
     {
         Pitch           pitch   = Tower.play();
@@ -11,6 +34,11 @@ public class TowerSolution
         demo.execute( pitch );
     }
 
+    /**
+     * This method is called to begin the solution.
+     * 
+     * @param pitch The Pitch on which the puzzle graphic is drawn.
+     */
     public void execute( Pitch pitch )
     {
         this.pitch = pitch;
@@ -18,6 +46,14 @@ public class TowerSolution
         moveDisk( numDisks, 0, 2, 1 );
     }
     
+    /**
+     * Recursive method to implement the puzzle solution.
+     * 
+     * @param num       the number of the disk to pop off the from rod
+     * @param fromRod   the number of the rod to move from
+     * @param toRod     the number of the rod to move to
+     * @param auxRod    the number of the rod to use as an auxiliary
+     */
     private void  
     moveDisk( int num, int fromRod, int toRod, int auxRod )
     {

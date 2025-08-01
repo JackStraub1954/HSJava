@@ -6,7 +6,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 /**
- * Encapsulates the GUI for Tower of Hanoi project.
+ * Encapsulates the GUI for the Tower of Hanoi project.
  * It is implemented as a singleton.
  */
 public class Frame

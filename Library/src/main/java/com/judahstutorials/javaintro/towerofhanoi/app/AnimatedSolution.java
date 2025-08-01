@@ -2,16 +2,52 @@ package com.judahstutorials.javaintro.towerofhanoi.app;
 
 import com.judahstutorials.javaintro.towerofhanoi.*;
 import com.judahstutorials.javaintro.towerofhanoi.utils.Animator;
+
+/**
+ * This is an application
+ * that encapsulates a solution to the Tower of Hanoi puzzle
+ * that employs the {@linkplain Animator} class
+ * to animate the movement of disks
+ * from one rod to another.
+ * <p>
+ * <b>Note:</b>
+ * Students are encouraged to develop their own solution to the puzzle
+ * before looking at the sample solution.
+ * 
+ * @see Animator
+ */
 public class AnimatedSolution
 {
+    /**
+     * The Pitch that contains the puzzle graphics;
+     */
     private Pitch pitch;
+    
+    /**
+     * Application entry point.
+     * 
+     * @param args  Command-line arguments, not used.
+     */
     public static void main(String[] args)
     {
         Pitch           pitch   = Tower.play();
         AnimatedSolution   demo    = new AnimatedSolution();
         demo.execute( pitch );
     }
+    
+    /**
+     * Default constructor, not used.
+     */
+    public AnimatedSolution()
+    {
+        // not used
+    }
 
+    /**
+     * This method is called to begin the solution.
+     * 
+     * @param pitch The Pitch on which the puzzle graphic is drawn.
+     */
     public void execute( Pitch pitch )
     {
         this.pitch = pitch;
@@ -19,6 +55,26 @@ public class AnimatedSolution
         moveDisk( numDisks, 0, 2, 1 );
     }
     
+    /**
+     * Recursive method to implement the puzzle solution.
+     * 
+     * @param num       the number of the disk to pop off the from rod
+     * @param fromRod   the number of the rod to move from
+     * @param toRod     the number of the rod to move to
+     * @param auxRod    the number of the rod to use as an auxiliary
+     * 
+     * @see 
+     *      <a href = "https://www.geeksforgeeks.org/dsa/c-program-for-tower-of-hanoi/">
+     *          Program for Tower of Hanoi Algorithm
+     *      </a>
+     *      on the GeeksForGeeks website
+     *      
+     * @see
+     *      <a href = "https://en.wikipedia.org/wiki/Tower_of_Hanoi">
+     *          Tower of Hanoi
+     *      </a>
+     *      on Wikipedia
+     */
     private void  
     moveDisk( int num, int fromRod, int toRod, int auxRod )
     {
