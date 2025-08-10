@@ -2,8 +2,11 @@ package com.judahstutorials.javaintro.towerofhanoi;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,31 @@ public class Pitch extends JPanel
      * Generated serial version UID.
      */
     private static final long serialVersionUID = 7816937742943245165L;
+    
+    /**
+     * Rendering hints for improving the appearance of the graphics.
+     */
+    private static final    RenderingHints renderingHints   = 
+        new RenderingHints(
+            RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON
+        );
+    static
+    {
+        renderingHints.put(
+            RenderingHints.KEY_RENDERING,
+            RenderingHints.VALUE_RENDER_QUALITY
+        );
+        renderingHints.put(
+            RenderingHints.KEY_COLOR_RENDERING,
+            RenderingHints.VALUE_COLOR_RENDER_QUALITY
+        );
+        renderingHints.put(
+            RenderingHints.KEY_DITHERING,
+            RenderingHints.VALUE_DITHER_ENABLE
+        );
+
+    }
     
     /**
      * The number of rods contained in the GUI.
@@ -79,6 +107,7 @@ public class Pitch extends JPanel
     {
         super.paintComponent( graphics );
         Graphics2D  gtx     = (Graphics2D)graphics;
+        gtx.setRenderingHints( renderingHints );
         
         double  rodYco          = Tower.getRodYco();
         double  plinthYco       = Tower.getPlinthYco();
@@ -100,8 +129,8 @@ public class Pitch extends JPanel
             rod.x = Tower.getRodXco( inx );
             plinth.x = Tower.getPlinthXco( inx );
             gtx.setColor( plinthColor );
-            gtx.fill( rod );
-            gtx.fill( plinth );
+            RodShader.fill( rod.getX(), gtx );
+            PlinthShader.fill( plinth.x, gtx );
             gtx.setColor( edgeColor );
             gtx.draw( rod );
             gtx.draw( plinth );
@@ -242,6 +271,165 @@ public class Pitch extends JPanel
             disk.setLocation( xco, yco );
             disk.draw( gtx );
             ++diskNum;
+        }
+    }
+    
+    /**
+     * Encapsulates the logic to draw a shaded rod.
+     * The logic is managed via a dedicated class
+     * in order to collect the details of the operation
+     * in a single, isolated place.
+     * <p>
+     * The rod is represented as a rectangle
+     * and shaded to give the appearance of a cylinder.
+     * The rectangle is drawn in a dark color,
+     * then overlaid from left to right
+     * with a sequence of rectangles
+     * drawn in the designated color of the rod
+     * (see {@linkplain Tower#getPlinthColor()}).
+     * The alpha values of the color
+     * of the overlaid recangles
+     * begins at 0
+     * and gradually increases to 1.
+     */
+    private static class RodShader
+    {
+        /**
+         * The cylinder width.
+         */
+        private static final double        cylWidth        = 
+            Tower.getRodWidth();
+        /**
+         * The cylinder height.
+         */
+        private static final double        cylHeight       = 
+            Tower.getRodHeight();
+        /**
+         * The y-coordinate of the cylinder
+         * (the upper-left corner of the bounding rectangle).
+         */
+        private static final double        cylYco          = 
+            Tower.getRodYco();
+        /**
+         * Underlying color of the cylinder.
+         */
+        private static final Color         cylBackground    = Color.DARK_GRAY;
+        /**
+         * Representation of the bounding rectangle of the cylinder;
+         * declared as a class variable so that it only
+         * has to be instantiated once.
+         * The properties of the rectangle are adjusted as needed.
+         */
+        private static final Rectangle2D   rectFrame         = 
+            new Rectangle2D.Double();
+        /**
+         * The number of shaded rectangles used to overlay
+         * the cylinder's bounds.
+         */
+        private static final double        shaderSegs       = 20;
+        /**
+         * The width of a shaded rectangle used to overlay
+         * the cylinder's bounds.
+         */
+        private static final double        shaderWidth      = 
+            cylWidth / shaderSegs;
+        /**
+         * The integer value of the designated color
+         * of a rod.
+         */
+        private static final int           shaderRGB        = 
+            Tower.getPlinthColor().getRGB() & 0xffffff;
+        /**
+         * The amount by which to increment the value of the alpha
+         * component of the color of sequential overlays.
+         */
+        private static final double         alphaIncr       = 
+            255. / shaderSegs;
+        
+        /**
+         * Draws a rod shaded to give the appearance
+         * of a cylinder.
+         * 
+         * @param xco   the x-coordinate of the rod
+         * @param gtx   the graphics context to use for drawing.
+         */
+        public static void fill( double xco, Graphics2D gtx )
+        {
+            gtx.setColor( cylBackground );
+            rectFrame.setRect( xco, cylYco, cylWidth, cylHeight );
+            gtx.fill( rectFrame );
+            
+            for ( int inx = 0 ; inx < shaderSegs ; ++inx )
+            {
+                int     iAlpha  = (int)(255 - inx * alphaIncr );
+                int     rgba    = shaderRGB | (iAlpha << 24);
+                Color   color   = new Color( rgba, true );
+                gtx.setColor( color );
+                double  cylXco  = xco + inx * shaderWidth;
+                System.out.println( cylXco );
+                System.out.println( Integer.toHexString( rgba ) );
+                rectFrame.setRect( cylXco, cylYco, shaderWidth, cylHeight );
+                gtx.fill( rectFrame );
+            }
+        }
+    }
+    
+    private static class PlinthShader
+    {
+        /**
+         * The plinth width.
+         */
+        private static final double        plinthWidth      = 
+            Tower.getPlinthWidth();
+        /**
+         * The plinth height.
+         */
+        private static final double        plinthHeight     = 
+            Tower.getComponentHeight();
+        /**
+         * The y-coordinate of the plinth
+         * (the upper-left corner of the bounding rectangle).
+         */
+        private static final double        plinthYco        = 
+            Tower.getPlinthYco();
+        /**
+         * Underlying color of the plinth.
+         */
+        private static final Color         plinthBackground = Color.DARK_GRAY;
+        /**
+         * Representation of the bounding rectangle of the cylinder;
+         * declared as a class variable so that it only
+         * has to be instantiated once.
+         * The properties of the rectangle are adjusted as needed.
+         */
+        private static final Rectangle2D   plinthFrame      = 
+            new Rectangle2D.Double();
+        private static final Point2D        left            = 
+            new Point2D.Double( 0, plinthYco );
+        private static final Point2D        right           = 
+            new Point2D.Double( 0, plinthYco );
+        
+        /**
+         * The designated color of a plinth.
+         */
+        private static final Color          plinthColor     = 
+            Tower.getPlinthColor();
+        
+        public static void fill( double xco, Graphics2D gtx )
+        {
+            left.setLocation( xco, plinthYco );
+            right.setLocation( xco + plinthWidth, plinthYco + plinthHeight );
+            GradientPaint   paint   = 
+                new GradientPaint(
+                    left,
+                    plinthColor,
+                    right,
+                    plinthBackground,
+                    false
+                );
+            gtx.setPaint( paint );
+            plinthFrame.setFrame( xco, plinthYco, plinthWidth, plinthHeight );
+            gtx.fill( plinthFrame );
         }
     }
 }

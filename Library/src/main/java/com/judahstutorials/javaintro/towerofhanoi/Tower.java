@@ -1,6 +1,10 @@
 package com.judahstutorials.javaintro.towerofhanoi;
 
 import java.awt.Color;
+import java.awt.LinearGradientPaint;
+import java.awt.Paint;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
@@ -20,13 +24,35 @@ public class Tower
     }
     
     /**
+     * Shadow color to simulate 3D images.
+     */
+    private static final Color  shadowColor = new Color( .35f, .35f, .35f );
+    
+    /**
+     * Positions for creating linear-gradient paint.
+     * @see #composePaint(Color, Rectangle2D)
+     * @see #keyColors
+     */
+    private static final float[]    keyFrame    = { 0f, .1f, 1f };
+    
+    /**
+     * Colors for creating linear-gradient paint;
+     * the color in the center of the array
+     * is changed each time a new Paint is constructed.
+     * @see #composePaint(Color, Rectangle2D)
+     * @see #keyFrame
+     */
+    private static final Color[]    keyColors   = 
+        { shadowColor, null, shadowColor };
+    
+    /**
      * The color brown.
      */
-    private static final Color  brown           = new Color( 150, 75, 0 );
+    private static final Color  lightBrown      = new Color( 0xd3b683 );
     /**
      * The color of a plinth, and the rod atop the plinth.
      */
-    private static Color    plinthColor         = brown;
+    private static Color    plinthColor         = lightBrown;
     /**
      * The color of the edge of a component in the assembly.
      */
@@ -51,10 +77,14 @@ public class Tower
      */
     private static double   plinthWidth         = rodWidth * 20;
     /**
-     * The margin around the edges of the Pitch,
+     * The left and right margins around the edges of the Pitch,
      * and between plinths.
      */
     private static double   margin              = 10;
+    /** The margin at the top of the Pitch. */
+    private static double   topMargin           = 10 * margin;
+    /** The margin at the bottom of the Pitch. */
+    private static double   bottomMargin        = margin;
     /**
      * The number of disks in play.
      */
@@ -207,7 +237,7 @@ public class Tower
      */
     public static double getRodYco()
     {
-        return margin + 2 * componentHeight;
+        return topMargin;//margin + 2 * componentHeight;
     }
     
     /**
@@ -341,7 +371,7 @@ public class Tower
     
     /**
      * Returns the margin to use 
-     * for the edges of the pitch,
+     * for the left and right edges of the pitch,
      * and for the distance between plinths.
      * 
      * @return  the margin used to separate components of the GUI
@@ -349,6 +379,28 @@ public class Tower
     public static double getMargin()
     {
         return  margin;
+    }
+    
+    /**
+     * Returns the margin to use 
+     * for the top of the pitch.
+     * 
+     * @return  the margin to use for the top of the pitch
+     */
+    public static double getTopMargin()
+    {
+        return  topMargin;
+    }
+    
+    /**
+     * Returns the margin to use 
+     * for the bottom of the pitch.
+     * 
+     * @return  the margin to use for the bottom of the pitch
+     */
+    public static double getBottomMargin()
+    {
+        return  bottomMargin;
     }
     
     /**
@@ -393,6 +445,22 @@ public class Tower
         double  plinthYco   = getPlinthYco();
         double  yco         = plinthYco - (pos + 1) * height;
         return yco;
+    }
+    
+    public static Paint composePaint( Color color, Rectangle2D rect )
+    {
+        keyColors[1] = color;
+        Point2D left    = new Point2D.Double( rect.getX(), rect.getY() );
+        Point2D right   = 
+            new Point2D.Double( rect.getMaxX(), rect.getMaxY() );
+        LinearGradientPaint paint =
+            new LinearGradientPaint( 
+                left,
+                right,
+                keyFrame,
+                keyColors
+            );
+        return paint;
     }
     
     /**

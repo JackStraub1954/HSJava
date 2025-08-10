@@ -43,6 +43,7 @@ public class Disk
             RenderingHints.VALUE_DITHER_ENABLE
         );
     }
+    
     /**
      * Shadow color to simulate 3D disk image.
      */
