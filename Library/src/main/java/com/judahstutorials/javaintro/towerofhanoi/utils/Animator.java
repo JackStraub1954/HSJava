@@ -7,6 +7,26 @@ import com.judahstutorials.javaintro.towerofhanoi.Disk;
 import com.judahstutorials.javaintro.towerofhanoi.Pitch;
 import com.judahstutorials.javaintro.towerofhanoi.Tower;
 
+/**
+ * An object of this class
+ * is used to animate the movement of a disk
+ * from one rod to another.
+ * The animation comprises three parts:
+ * <ol>
+ * <li>
+ *      The vertical movement of a disk
+ *      upwards along its source rod.
+ * </li>
+ * <li>
+ *      The horizontal traversal of a disk
+ *      from the source rod to the destination rod.
+ * </li>
+ * <li>
+ *      The vertical movement of a disk
+ *      downwards along its destination rod.
+ * </li>
+ * </ol>
+ */
 public class Animator
 {
     /**
@@ -41,7 +61,9 @@ public class Animator
     /**
      * The bounding rectangle of the disk registered as
      * "auxiliary" with the Pitch.
-     * @see Pitch#addAuxDisk(Disk).
+     * 
+     * @see Pitch#addAuxDisk(Disk)
+     * @see Pitch#removeAuxDisk(Disk)
      */
     private final Rectangle2D   auxRect     = new Rectangle2D.Double();
     /**
@@ -74,7 +96,7 @@ public class Animator
     /**
      * The y-coordinate at which horizontal traversal begins
      * and ends. This will be approximately the y-coordinate of the
-     * top of the rods minus the height of the disk.
+     * top of the source rod minus the height of the disk.
      */
     private final double        traverseYco;
     /**
@@ -120,15 +142,49 @@ public class Animator
      * readability.
      */
     private final double        arcYco2;
+    /**
+     * The destination rod.
+     */
     private final int           toRod;
     
+    /**
+     * The current state of the animation.
+     */
     private int                 state       = unengaged;
+    /**
+     * The amount by which to increment the y-coordinate
+     * when performing a vertical traversal.
+     */
     private double              yIncr       = 1;
+    /**
+     * The x-coordinate of the next animation frame to draw.
+     */
     private double              nextXco;
+    /**
+     * The y-coordinate of the next animation frame to draw.
+     */
     private double              nextYco;
+    /**
+     * The next value of the t-parameter for generating
+     * a point along the Bezier curve.
+     */
     private double              nextTee     = 0;
+    /**
+     * The amount by which to increment the t-parameter
+     * when traversing the Bezier curve.
+     */
     private double              teeIncr     = .005;
     
+    /**
+     * Constructor.
+     * Initializes the parameter of an object
+     * to control the animation of a disk 
+     * from a source rod to a destination rod.
+     * 
+     * @param pitch     the Pitch on which the animation takes place
+     * @param fromRod   the index of the source rod
+     * @param toRod     the index of the destination rod
+     */
     public Animator( Pitch pitch, int fromRod, int toRod )
     {
         this.pitch = pitch;
@@ -156,6 +212,9 @@ public class Animator
         state = rising;
     }
     
+    /**
+     * Executes the animation.
+     */
     public void animate()
     {
         pitch.addAuxDisk( disk );
@@ -168,6 +227,9 @@ public class Animator
         state = unengaged;
     }
     
+    /**
+     * Computes the coordinates of the next frame of the animation.
+     */
     private void computeNextCoordinates()
     {
         switch( state )
@@ -176,7 +238,6 @@ public class Animator
             if ( (nextYco -= yIncr) < traverseYco )
             {
                 nextYco = traverseYco;
-//                state = direction > 0 ? traversingRight : traversingLeft;
                 state = traversing;
             }
             break;
@@ -200,6 +261,9 @@ public class Animator
         }
     }
     
+    /**
+     * Initiates drawing of the next animation frame.
+     */
     private void next()
     {
         computeNextCoordinates();
@@ -216,7 +280,11 @@ public class Animator
         Pitch.pause( 3 );
     }
 
-    
+    /**
+     * Parametric equation for traversing a Bezier curve.
+     * 
+     * @return the next point on the Bezier curve
+     */
     private Point2D getPointOnCurve()
     {
         double xco = 

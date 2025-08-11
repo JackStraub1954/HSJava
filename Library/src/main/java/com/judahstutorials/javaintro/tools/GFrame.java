@@ -213,7 +213,18 @@ public class GFrame
      */
     private class IntPanel extends JPanel
     {
+        /**
+         * Default serial version UID.
+         */
         private static final long serialVersionUID = 1L;
+        
+        /**
+         * Default constructor; not used.
+         */
+        private IntPanel()
+        {
+            // not used
+        }
 
 		@Override
         public void paint( Graphics graphics )

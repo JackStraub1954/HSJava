@@ -14,15 +14,35 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/**
+ * Application to experiment with a means
+ * to draw a rectangle
+ * with the edge-on appearance of a disk.
+ */
 public class DiskExperiment
 {
-
+    /**
+     * Application entry point.
+     * 
+     * @param args  command-line arguments; not used
+     */
     public static void main( String[] args )
     {
         DiskExperiment  app = new DiskExperiment();
         SwingUtilities.invokeLater( () -> app.build() );
     }
+    
+    /**
+     * Default constructor; not used.
+     */
+    private DiskExperiment()
+    {
+        // not used
+    }
 
+    /**
+     * Constructs the application GUI.
+     */
     private void build()
     {
         JFrame      frame           = new JFrame( "Disk Colors" );
@@ -35,6 +55,10 @@ public class DiskExperiment
         frame.setVisible( true );
     }
     
+    /**
+     * Encapsulates the window
+     * in which the disk is drawn.
+     */
     private class Sandbox extends JPanel
     {
         /**
@@ -42,6 +66,10 @@ public class DiskExperiment
          */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Constructor;
+         * establishes the initial size of the window.
+         */
         public Sandbox()
         {
             Dimension   dim     = new Dimension( 300, 300 );

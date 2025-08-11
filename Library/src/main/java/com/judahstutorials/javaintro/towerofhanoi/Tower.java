@@ -447,6 +447,15 @@ public class Tower
         return yco;
     }
     
+    /**
+     * Composes a gradient Paint object for shading a given rectangle
+     * with the given primary color.
+     * 
+     * @param color the given primary color
+     * @param rect  the given rectangle
+     * 
+     * @return  the composed Paint object
+     */
     public static Paint composePaint( Color color, Rectangle2D rect )
     {
         keyColors[1] = color;

@@ -295,6 +295,14 @@ public class Pitch extends JPanel
     private static class RodShader
     {
         /**
+         * Default constructor, not used.
+         */
+        private RodShader()
+        {
+            // not used
+        }
+        
+        /**
          * The cylinder width.
          */
         private static final double        cylWidth        = 
@@ -374,8 +382,26 @@ public class Pitch extends JPanel
         }
     }
     
+    /**
+     * Encapsulates the logic to draw a shaded rod.
+     * The logic is managed via a dedicated class
+     * in order to collect the details of the operation
+     * in a single, isolated place.
+     * <p>
+     * Shading is accomplished using a GradientPaint object
+     * that interpolates from the Plinth color ({@linkplain Tower#getPlinthColor()})
+     * on the left to a dark color on the right.
+     */
     private static class PlinthShader
     {
+        /**
+         * Default constructor, not used.
+         */
+        private PlinthShader()
+        {
+            // not used
+        }
+        
         /**
          * The plinth width.
          */
@@ -404,8 +430,14 @@ public class Pitch extends JPanel
          */
         private static final Rectangle2D   plinthFrame      = 
             new Rectangle2D.Double();
+        /**
+         * The left point of the gradient.
+         */
         private static final Point2D        left            = 
             new Point2D.Double( 0, plinthYco );
+        /**
+         * The right point of the gradient.
+         */
         private static final Point2D        right           = 
             new Point2D.Double( 0, plinthYco );
         
@@ -415,6 +447,14 @@ public class Pitch extends JPanel
         private static final Color          plinthColor     = 
             Tower.getPlinthColor();
         
+        /**
+         * Fills the plinth with a gradient
+         * beginning at the given x-coordinate
+         * and using the given graphics context.
+         * 
+         * @param xco   the given x-coordinate
+         * @param gtx   the given graphics object
+         */
         public static void fill( double xco, Graphics2D gtx )
         {
             left.setLocation( xco, plinthYco );

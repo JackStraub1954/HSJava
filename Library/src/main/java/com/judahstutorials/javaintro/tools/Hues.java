@@ -11,11 +11,29 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/**
+ * Application to demonstrate use of the HSB color model,
+ * and Java utilities that employ the HSB color model.
+ * Displays the ColorWheel animation in one window,
+ * and the color spectrum in another.
+ */
 public class Hues
 {
+    /**
+     * Milliseconds to pause between drawing a frame
+     * of the ColorWheel animation.
+     */
     private static final    long    pauseTime       = 10;
+    /**
+     * Encapsulation of the ColorWheel animation.
+     */
     private static ColorWheelPanel colorWheel;
     
+    /**
+     * Application entry point.
+     * 
+     * @param args  command-line arguments, not used
+     */
     public static void main( String[] args )
     {
         Hues    app     = new Hues();
@@ -27,6 +45,17 @@ public class Hues
         }
     }
     
+    /**
+     * Default constructor, not used.
+     */
+    private Hues()
+    {
+        // not used
+    }
+    
+    /**
+     * Builds the application GUI.
+     */
     private void buildGUI()
     {
         JFrame  frame   = new JFrame( "Hues Panel" );
@@ -42,6 +71,10 @@ public class Hues
         frame.setVisible( true );
     }
     
+    /**
+     * Pause the application for the purpose
+     * of animating the color where.
+     */
     private static void pause()
     {
         try
@@ -54,10 +87,21 @@ public class Hues
         }
     }
 
+    /**
+     * Encapsulates the window in which
+     * the color spectrum is displayed.
+     */
     private static class HuesPanel extends JPanel
     {
+        /**
+         * Default serial version UID.
+         */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Constructor;
+         * sets the initial size of the window.
+         */
         public HuesPanel()
         {
             setPreferredSize( new Dimension( 256, 50 ) );
@@ -66,7 +110,7 @@ public class Hues
         @Override
         public void paintComponent( Graphics graphics )
         {
-            Graphics2D  gtx     = (Graphics2D)graphics.create();
+            Graphics2D  gtx     = (Graphics2D)graphics;
             
             int         height  = getHeight();
             int         width   = getWidth();
@@ -83,8 +127,6 @@ public class Hues
                     new Rectangle2D.Double( xco, 0, 2, height );
                 gtx.fill( rect );
             }
-            
-            gtx.dispose();
         }
     }
 }
