@@ -19,34 +19,87 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * Encapsulation of the principal functionality
+ * of the Turtle implementation.
+ */
 public class Turtlet extends Object
 {
+    
+    /**
+     * Rendering hints for improving the appearance of the graphics.
+     */
+    private static final    RenderingHints renderingHints   = 
+        new RenderingHints(
+            RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON
+        );
+    static
+    {
+        renderingHints.put(
+            RenderingHints.KEY_RENDERING,
+            RenderingHints.VALUE_RENDER_QUALITY
+        );
+        renderingHints.put(
+            RenderingHints.KEY_COLOR_RENDERING,
+            RenderingHints.VALUE_COLOR_RENDER_QUALITY
+        );
+        renderingHints.put(
+            RenderingHints.KEY_DITHERING,
+            RenderingHints.VALUE_DITHER_ENABLE
+        );
+        renderingHints.put(
+            RenderingHints.KEY_ALPHA_INTERPOLATION,
+            RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY
+        );
+    }
+
+    /**
+     * One degree, converted to radians.
+     */
     public static final double DEGREE = Math.PI / 180;
+	/**
+	 * Colors available directly from the Turtle implementation.
+	 * Present so that students can avoid dealing with the Color class.
+	 */
 	public static final Color RED = Color.red, BLUE = Color.blue,
 	               BLACK = Color.black,      GRAY = Color.gray,
 	               YELLOW = Color.yellow,    PINK = Color.pink,
 	               ORANGE = Color.orange,    GREEN = Color.green,
 	               MAGENTA = Color.magenta,  WHITE = Color.white;
+	/**
+	 * Graphics context from the encapsulated image object.
+	 */
 	private static Graphics2D thePage;
+	/**
+	 * Additional picture objects that can be drawn
+	 * on the application window.
+	 * 
+	 * @see Turtlet#addPaintMe(IPaintMe)
+	 * @see #removePaintMe(IPaintMe)
+	 */
 	private static final ArrayList<IPaintMe>	paintMes	= new ArrayList<>();
 	//////////////////////////////////
-	private double heading = 0;         // heading initially east
-	private double xcor, ycor;          // current position of Turtle
-	private Color  currColor;           // current color of Turtle
-	private Color  xorColor;            // current XOR mode color of Turtle
-
-    private final RHint[]     allRHints_  = new RHint[]
-    {
-        new RHint( RenderingHints.KEY_ALPHA_INTERPOLATION,
-                    RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY
-                  ),
-        new RHint( RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON
-                  ),
-        new RHint( RenderingHints.KEY_RENDERING,
-                    RenderingHints.VALUE_RENDER_QUALITY
-                  )
-    };
+	/**
+	 * Current heading; initially East.
+	 */
+	private double heading = 0;
+	/**
+	 * Current position of the Turtle.
+	 */
+	private double xcor, ycor;
+	/**
+	 * Current color of the Turtle
+	 */
+	private Color  currColor;
+	/**
+	 * 
+	 * Color for use in xor-drawing mode 
+	 * for implementing color in Turtles
+	 * 
+	 * @see #setXORMode(Color)
+	 */
+	private Color  xorColor;
 
 	/** Convenience method so that the student can obtain a URL
 	 *  without having to deal with exceptions.
@@ -62,7 +115,6 @@ public class Turtlet extends Object
 		URL	url;
         try
 		{
-//			url = new URL( path ); DEPRECATED
         	URI	uri	= new URI( path );
         	url = uri.toURL();
 		}
@@ -74,12 +126,12 @@ public class Turtlet extends Object
 		return url;
 	}
 
-	/** Set the color for this turtle to the given color.
+	/** 
+	 * Set the color for this turtle to the given color.
 	 *
 	 * @param	given	The color to switch to
 	 *
 	 * @return The previous color.
-	 *
 	 */
 
 	public Color switchTo (Color given)
@@ -89,10 +141,12 @@ public class Turtlet extends Object
 		return oldColor;
 	}	//======================
 
-	/** Set this Turtle's XOR mode.
+	/** 
+	 * Set this Turtle's XOR mode color.
+	 * The previous value of the color is returned
 	 *
-	 *  @param	color	The color to use in the Turtle's XOR mode. To
-	 *  				return to paint (normal) mode pass null;
+	 *  @param	color  the color to use in the Turtle's XOR mode, 
+	 *                 null to return to normal drawing mode
 	 *
 	 *  @return	previous xor mode color.
 	 *
@@ -106,7 +160,7 @@ public class Turtlet extends Object
 		return oldColor;
 	}
 
-	/** Get the grapchics context used for drawing on the Turtles' canvas.
+	/** Get the graphics context used for drawing on the Turtles' canvas.
 	 *  With this object you can draw anything that Java is capable of.
 	 *
 	 *  @return	Graphics2D object
@@ -170,12 +224,22 @@ public class Turtlet extends Object
 	}
 
 
-	/** Supply the nearest int value to methods requiring ints. */
-
+	/** 
+	 * Rounds the given double
+	 * to the nearest int value.
+	 * 
+	 * @param  x   the double to round
+	 * 
+	 * @return the integer closest to the given double
+	 *         (round half-up)
+	 */
 	private int round (double x)
 	{	return (int) (x + 0.5);
 	}	//======================
 
+	/**
+	 * Set the graphics context paint mode.
+	 */
 	private void setDrawingParams()
 	{
 		thePage.setColor( currColor );
@@ -198,13 +262,14 @@ public class Turtlet extends Object
 		}
 	}	//======================
 
-	/** Draws a circular arc inside a square of side 2 * radius.
+	/** 
+	 * Draws a circular arc inside a square of side 2 * radius.
 	 *  The beginning of the arc is the Turtle's current heading; the end
 	 *  of the arc is the current heading + degrees. The Turtle is rotated
 	 *  by degrees.
 	 *
 	 *  @param	radius	the radius of the circle
-	 *  @param	degrees	degrees to rotate Turtlet through
+	 *  @param	degrees to rotate Turtlet
 	 */
 	public void paintCircularArc( double radius, double degrees )
 	{
@@ -315,14 +380,11 @@ public class Turtlet extends Object
         return img;
     }
 
-// the Turtle class, completed
-
 	/** Rotate left by left degrees; MOVE for forward steps.
      * @param left     The number of degrees to rotate.
      * @param forward  The number of pixels to move forward.
      * @return this
      */
-
 	public Turtlet move (double left, double forward)
 	{	heading += left * DEGREE;
 		xcor += forward * Math.cos (heading);
@@ -394,28 +456,7 @@ public class Turtlet extends Object
 		thePage = (Graphics2D)page;
 		xcor = xstart;
 		ycor = ystart;
-
-        for ( RHint hint : allRHints_ )
-            hint.apply( thePage );
+		thePage.setRenderingHints( renderingHints );
 	}	//======================
 }
-
-class RHint
-{
-    public RenderingHints.Key   key_;
-    public Object               value_;
-
-    public
-    RHint( RenderingHints.Key key, Object value )
-    {
-        key_ = key;
-        value_ = value;
-    }
-
-    public void apply( Graphics2D g2D )
-    {
-        g2D.setRenderingHint( key_, value_ );
-    }
-}
-// </pre>
 

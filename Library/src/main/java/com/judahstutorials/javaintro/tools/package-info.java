@@ -1,5 +1,5 @@
 /**
- * This package classes to complete the Introduction to Java classes,
+ * This package contains classes to complete the Introduction to Java classes,
  * notably <em>Turtle, Vic,</em> and <em>Buffin.</em>
  * 
  * @since 1.0

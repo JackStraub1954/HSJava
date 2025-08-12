@@ -8,9 +8,26 @@ import javax.swing.JPanel;
 import com.judahstutorials.javaintro.tools.GFrame;
 import com.judahstutorials.javaintro.tools.GUser;
 
+/**
+ * This is a simple application that demonstrates
+ * how to use a GFrame to open a window
+ * and draw a rectangle in it.
+ */
 public class RectDemo3 extends GUser
 {
+    /**
+     * Object to create and interface with the application GUI.
+     */
     private final GFrame    frame       = GFrame.getGFrame( this, 300, 200 );
+    
+    /**
+     * Default constructor; not used.
+     */
+    private RectDemo3()
+    {
+        // not used
+    }
+
     public void paint( Graphics2D gtx, JPanel panel )
     {
         int width   = frame.getWidth();
@@ -26,8 +43,14 @@ public class RectDemo3 extends GUser
         gtx.setColor( Color.RED );
         gtx.fillRect( margin, margin, rWidth, rHeight );
     }
+    
+    /**
+     * Application entry point.
+     * 
+     * @param args  command-line arguments; not used
+     */
     public static void main( String[] args )
     {
-       RectDemo3     user = new RectDemo3();
+       new RectDemo3();
     }
 }

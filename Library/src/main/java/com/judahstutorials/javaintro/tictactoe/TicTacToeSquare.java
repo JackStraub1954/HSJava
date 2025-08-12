@@ -25,6 +25,15 @@ public class TicTacToeSquare
     private char    owner       = ' ';
     
     /**
+     * Default constructor.
+     * Present for documentation purposes only.
+     */
+    public TicTacToeSquare()
+    {
+        // not used
+    }
+    
+    /**
      * Gets the background color of this square.
      * @return the background color of this square
      */
@@ -34,7 +43,9 @@ public class TicTacToeSquare
     }
     
     /**
-     * @param bgColor
+     * Sets the background color of this square.
+     * 
+     * @param bgColor   the background color to set
      */
     public void setBGColor(Color bgColor)
     {
@@ -43,6 +54,7 @@ public class TicTacToeSquare
     
     /**
      * Gets the foreground color of this square.
+     * 
      * @return the foreground color of this square
      */
     public Color getFGColor()

@@ -398,6 +398,14 @@ public class TicTacToeBoard extends JPanel
      */
     private class Mouser extends MouseAdapter
     {
+        /**
+         * Default constructor.
+         */
+        private Mouser()
+        {
+            // not used
+        }
+        
         @Override
         public void mouseClicked( MouseEvent evt )
         {

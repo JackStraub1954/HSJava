@@ -48,7 +48,10 @@ public class Pitch extends JPanel
             RenderingHints.KEY_DITHERING,
             RenderingHints.VALUE_DITHER_ENABLE
         );
-
+        renderingHints.put(
+            RenderingHints.KEY_ALPHA_INTERPOLATION,
+            RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY
+        );
     }
     
     /**

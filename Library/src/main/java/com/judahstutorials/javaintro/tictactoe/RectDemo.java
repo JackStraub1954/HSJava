@@ -8,10 +8,33 @@ import javax.swing.JPanel;
 import com.judahstutorials.javaintro.tools.GFrame;
 import com.judahstutorials.javaintro.tools.GUser;
 
+/**
+ * This is a simple application that demonstrates
+ * how to interact with the operator 
+ * in a GFrame application.
+ * The operator is prompted to enter an number,
+ * then the application is filled with
+ * the given number of rectangles.
+ */
 public class RectDemo extends GUser
 {
+    /**
+     * Object to create and interface with the application GUI.
+     */
     private final GFrame    frame       = GFrame.getGFrame( this, 300, 200 );
+    /**
+     * Number of rectangles to draw in the application window.
+     */
     private int             numRects    = 0;
+    
+    /**
+     * Default constructor; not used.
+     */
+    private RectDemo()
+    {
+        // not used
+    }
+    
     public void paint( Graphics2D gtx, JPanel panel )
     {
         int width   = frame.getWidth();
@@ -26,6 +49,12 @@ public class RectDemo extends GUser
             gtx.fillRect( offset, offset, 10, 10 );
         }
     }
+    
+    /**
+     * Application entry point.
+     * 
+     * @param args  command-line arguments; not used
+     */
     public static void main( String[] args )
     {
        RectDemo     user = new RectDemo();
