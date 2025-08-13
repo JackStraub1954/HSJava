@@ -22,6 +22,9 @@ import com.judahstutorials.javaintro.tictactoe.TicTacToeUser;
  */
 public class TicTacToeDemo implements TicTacToeUser
 {
+    /**
+     * The board that encapsulates the GUI.
+     */
     private static TicTacToeBoard  board;
     
     /**
@@ -40,6 +43,14 @@ public class TicTacToeDemo implements TicTacToeUser
         board.setOwner( 0, 0, 'X' );
         board.setOwner( 2, 2, 'O' );
         board.repaint();
+    }
+    
+    /**
+     * Default constructor; not used.
+     */
+    public TicTacToeDemo()
+    {
+        // not used
     }
     
     /**

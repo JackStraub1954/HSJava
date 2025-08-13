@@ -22,6 +22,11 @@ public class MiscDemo
         // not used
     }
 
+    /**
+     * Application entry point.
+     * 
+     * @param args  command-line arguments; not used
+     */
     public static void main(String[] args)
     {
         Plane       plane           = CPFrame.getPlane();

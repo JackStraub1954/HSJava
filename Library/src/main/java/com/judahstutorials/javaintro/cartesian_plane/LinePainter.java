@@ -31,51 +31,35 @@ public class LinePainter
      */
 //    private transient Rectangle2D   rect;
     /**
-     * Left side of the drawing area;
-     * derived from {@linkplain #rect}
-     * and declared here for convenience.
+     * Left side of the drawing area;.
      */
     private transient double        rectXco;
     /**
-     * Top of the drawing area;
-     * derived from {@linkplain #rect}
-     * and declared here for convenience.
+     * Top of the drawing area.
      */
     private transient double        rectYco;
     /**
-     * X-coordinate of the center of the drawing area;
-     * derived from {@linkplain #rect}
-     * and declared here for convenience.
+     * X-coordinate of the center of the drawing area.
      */
     private transient double        centerXco;
     /**
-     * Y-coordinate of the center of the drawing area;
-     * derived from {@linkplain #rect}
-     * and declared here for convenience.
+     * Y-coordinate of the center of the drawing area.
      */
     private transient double        centerYco;
     /**
-     * X-coordinate that defines the right the drawing area;
-     * derived from {@linkplain #rect}
-     * and declared here for convenience.
+     * X-coordinate that defines the right the drawing area.
      */
     private transient double        maxXco;
     /**
-     * Y-coordinate that defines the bottom drawing area;
-     * derived from {@linkplain #rect}
-     * and declared here for convenience.
+     * Y-coordinate that defines the bottom drawing area.
      */
     private transient double        maxYco;
     /**
-     * Width of the drawing area;
-     * derived from {@linkplain #rect}
-     * and declared here for convenience.
+     * Width of the drawing area.
      */
     private transient double        width;
     /**
-     * Height of the drawing area;
-     * derived from {@linkplain #rect}
-     * and declared here for convenience.
+     * Height of the drawing area.
      */
     private transient double        height;
     /**

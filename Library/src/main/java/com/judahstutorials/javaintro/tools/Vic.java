@@ -11,42 +11,96 @@ import java.util.*;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * This is a "CD changer simulator."
+ * It's purpose is to introduce students
+ * to boolean expressions and conditionals in Java.
+ * An instance of this class
+ * encapsulates a row of slots
+ * which may or may not be occupied by a CD.
+ * In addition,
+ * a row has an "end position"
+ * which may not contain a CD.
+ * At any time,
+ * an instance has a "current position,"
+ * which may be anywhere on the encapsulated row,
+ * including the end position.
+ * The class includes a stack,
+ * shared by all instances,
+ * where CDs are stored
+ * when not allocated a slot.
+ */
 public class Vic
 {
-	private static Stack<String> theStack =
-        new Stack<>();  // where spare CDs are kept
+	/**
+	 * Collection of CDs that are not allocated slots.
+	 * @see #initCDs
+	 */
+	private static Stack<String> theStack  = new Stack<>();
+	/**
+	 * Sequence of slots assigned to an instance.
+	 */
 	private SlotsList itsSequence;  // its slots
-	private int itsPos;             // 0,1,2,...; 0 is at front
-	private int itsID;              // 1 for first Vic, 2 for...
-	
-	// for initializing the stack with up to eight CDs.
+	/**
+	 * The instance's current position.
+	 */
+	private int itsPos;
+	/**
+	 * The ID  of this instance, assigned sequentially beginning at one.
+	 */
+	private int itsID;
+
+	/**
+	 * Source of CDs for initial population of stack;
+	 * a possibly empty subset of these CDs
+	 * is assigned to the stack when the first Vic is created.
+	 * #see {@link #theStack}
+	 */
 	static private String[]	initCDs	=
 		new String[]{ "LyleL", "GarthB", "Calexico", "MethenyP",
 		              "FloydP", "CoreaC", "DiMeolaA", "ClarkeS"
 					};
-	// Number of cds to initialize the stack; -1 means
-	// initialize stack randomly.
+	/**
+	 * Number of cds to initialize the stack; -1 means
+	 * initialize stack randomly.
+	 */
 	static private int	numInitCDs	= -1;
 
-
-/* QUERY METHODS */
-
-	/** Return the current position as a String value.  */
-
+	/** 
+	 * Return the current position as a String value.
+	 * The string consists of two comma-separated integers
+	 * where the first integer is the ID of the Vic instance
+	 * (beginning at 1)
+	 * and the second integer is the sequence number
+	 * of its current position
+	 * (beginning at 0).
+	 * 
+	 * @return the current position of this Vic
+	 */
 	public String getPosition()
 	{	return itsID + ", " + itsPos;
 	}	//======================
 
 
-	/** Tell whether there is a slot at its position.  */
+	/** 
+	 * Returns true if there is a slot
+	 * at this Vic's current position.
+	 * 
+	 * @return true there is a slot at this Vic's current position
+	 */
 
 	public boolean seesSlot()
 	{	return itsPos < itsSequence.size();
 	}	//======================
 
 
-	/** Tell whether there is a CD in its current slot.  */
-
+	/** 
+	 * Tell whether there is a CD in this Vic's current slot. 
+	 * If there is no slot at the current position
+	 * the program is abruptly terminated.
+	 * 
+	 * @return true if there is a CD in the current slot
+	 */
 	public boolean seesCD()
 	{	if (! seesSlot())
 			fail ("Can't see a CD where there is no slot!");
@@ -54,8 +108,15 @@ public class Vic
 	}	//======================
 
 
-	/** Return the CD that is in its current slot.  */
-
+	/**
+	 * Return the name of the CD
+	 * that is in this Vic's current slot,
+	 * or null if the slot is empty.
+     * If there is no slot at the current position
+     * the program is abruptly terminated.
+     * 
+     * @return the name of the CD in the current slot, or null if none
+	 */
 	public String getCD()
 	{	if (! seesSlot())
 			fail ("There is no slot to get a CD from!");
@@ -63,17 +124,20 @@ public class Vic
 	}	//======================
 
 
-	/** Tell whether the stack has any CDs available. */
-
+	/**
+	 * Return true if the stack is non-empty.
+	 * 
+	 * @return  true if the stack is non-empty
+	 */
 	public static boolean stackHasCD()
 	{	return ! theStack.isEmpty();
 	}	//======================
 
-
-/* ACTION METHODS */
-
-	/** Move forward to the next slot in the sequence. */
-
+	/** 
+	 * Move forward to the next position in the sequence.
+	 * If there is no next position
+	 * the program is abruptly terminated.
+	 */
 	public void moveOn()
 	{	if (! seesSlot())
 			fail ("Already at the end of the sequence!");
@@ -81,9 +145,11 @@ public class Vic
 		trace ("moveOn to slot " + (itsPos + 1));
 	}	//======================
 
-
-	/** Back up to the previous slot in the sequence. */
-
+    /** 
+     * Move backward to the previous position in the sequence.
+     * If there is no previous position
+     * the program is abruptly terminated.
+     */
 	public void backUp()
 	{	if (itsPos == 0)
 			fail ("Already at the front of the sequence!");
@@ -91,9 +157,14 @@ public class Vic
 		trace ("backUp to slot " + (itsPos + 1));
 	}	//======================
 
-
-	/** Move a CD from the stack to the current slot.  */
-
+	/**
+	 * Move a CD from the stack to the current slot.
+	 * If the stack is empty,
+	 * or the slot is already occupied,
+	 * no action is taken.
+     * If there is no slot at the current position
+     * the program is abruptly terminated.
+     */
 	public void putCD()
 	{	if (! seesCD() && stackHasCD())
 			itsSequence.set (itsPos, theStack.pop());
@@ -101,8 +172,14 @@ public class Vic
 	}	//======================
 
 
-	/** Move a CD from the current slot to the stack.  */
 
+    /**
+     * Move a CD from the current slot to the stack.
+     * If the slot is not occupied,
+     * no action is taken.
+     * If there is no slot at the current position
+     * the program is abruptly terminated.
+     */
 	public void takeCD()
 	{	if (seesCD())
 		{	theStack.push (itsSequence.get (itsPos));
@@ -112,42 +189,42 @@ public class Vic
 	}	//======================
 
 
-	/** Terminate the program with an appropriate message.  */
-
+	/** 
+	 * Terminate the program with the given message.
+	 * @param  cause  the given message
+	 */
 	private void fail (String cause)
 	{	JOptionPane.showMessageDialog (null, "STOPPING: " + cause
 			      + "  (Vic #)" + itsID + ", position =" + itsPos);
 		System.exit (0);
 	}	//======================
 
-
-	/** Two convenience methods */
-
-	public void shiftFromSlotToStack()
-	{	takeCD();
-	}	//======================
-
-	public void shiftFromStackToSlot()
-	{	putCD();
-	}	//======================
-
-
-/* METHODS THAT USE THE FRAME */
-
+	/**
+	 * Initial string to display in message area.
+	 */
 	private static String vicSay = "Programmable CD Organizer "
 	                             + "        mfd by Jones & Co.";
+	/**
+	 * The frame that contains the main application window.
+	 */
 	private static final VicFrame theFrame = new VicFrame();
 	//////////////////////////////////
 
-
+	/**
+	 * Display a message in the application's message area.
+	 * 
+	 * @param message  the message to display
+	 */
 	public static void say (String message)
 	{	vicSay = message;
 		theFrame.repaint();
 	}	//======================
 
 
-	/** Print a trace of the Vic's action.  */
-
+	/**
+	 * Print a trace of the Vic's action.
+	 * @param message  message to accompany the trace
+	 */
 	private void trace (String message)
 	{	System.out.println (message + " for Vic #" + itsID);
 		theFrame.repaint();
@@ -155,7 +232,11 @@ public class Vic
 	}	//======================
 
 
-	/** Pause for the specified number of milliseconds.  */
+	/**
+	 * Pause for the given number of milliseconds.
+	 * 
+	 * @param  milliseconds    the given number of milliseconds
+	 */
 
 	private static void pause (int milliseconds)
 	{	try
@@ -166,22 +247,42 @@ public class Vic
 		}
 	}	//======================
 
-
-/* THE INITIALIZER AND CONSTRUCTOR METHODS */
-
+	/**
+	 * Maximum number of slots that can be assigned to an instance.
+	 */
 	private static final int MAXSLOTS = 8;
+    /**
+     * Minimum number of slots that can be assigned to an instance.
+     */
 	private static final int MINSLOTS = 3;
+	/**
+	 * Maximum number of Vics that can be instantiated.
+	 */
 	private static final int MAXVICS  = 4;
+	/**
+	 * Random number generator for populating the application window
+	 * when no configuration is specified.
+	 * @see #reset(String[])
+	 */
 	private static final Random random = new Random();
+	/**
+	 * The number of Vics that may be instantiated
+	 * for this application configuration.
+	 */
 	private static int theMaxVics = random.nextInt (MAXVICS) + 1;
+	/**
+	 * The physical rows of slots assigned to this application.
+	 */
 	private static SlotsList[] theSeq = new SlotsList[theMaxVics];
+	/**
+	 * The number of Vics currently instantiated.
+	 */
 	private static int theNumVics = 0;
+	/**
+	 * Collection of Vics assigned to this application.
+	 */
 	private static final Vic[] theVics = {null, null, null, null};
 	//////////////////////////////////
-
-
-	/** Initialize individual sequences and stacks.  An initializer method
-	    is used because these have to exist before any Vics are created. */
 
 	static
 	{	for (int k = 0;  k < theMaxVics;  k++)
@@ -205,7 +306,6 @@ public class Vic
 
 
 	/** Construct a new Vic. */
-
 	public Vic()
 	{	super();
 		itsSequence =  theNumVics < theMaxVics
@@ -218,16 +318,19 @@ public class Vic
 	}	//======================
 
 
-	/** Replace random initialization of rows and stack with user-specified arrangement.
+	/** 
+	 * Replace random initialization of rows and stack
+	 *  with user-specified arrangement.
 		<p>
 		Parameter <em>args</em> is an array of up to five strings:
-			
+        <ul>
+        <li>
 		A string beginning with a pound sign (#) must be followed by
 		a valid integer between 0 and 8, inclusive, and indicates 
 		the number of CDs initially placed on the stack. A number
 		greater than 8 will be forced to 8; a number less than 0, 
 		or an invalid integer will be ignored.
-		<p>
+		<li>
 		There may be up to four additional strings consisting of
 		0 to 8 ones and zeros. The number of strings indicates the
 		number of rows to be created; if there are more than four
@@ -238,6 +341,7 @@ public class Vic
 		that the slot will be occupied. If a string consists of more
 		than 8 characters, the extraneous characters will be ignored;
 		a character other than zero or one will be treated as a one.
+		</ul>
 		<p>
 		Examples:
 		<blockquote>
@@ -251,15 +355,13 @@ public class Vic
 			a stack with an initial size of four:
 			<pre>    "111" "111" "#4"</pre>
 		</blockquote>
-
-		@author Jack Straub
 		
-		@param args An array of strings that specify the
-		       configuration of rows and stack.
-  
-	
+		@param args 
+		    array of strings that specify the
+		    configuration of rows and stack
+		       
+		@see  #reset1(String[])
 	*/
-	
 	public static void reset( String[] args )
 	{
 		Vector<String>	vec	= new Vector<String>();
@@ -278,7 +380,7 @@ public class Vic
 				{
 					// if number after # is invalid, just toss the
 					// string into the vector and let life go on as
-					// it used to.
+					// usual.
 					vec.add( args[inx] );
 				}
 			}
@@ -289,6 +391,13 @@ public class Vic
 		reset1( newArgs );
 	}
 
+	/**
+	 * Complete the initialization of the application.
+	 * 
+	 * @param args
+     *      array of strings that specify the
+     *      configuration of rows
+	 */
 	private static void reset1 (String[] args)
 	{	if (args.length > 0 && theNumVics == 0)
 		{	theMaxVics = Math.min (args.length, MAXVICS);
@@ -313,31 +422,56 @@ public class Vic
 
 	}	//======================
 
-
-// THE NESTED FRAME CLASS
-
+	/**
+	 * JFrame comprising the main application window.
+	 */
 	static class VicFrame extends JFrame
 	{
+        /**
+         * Serial version UID.
+         */
         private static final long serialVersionUID = 0x10L;
 
-        private final int SLOT = 75;           // between CD slots
+        /**
+         * Pixels between slots.
+         */
+        private final int SLOT = 75;
+		/**
+		 * Margin.
+		 */
 		private final int EDGE = 10;           // leave free at left side
+		/**
+		 * Window width.
+		 */
 		private final int WIDTH = (MAXSLOTS + 2) * SLOT + 2 * EDGE;
-		private final int DIST = 60;           // between CD sequences
-		private final int SAY = 45;            // depth of say's output
+		/**
+		 * Distance between rows.
+		 */
+		private final int DIST = 60;
+		/**
+		 * Y-coordinate of message area.
+		 */
+		private final int SAY = 45;
+		/**
+		 * Y-coordinated of first row of slots.
+		 */
 		private final int TOPSEQ = SAY + DIST; // depth of first seq
 
+		/**
+		 * Constructor.
+		 * Initializes te main application window
+		 * and makes it visible.
+		 */
 		public VicFrame()
-		{	addWindowListener (new Closer());
+		{
+		    setDefaultCloseOperation( EXIT_ON_CLOSE );
 			setSize (WIDTH, TOPSEQ + MAXVICS * DIST + 2 * EDGE);
 			setBackground (new Color (255, 252, 224)); // a nice cream
 	 		setVisible (true);    // make it visible to user
 		}	//======================
 
-
-		/** Same as for an applet; called by repaint. */
-
-		public void paint (Graphics page)  
+		@Override
+		public void paint( Graphics page )  
 		{	// PRINT THE vicSay MESSAGE AT THE TOP
 			page.setColor (getBackground());
 			page.fillRect (EDGE, EDGE, WIDTH - 2 * EDGE, 
@@ -359,9 +493,13 @@ public class Vic
 					            EDGE, y - 30 - k * 20);
 		}	//======================
      
-
-		/** Called by VicFrame's paint method. */
-
+		/**
+		 * Draw a row.
+		 * 
+		 * @param page    graphics context
+		 * @param index   index to controlling Vic
+		 * @param y       y-coordinate of the row
+		 */
 		private void drawSequence (Graphics page, int index, int y)
 		{	page.setColor (Color.red);
 			if (theVics[index] != null)
@@ -371,6 +509,13 @@ public class Vic
 		}	//======================
 
 
+		/**
+		 * Draw the CD configuration for a row of slots.
+		 * 
+		 * @param page    graphics context
+		 * @param y       y-coordinate of row
+		 * @param slots   list of slots in this row
+		 */
 		private void drawAllCDs (Graphics page, int y,
 	      	                   SlotsList slots)
 		{	int atEnd = slots.size();
@@ -383,6 +528,15 @@ public class Vic
 		}	//======================
 
 
+		/**
+		 * Draw the stick figure at the current position.
+		 * 
+		 * @param page    the graphics context
+		 * @param pos     the x-coordinate of the lower-left corner
+		 *                of the stick figure.
+		 * @param y       the y-coordinate of the lower-left corner
+         *                of the stick figure.
+		 */
 		private void drawMacMan (Graphics page, int pos, int y)
 		{	// <x, y> is the lower-left corner of the stick figure
 			int x = pos * SLOT + EDGE + 78;
@@ -398,37 +552,66 @@ public class Vic
 		}	//======================
 	} // end of VicFrame class
 
+    /**
+     * Encapsulation of the list of slots assigned to a row.
+     */
     private static class SlotsList
     {
+        /**
+         * The list of slots assigned to a row.
+         */
         ArrayList<String>   slots   = new ArrayList<String>();
 
+        /**
+         * Default constructor; not used.
+         */
+        public SlotsList()
+        {
+            // not used
+        }
+        
+        /**
+         * Add a slot to this list.
+         * 
+         * @param str   the ID of the slot
+         */
         public void add( String str )
         {
             slots.add( str );
         }
 
+        /**
+         * Get the ID of the slot at the given index.
+         * 
+         * @param inx   the given index
+         * @return  the ID of the slot at the given index
+         */
         public String get( int inx )
         {
             return slots.get( inx );
         }
 
+        /**
+         * Get the size of this list.
+         * 
+         * @return  the size of this list
+         */
         public int size()
         {
             return slots.size();
         }
 
+        /**
+         * Set the ID of the slot at the given index.
+         * 
+         * @param inx   the given index
+         * @param str   the ID of the slot
+         */
         public void set( int inx, String str )
         {
             slots.set( inx, str );
         }
     }
-
-	private static class Closer extends java.awt.event.WindowAdapter 
-	{	
-		public void windowClosing (java.awt.event.WindowEvent e) 
-		{	System.exit (0);
-		}	//======================
-	}     
 }     
 
 // </pre>
