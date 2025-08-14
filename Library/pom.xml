@@ -56,6 +56,18 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <configuration>
+                    <excludePackageNames>temp</excludePackageNames>
+                    <overview>${basedir}/src/main/javadoc/overview.html</overview>
+                    <show>private</show>
+                    <doctitle>Introduction to Java API Documention</doctitle>
+                    <windowtitle>Introduction to Java</windowtitle>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
