@@ -178,6 +178,26 @@ public class ImagePart
     }
     
     /**
+     * Gets the starting row for this ImagePart.
+     * 
+     * @return the starting row for this ImagePart
+     */
+    public int getRow()
+    {
+        return row;
+    }
+    
+    /**
+     * Gets the starting row for this ImagePart.
+     * 
+     * @return the starting column for this ImagePart
+     */
+    public int getColumn()
+    {
+        return col;
+    }
+    
+    /**
      * Merges a row from the given ImagePart
      * into the corresponding row of this ImagePart.
      * 

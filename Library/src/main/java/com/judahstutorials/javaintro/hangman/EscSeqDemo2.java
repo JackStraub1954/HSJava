@@ -1,25 +1,67 @@
 package com.judahstutorials.javaintro.hangman;
 
+import java.util.HashMap;
+
 import javax.swing.JOptionPane;
 
 /**
- * Application to demonstrate the "merge" image assembly technique
+ * Application to demonstrate the "escape sequence" image assembly technique
  * used in the sample code.
- * Start with a two-dimensional array of chars
- * which will eventually hold the final figure.
- * Initialize the starter array with
- * the horizontal and vertical parts of the gallows;
- * all other elements of the array are 
- * initialized to spaces.
- * For each remaining part of the image
- * make a two-dimensional array of chars
- * that hold the characters that describe that part.
+ * Represent each part of the final figure
+ * (e.g. "gallows," "head," "left arm")
+ * as a two-dimensional array of chars
+ * and row/column properties
+ * that describe the position of the part
+ * on the screen, for example:
+ * <pre>
+ * int      nooseRow = 0;
+ * int      nooseCol = 5;
+ * String[] noose = {
+ *   //       1    1
+ *   //  5----0----5---
+ *      "+",  // 10
+ *      "|",  // 1
+ *      "o",  // 2
+ *  };</pre>
+ * <p>
  * Across multiple steps,
- * gradually merge each individual part
- * into the array that holds the final figure.
+ * use ANSI escape sequences to position the cursor
+ * to the given row and column,
+ * then print the encapsulated characters.
+ * <p>
+ * Note:
+ * I tried improving the display using Unicode characters
+ * from the box-drawing set.
+ * This effort met with mixed results
+ * and I disabled it.
  */
-public class MergeDemo2
+public class EscSeqDemo2
 {
+    /**
+     * Map of Unicode characters found on a keyboard to Unicode
+     * characters from the box-drawing set.
+     * 
+     * @see AltChar
+     */
+    private static final AltChar    altCharMap  = new AltChar();
+    /**
+     * Top-margin of the final figure; specified in rows.
+     */
+    private static final int        topMargin   = 5;
+    /**
+     * Left-margin of the final figure; specified in columns.
+     */
+    private static final int        leftMargin  = 15;
+    /**
+     * Escape sequence to clear the screen.
+     */
+    private static final String     clear       = "\u001b[2J";
+    /**
+     * Format string for deriving the escape sequence to position
+     * the cursor at a given row/column.
+     * @see #print(ImagePart)
+     */
+    private static final String     position    = "\u001b[%d;%dH";
     /*
     private static final String[]   finalImage    =
     {
@@ -49,9 +91,18 @@ public class MergeDemo2
     };
     */
 
-//    private static final int        gallowsInx  = 0;
-//    private static final int        gallowsRow  = 0;
-//    private static final int        gallowsCol  = 0;
+    /**
+     * Row at which to begin drawing the gallows.
+     */
+    private static final int        gallowsRow  = 0;
+    /**
+     * Column at which to begin drawing the gallows.
+     */
+    private static final int        gallowsCol  = 0;
+    /**
+     * Number of the step in which the noose is drawn.
+     */
+    private static final int        gallowsInx  = 0;
     /**
      * Array to describe the gallows.
      */
@@ -83,18 +134,16 @@ public class MergeDemo2
     };
 
     /**
-     * Row at which to merge the noose
-     * into the final image.
+     * Row at which to begin drawing the noose.
      */
     private static final int        nooseRow    = 0;
     /**
-     * Column at which to merge the noose
-     * into the final image.
+     * Column at which to begin drawing the noose.
      */
     private static final int        nooseCol    = 5;
     /**
      * Number of the step in which the noose
-     * is merged into the final image.
+     * is drawn on the screen.
      */
     private static final int        nooseInx    = 1;
     /**
@@ -110,18 +159,15 @@ public class MergeDemo2
     };
 
     /**
-     * Row at which to merge the head
-     * into the final image.
+     * Row at which to begin drawing the head.
      */
     private static final int        headRow     = 3;
     /**
-     * Column at which to merge the head
-     * into the final image.
+     * Column at which to begin drawing the head.
      */
     private static final int        headCol     = 2;
     /**
-     * Number of the step in which the head
-     * is merged into the final image.
+     * Number of the step in which the head is drawn.
      */
     private static final int        headInx     = 2;
     /**
@@ -140,18 +186,15 @@ public class MergeDemo2
     };
     
     /**
-     * Row at which to merge the body
-     * into the final image.
+     * Row at which to begin drawing the body.
      */
     private static final int        bodyRow     = 9;
     /**
-     * Column at which to merge the body
-     * into the final image.
+     * Column at which to begin drawing the body.
      */
     private static final int        bodyCol     = 5;
     /**
-     * Number of the step in which the body
-     * is merged into the final image.
+     * Number of the step in which the body is drawn
      */
     private static final int        bodyInx     = 3;
     /**
@@ -170,18 +213,15 @@ public class MergeDemo2
     };
     
     /**
-     * Row at which to merge the left arm
-     * into the final image.
+     * Row at which to begin drawing the left arm.
      */
     private static final int        leftArmRow  = 10;
     /**
-     * Column at which to merge the left arm
-     * into the final image.
+     * Column at which to begin drawing the left arm.
      */
     private static final int        leftArmCol  = 2;
     /**
-     * Number of the step in which the left arm
-     * is merged into the final image.
+     * Number of the step in which the left arm is drawn.
      */
     private static final int        leftArmInx  = 4;
     /**
@@ -197,18 +237,15 @@ public class MergeDemo2
     };
     
     /**
-     * Row at which to merge the right arm
-     * into the final image.
+     * Row at which to begin drawing the right arm.
      */
     private static final int        rightArmRow = 10;
     /**
-     * Column at which to merge the right arm
-     * into the final image.
+     * Column at which to begin drawing the right arm.
      */
     private static final int        rightArmCol = 6;
     /**
-     * Number of the step in which the right arm
-     * is merged into the final image.
+     * Number of the step in which the right arm is drawn.
      */
     private static final int        rightArmInx = 5;
     /**
@@ -224,18 +261,15 @@ public class MergeDemo2
     };
     
     /**
-     * Row at which to merge the left leg
-     * into the final image.
+     * Row at which to begin drawing the left leg.
      */
     private static final int        leftLegRow  = 15;
     /**
-     * Column at which to merge the left leg
-     * into the final image.
+     * Column at which to begin drawing the left leg.
      */
     private static final int        leftLegCol  = 1;
     /**
-     * Number of the step in which the left leg
-     * is merged into the final image.
+     * Number of the step in which the left leg is drawn.
      */
     private static final int        leftLegInx  = 6;
     /**
@@ -252,18 +286,15 @@ public class MergeDemo2
     };
 
     /**
-     * Row at which to merge the right leg
-     * into the final image.
+     * Row at which to begin drawing the right leg.
      */
     private static final int        rightLegRow = 15;
     /**
-     * Column at which to merge the right leg
-     * into the final image.
+     * Column at which to begin drawing the right leg.
      */
     private static final int        rightLegCol = 6;
     /**
-     * Number of the step in which the right leg
-     * is merged into the final image.
+     * Number of the step in which the right leg is drawn.
      */
     private static final int        rightLegInx = 7;
     /**
@@ -287,7 +318,7 @@ public class MergeDemo2
     /**
      * Default constructor; not used.
      */
-    private MergeDemo2()
+    private EscSeqDemo2()
     {
         // not used
     }
@@ -299,15 +330,18 @@ public class MergeDemo2
      */
     public static void main(String[] args)
     {
-        ImagePart   dest        = new ImagePart( gallows, 0, 0 );
-        ImagePart   nextPart    = null;
-        int         next        = nooseInx;
-        print( dest );
+        ImagePart   nextPart    = new ImagePart( gallows, 0, 0 );
+        int         next        = gallowsInx;
+        clearScreen();
         while ( next < done )
         {
             JOptionPane.showMessageDialog( null, "Next" );
             switch ( next )
             {
+            case gallowsInx:
+                nextPart = new ImagePart( gallows, gallowsRow, gallowsCol );
+                nextPart.setName( "gallows" );
+                break;
             case nooseInx:
                 nextPart = new ImagePart( noose, nooseRow, nooseCol );
                 nextPart.setName( "noose" );
@@ -337,23 +371,141 @@ public class MergeDemo2
                 nextPart.setName( "rightLeg" );
                 break;
             }
-            dest.merge( nextPart );
-            print( dest );
+//            refine( nextPart );
+            print( nextPart );
             ++next;
+        }
+        int cursorRow   = gallows.length + gallowsRow;
+        setCursor( cursorRow, 0 );
+        JOptionPane.showMessageDialog( null, "Done" );
+    }
+    
+    /**
+     * In the array encapsulated in the given ImagePart,
+     * attempt to improve the drawing by substituting
+     * Unicode box-drawing characters
+     * for keyboard characters
+     * initially used to format the character array.
+     * 
+     * @param part  the given ImagePart
+     * 
+     * @see AltChar
+     */
+    @SuppressWarnings("unused")
+    private static void refine( ImagePart part )
+    {
+        char[][]    image   = part.getImage();
+        for ( char[] row : image )
+        {
+            for ( int inx = 0 ; inx < row.length ; ++inx )
+                row[inx] = altCharMap.get( row[inx] );
         }
     }
 
     /**
-     * Draw the image that has been so far assembled
-     * on the console.
+     * Draw the given ImagePart on the screen.
      * 
-     * @param part  the image to draw
+     * @param part  the given ImagePart
      */
     private static void print( ImagePart part )
     {
         char[][]    image   = part.getImage();
-        System.out.println( "\033[H\033[2J" );
+        int         col     = part.getColumn();
+        int         row     = part.getRow();
         for ( int inx = 0 ; inx < image.length ; ++inx )
-            System.out.println( image[inx] );
+        {
+            setCursor( row++, col );
+            System.out.print( image[inx] );
+        }
+    }
+    
+    /**
+     * Clear the screen.
+     */
+    private static void clearScreen()
+    {
+        System.out.print( clear );
+    }
+    
+    /**
+     * Position the cursor 
+     * at the given row and column coordinates
+     * on the screen.
+     * 
+     * @param row   the given row-coordinate
+     * @param col   the given column-coordinate
+     */
+    private static void setCursor( int row, int col )
+    {
+        int     xco     = col + leftMargin;
+        int     yco     = row + topMargin;
+        String  command = String.format( position, yco, xco );
+        System.out.print( command );
+    }
+    
+    /**
+     * Encapsulate a table
+     * that maps a keyboard character
+     * to a Unicode character
+     * from the box-drawing set.
+     */
+    @SuppressWarnings("serial")
+    private static class AltChar extends HashMap<Character,Character>
+    {
+        /**
+         * The Unicode character for the upper side of a box.
+         */
+        private static final char   boxTop      = '\u2500';
+        /**
+         * The Unicode character for the left or right side of a box.
+         */
+        private static final char   boxSide     = '\u2502';
+        /**
+         * The Unicode character for the upper-left corner of a box.
+         */
+        private static final char   ulCorner    = '\u250c';
+        /**
+         * The Unicode character for the upper-right corner of a box.
+         */
+        private static final char   urCorner    = '\u2510';
+        /**
+         * The Unicode character for a right slant.
+         */
+        private static final char   rightSlant  = '\u2571';
+        /**
+         * The Unicode character for a left slant.
+         */
+        private static final char   leftSlant   = '\u2572';
+        
+        /**
+         * Constructor.
+         * Fully initialize the encapsulated map.
+         */
+        public AltChar()
+        {
+            put( '-', boxTop );
+            put( '|', boxSide );
+            put( '+', ulCorner );
+            put( '%', urCorner );
+            put( '/', rightSlant );
+            put( '\\', leftSlant );
+        }
+        
+        /**
+         * Gets the character to substitute for the given character.
+         * If none, returns the given character.
+         * 
+         * @param key   the given character
+         * 
+         * @return  character to substitute for the given character,
+         *          or the given character if no substitute is found.
+         */
+        public Character get( Character key )
+        {
+            Character   charOut = super.get( key );
+            if ( charOut == null )
+                charOut = key;
+            return charOut;
+        }
     }
 }
