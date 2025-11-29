@@ -2,10 +2,9 @@ package com.judahstutorials.javaintro.hangman;
 
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
-
 /**
- * Application to demonstrate the "escape sequence" image assembly technique
+ * Application to demonstrate 
+ * the "escape sequence" image assembly technique
  * used in the sample code.
  * Represent each part of the final figure
  * (e.g. "gallows," "head," "left arm")

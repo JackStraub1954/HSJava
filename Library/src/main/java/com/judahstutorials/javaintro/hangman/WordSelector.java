@@ -134,6 +134,11 @@ public class WordSelector
         return rcode;
     }
     
+    public char[] getAssembledChars() 
+    {
+        return assembledChars;
+    }
+    
     public boolean isWin()
     {
         boolean rcode   = Arrays.equals( selectedWord, assembledChars );

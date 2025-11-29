@@ -26,8 +26,7 @@ public abstract class GUser
      * The given panel is the JPanel in which
      * the drawing takes place.
      * The given graphics context is linked to the JPanel.
-     * The graphics context is a copy of the original,
-     * and as such can be modified
+     * The graphics context can be modified
      * at the user's discretion.
      * 
      * @param graphics  the given graphics context

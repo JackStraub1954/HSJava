@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 /**
  * Application to demonstrate the "escape sequence" image assembly technique
  * used in the sample code.
+ * <p>
  * Represent each part of the final figure
  * (e.g. "gallows," "head," "left arm")
  * as a two-dimensional array of chars
@@ -17,11 +18,11 @@ import javax.swing.JOptionPane;
  * int      nooseRow = 0;
  * int      nooseCol = 5;
  * String[] noose = {
- *   //       1    1
- *   //  5----0----5---
- *      "+",  // 10
- *      "|",  // 1
- *      "o",  // 2
+ *   //           1    1
+ *   //  ----5----0----5---
+ *          "+",  // row 0
+ *          "|",  // row 1
+ *          "o",  // row 2
  *  };</pre>
  * <p>
  * Across multiple steps,
@@ -153,7 +154,7 @@ public class EscSeqDemo2
     {
      //       1    1
      //  5----0----5---
-        "+",  // 10
+        "+",  // 0
         "|",  // 1
         "o",  // 2
     };
@@ -177,12 +178,12 @@ public class EscSeqDemo2
     {
      //          1    1
      //  2--5----0----5--- 
-        "  / \\  ",  // 3
-        " /   \\ ",  // 4
+        "  / \\  ",   // 3
+        " /   \\ ",   // 4
         "| x x | ",   // 5
         "|  ^  | ",   // 6
-        " \\ O / ",  // 7
-        "  \\ /  ",  // 8
+        " \\ O / ",   // 7
+        "  \\ /  ",   // 8
     };
     
     /**

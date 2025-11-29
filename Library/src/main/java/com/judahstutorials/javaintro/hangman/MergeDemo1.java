@@ -5,6 +5,10 @@ import java.util.Arrays;
 /**
  * This application verifies that the error processing logic
  * in the {@linkplain ImagePart} class works as expected.
+ * <p>
+ * If this demo executes correctly
+ * you will see an error message in the console,
+ * but no GUI.
  */
 public class MergeDemo1
 {

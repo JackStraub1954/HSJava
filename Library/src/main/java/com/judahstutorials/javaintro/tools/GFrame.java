@@ -230,7 +230,7 @@ public class GFrame
         public void paint( Graphics graphics )
         {
             super.paint( graphics );
-            Graphics2D  gtx = (Graphics2D)graphics.create();
+            Graphics2D  gtx = (Graphics2D)graphics;
             gUser.paint( gtx, this );
         }
     }
