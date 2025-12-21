@@ -6,7 +6,7 @@
  * or that can be used in formulating a solution.
  * <h1>Progression</h1>
  * <ol>
- *      <li>Ask the operator to enter a secret word</li>
+ *      <li>Ask the operator to select a secret word</li>
  *      <ol>
  *          <li>If the operator cancels, terminate;</li>
  *          <li>Else set in-progress to true.</li>

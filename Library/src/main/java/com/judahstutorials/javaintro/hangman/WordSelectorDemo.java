@@ -1,25 +1,31 @@
 package com.judahstutorials.javaintro.hangman;
 
+import java.util.Arrays;
+
 public class WordSelectorDemo
 {
      public static void main( String[] args )
      {
          WordSelector   selector    = new WordSelector();
          String         word        = selector.select();
-         boolean        done        = false;
+         GuessManager   guessMgr    = null;
+         String         guess       = "";
          
-         System.out.println( word );
-         while ( !done )
+         System.out.println( "Selected word:" + word );
+         if ( word != null )
+             guessMgr = new GuessManager( word );
+         else
+             guess = null;
+         while ( guess != null )
          {
              System.out.println( "=================" );
-             String guess   = selector.getGuess();
-             if ( guess == null )
-                 done = true;
-             else
+             guess = GuessManager.getGuess();
+             if ( guess != null )
              {
-                 String chars   = String.valueOf( selector.getAssembledChars() );
-                 System.out.println( "Guess: " + guess );
-                 System.out.println( "Chars: " + chars );
+                 boolean    res     = guessMgr.processGuess( guess );
+                 char[]     chars   = guessMgr.getAssembledChars();
+                 System.out.println( "Guess: " + guess + "( "  + res + ")" );
+                 System.out.println( "Chars: " + Arrays.toString( chars ) );
              }
          }
      }
