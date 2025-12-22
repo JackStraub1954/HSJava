@@ -2,6 +2,8 @@ package com.judahstutorials.javaintro.hangman;
 
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 /**
  * Application to demonstrate 
  * the "escape sequence" image assembly technique
@@ -46,7 +48,7 @@ public class TextArtwork
     /**
      * Top-margin of the final figure; specified in rows.
      */
-    private static final int        topMargin   = 5;
+    private static final int        topMargin   = 3;
     /**
      * Left-margin of the final figure; specified in columns.
      */
@@ -309,6 +311,11 @@ public class TextArtwork
         "   \\", // 18
     };
     
+    /** The row at which to print the assembled chars. */
+    private static final int    textRow = gallowsRow + gallows.length + 2;
+    /** The column at which to print the assembled chars. */
+    private static final int    textCol = gallowsCol;
+    
     /**
      * Number of the last step in the process.
      */
@@ -316,26 +323,67 @@ public class TextArtwork
     
     private int     next        = 0;
     
-    /**
-     * Default constructor; not used.
-     */
-    private TextArtwork()
+    public static void main( String[] args )
     {
-        // not used
+        TextArtwork artwork = new TextArtwork();
+        String      selectedStr     = "RED DOG, BLUE DOG";
+        int         selectedLen     = selectedStr.length();
+        char[]      assembledChars  = new char[selectedLen];
+        int         charsInx        = 0;
+        
+        // Clear the screen and draw the gallows
+        ImagePart   nextPart    = artwork.nextPart();
+        print( nextPart );
+        artwork.printText( assembledChars );
+        while ( !artwork.isComplete() )
+        {
+            nextPart = artwork.nextPart();
+            print( nextPart );
+            artwork.printText( assembledChars );
+            if ( charsInx < selectedLen )
+                assembledChars[charsInx] = selectedStr.charAt( charsInx++ );
+            JOptionPane.showMessageDialog( null, "Next" );
+        }
     }
     
+    /**
+     * Default constructor.
+     */
+    public TextArtwork()
+    {
+        clearScreen();
+    }
+    
+    /**
+     * Indicates whether the figure is completely drawn.
+     * 
+     * @return  true if the figure is completely drawn
+     */
     public boolean isComplete()
     {
         boolean complete    = next >= done;
         return complete;
     }
     
+    /**
+     * Gets the next part of the image to draw.
+     * 
+     * @return  next part of the image to draw
+     */
     public ImagePart nextPart()
     {
         ImagePart   nextPart    = getPart( next++ );
         return nextPart;
     }
     
+    /**
+     * Gets a specific part of the figure to draw.
+     * Returns null if none.
+     * 
+     * @param partNum   the number of the part to draw
+     * 
+     * @return  the corresponding part to draw, or null if none
+     */
     public ImagePart getPart( int partNum )
     {
         ImagePart   nextPart    = null;
@@ -379,6 +427,27 @@ public class TextArtwork
     }
     
     /**
+     * Prints the characters in a given array.
+     * A space is printed between each character.
+     * If a character in the array is 0, 
+     * '_' is substituted.
+     * 
+     * @param assembledChars    the given array of chars
+     */
+    public void printText( char[] assembledChars )
+    {
+        StringBuilder   bldr    = new StringBuilder();
+        for ( char ccc : assembledChars )
+        {
+            if ( ccc == 0 )
+                ccc = '_';
+            bldr.append( ccc ).append( ' ' );
+        } 
+        setCursor( textRow, textCol);
+        System.out.print( bldr );
+    }
+    
+    /**
      * In the array encapsulated in the given ImagePart,
      * attempt to improve the drawing by substituting
      * Unicode box-drawing characters
@@ -405,7 +474,7 @@ public class TextArtwork
      * 
      * @param part  the given ImagePart
      */
-    private static void print( ImagePart part )
+    public static void print( ImagePart part )
     {
         char[][]    image   = part.getImage();
         int         col     = part.getColumn();
@@ -420,7 +489,7 @@ public class TextArtwork
     /**
      * Clear the screen.
      */
-    private static void clearScreen()
+    public static void clearScreen()
     {
         System.out.print( clear );
     }
