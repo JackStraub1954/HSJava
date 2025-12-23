@@ -2,15 +2,12 @@ package com.judahstutorials.javaintro.hangman;
 
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
-
 /**
- * Application to demonstrate 
- * the "escape sequence" image assembly technique
- * used in the sample code.
- * Represent each part of the final figure
+ * Facility to draw a hanged man in a command prompt window
+ * using escape sequences and Unicode characters.
+ * Each part of the hanged man
  * (e.g. "gallows," "head," "left arm")
- * as a two-dimensional array of chars
+ * is represented as a two-dimensional array of chars,
  * and row/column properties
  * that describe the position of the part
  * on the screen, for example:
@@ -25,10 +22,39 @@ import javax.swing.JOptionPane;
  *      "o",  // 2
  *  };</pre>
  * <p>
- * Across multiple steps,
- * use ANSI escape sequences to position the cursor
- * to the given row and column,
- * then print the encapsulated characters.
+ * Immediately following the figure
+ * is a feedback area
+ * in which are drawn the characters
+ * correctly guessed by the player.
+ * The client updates the feedback area
+ * by passing an array of chars 
+ * to the {@link #update(boolean, char[])} method.
+ * The array should contain one character
+ * for each letter in the word/phrase to guess.
+ * Each element of the array should be set
+ * to the letters that have been correctly guessed;
+ * letters not yet guessed are represented 
+ * by the nul character (Unicode value 0).
+ * The text drawn in the feedback area
+ * will look something like this:
+ * <pre>
+ * _ E _ E V _ _ _</pre>
+ * <p>
+ * The client should begin the drawing
+ * by calling the {@link #update(boolean, char[])}
+ * passing <em>false</em> and an array of chars
+ * in which each element is set to 0.
+ * After each guess made by the player
+ * call the {@link #update(boolean, char[])} method again
+ * passing true if the player guessed correctly
+ * and an updated array of chars.
+ * <p>
+ * To execute this application
+ * open a command line in the root directory of the project.
+ * Change to the target/classes directory
+ * and execute the command:
+ * <pre>
+ * java com.judahstutorials.javaintro.hangman.TextArtwork</pre>
  * <p>
  * Note:
  * I tried improving the display using Unicode characters
@@ -316,35 +342,11 @@ public class TextArtwork
     /** The column at which to print the assembled chars. */
     private static final int    textCol = gallowsCol;
     
-    /**
-     * Number of the last step in the process.
-     */
+    /** Number of the last step in the process. */
     private static final int    done            = 8;
     
+    /** Number of the step to be executed next. */
     private int     next        = 0;
-    
-    public static void main( String[] args )
-    {
-        TextArtwork artwork = new TextArtwork();
-        String      selectedStr     = "RED DOG, BLUE DOG";
-        int         selectedLen     = selectedStr.length();
-        char[]      assembledChars  = new char[selectedLen];
-        int         charsInx        = 0;
-        
-        // Clear the screen and draw the gallows
-        ImagePart   nextPart    = artwork.nextPart();
-        print( nextPart );
-        artwork.printText( assembledChars );
-        while ( !artwork.isComplete() )
-        {
-            nextPart = artwork.nextPart();
-            print( nextPart );
-            artwork.printText( assembledChars );
-            if ( charsInx < selectedLen )
-                assembledChars[charsInx] = selectedStr.charAt( charsInx++ );
-            JOptionPane.showMessageDialog( null, "Next" );
-        }
-    }
     
     /**
      * Default constructor.
@@ -445,6 +447,33 @@ public class TextArtwork
         } 
         setCursor( textRow, textCol);
         System.out.print( bldr );
+    }
+    
+    /**
+     * If the player made an incorrect guess
+     * draw the next part of the hanged man.
+     * Redraw the feedback area
+     * whether the player's guess was correct or not.
+     * Returns true if all parts of the hanged man
+     * have been drawn.
+     * 
+     * @param correctGuess      
+     *      true to indicate that the player guessed correctly
+     * @param assembledChars    
+     *      the characters to print in the feedback area
+     * 
+     * @return  true if the hanged man is completely drawn
+     */
+    public boolean update( boolean correctGuess, char[] assembledChars )
+    {
+        if ( !correctGuess )
+        {
+            ImagePart   nextPart    = nextPart();
+            print( nextPart );
+        }
+        printText( assembledChars );
+        boolean isComplete  = isComplete();
+        return isComplete;
     }
     
     /**
