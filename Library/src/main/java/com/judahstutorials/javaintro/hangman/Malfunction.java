@@ -26,6 +26,8 @@ public class Malfunction extends Error
     /**
      * See the documentation for 
      * java.lang.Error( String ).
+     * 
+     * @param message see java.lang.Error
      */
     public Malfunction(String message)
     {
@@ -35,6 +37,7 @@ public class Malfunction extends Error
     /**
      * See the documentation for 
      * java.lang.Error( Throwable ).
+     * @param cause see java.lang.Error
      */
     public Malfunction(Throwable cause)
     {
@@ -44,6 +47,8 @@ public class Malfunction extends Error
     /**
      * See the documentation for 
      * java.lang.Error( String, Throwable ).
+     * @param message   see java.lang.Error
+     * @param cause     see java.lang.Error
      */
     public Malfunction(String message, Throwable cause)
     {
@@ -53,6 +58,10 @@ public class Malfunction extends Error
     /**
      * See the documentation for 
      * java.lang.Error( String, Throwable, boolean, boolean ).
+     * @param message                       see java.lang.Error
+     * @param cause                         see java.lang.Error
+     * @param enableSuppression   message   see java.lang.Error
+     * @param writableStackTrace  message   see java.lang.Error
      */
     public Malfunction(
         String message, 

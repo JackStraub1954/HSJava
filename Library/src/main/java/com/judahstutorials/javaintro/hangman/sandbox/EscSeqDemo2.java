@@ -1,8 +1,10 @@
-package com.judahstutorials.javaintro.hangman;
+package com.judahstutorials.javaintro.hangman.sandbox;
 
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
+
+import com.judahstutorials.javaintro.hangman.ImagePart;
 
 /**
  * Application to demonstrate the "escape sequence" image assembly technique

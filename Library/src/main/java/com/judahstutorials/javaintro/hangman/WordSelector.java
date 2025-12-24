@@ -29,39 +29,58 @@ import javax.swing.JOptionPane;
  */
 public class WordSelector
 {
-    // The subfolder within the resources folder that holds the files
-    // containing the words/phrases for all the categories.
+    /**
+     * The subfolder within the resources folder that holds the files
+     * containing the words/phrases for all the categories.
+     */
     private static final String source  = "hangman/";
     
-    // The names of the files that contain the words/phrases
-    // for a particular category.
+    /** The name of the file containing easy word options. */
     private static final String easy    = "EasyWords.txt";
+    /** The name of the file containing hard word options. */
     private static final String hard    = "HardWords.txt";
+    /** The name of the file containing kid's word options. */
     private static final String kids    = "KidsWords.txt";
+    /** The name of the file containing funny word options. */
     private static final String funny   = "FunnyWords.txt";
+    /** The name of the file containing phrase options. */
     private static final String phrases = "Phrases.txt";
     
-    // Options to use when assembling the dialog asking the operator
-    // to select a category.
+    /** The prompt for asking the operator to select a category */
     private static final String prompt  = "Select a Category";
+    /** The dialog title for asking the operator to select a category */
     private static final String title   = "Word Selection";
+    /** The message type for asking the operator to select a category */
     private static final int    msgType = JOptionPane.QUESTION_MESSAGE;
+    /** The option type for asking the operator to select a category */
     private static final int    optType = 0;
     
-    // Categories that the operator may choose from.
+    /** Encapsulates the list of easy word choices. */
     private final Category          easyList;
+    /** Encapsulates the list of hard word choices. */
     private final Category          hardList;
+    /** Encapsulates the list of kid's word choices. */
     private final Category          kidsList;
+    /** Encapsulates the list of funny word choices. */
     private final Category          funnyList;
+    /** Encapsulates the list of phrase choices. */
     private final Category          phrasesList;
+    /** 
+     * Encapsulates the dialog option that allows the operator 
+     * to enter a custom word
+     */
     private final Category          customSentinel;
+    /** 
+     * Encapsulates the dialog option that allows the operator 
+     * to enter a cancel the game.
+     */
     private final Category          cancelSentinel;
     
-    // List of all categories.
+    /** List of all categories. */
     private final List<Category>    categories          = new ArrayList<>();
-    // Category selected by the operator.
+    /** Category selected by the operator. */
     private Category                selectedCategory    = null;
-    // Word/phrase selected from the selected category.
+    /** Word/phrase selected from the selected category. */
     private String                  selection           = null;
     
     /**
@@ -158,7 +177,7 @@ public class WordSelector
     private String selectCustom()
     {
         String  prompt  = "Enter your selection";
-        String  input   = null;
+        String  input   = "";
         while ( input != null && input.isEmpty() )
             input = JOptionPane.showInputDialog( null, prompt );
 

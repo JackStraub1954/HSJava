@@ -1,10 +1,24 @@
-package com.judahstutorials.javaintro.hangman;
+package com.judahstutorials.javaintro.hangman.sandbox;
 
 import java.util.Arrays;
 
+import com.judahstutorials.javaintro.hangman.GuessManager;
+import com.judahstutorials.javaintro.hangman.WordSelector;
+
+/**
+ * This is a simple application 
+ * that exercises the {@link WordSelector} class.
+ * Allows the operator to select a word
+ * and then prints it.
+ */
 public class WordSelectorDemo
 {
-     public static void main( String[] args )
+     /**
+      * Principal entry point.
+      * 
+     * @param args  command line arguements; not used
+     */
+    public static void main( String[] args )
      {
          WordSelector   selector    = new WordSelector();
          String         word        = selector.select();
@@ -29,4 +43,12 @@ public class WordSelectorDemo
              }
          }
      }
+    
+    /**
+     * Default constructor; not used.
+     */
+    public WordSelectorDemo()
+    {
+        // not used
+    }
 }

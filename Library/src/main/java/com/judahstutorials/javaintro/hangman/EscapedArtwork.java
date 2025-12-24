@@ -62,7 +62,7 @@ import java.util.HashMap;
  * This effort met with mixed results
  * and I disabled it.
  */
-public class TextArtwork
+public class EscapedArtwork
 {
     /**
      * Map of Unicode characters found on a keyboard to Unicode
@@ -351,7 +351,7 @@ public class TextArtwork
     /**
      * Default constructor.
      */
-    public TextArtwork()
+    public EscapedArtwork()
     {
         clearScreen();
     }

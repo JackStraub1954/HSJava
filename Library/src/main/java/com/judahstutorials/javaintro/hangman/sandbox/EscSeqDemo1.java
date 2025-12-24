@@ -1,4 +1,4 @@
-package com.judahstutorials.javaintro.hangman;
+package com.judahstutorials.javaintro.hangman.sandbox;
 
 /**
  * Application to demonstrate how escape sequences

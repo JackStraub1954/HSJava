@@ -1,19 +1,48 @@
-package com.judahstutorials.javaintro.hangman;
+package com.judahstutorials.javaintro.hangman.sandbox;
 
+import com.judahstutorials.javaintro.hangman.GuessManager;
+import com.judahstutorials.javaintro.hangman.WordSelector;
+
+/**
+ * A simple implementation of the Hangman game
+ * that produces no artwork.
+ * Any Hangman game can be written
+ * using this class as a template,
+ * and substituting a class that produced artwork
+ * for {@link ProgressMonitor}.
+ * 
+ * @see ProgressMonitor
+ */
 public class SimpleHangman
 {
+    /** For selecting the secret word. */
     private final WordSelector      selector;
+    /** The secret word. */
     private final String            secretWord;
+    /** For GuessManager. */
     private final GuessManager      guessMgr;
+    /** Stand-in for the class that produces artwork. */
     private final ProgressMonitor   monitor;
 
+    /** Set to true when the game is over. */
     private boolean             inProgress  = false;
     
+    /**
+     * Application entry point.
+     * 
+     * @param args  command line arguments; not used
+     */
     public static void main( String[] args )
     {
         new SimpleHangman().play();
     }
     
+    /**
+     * Constructor.
+     * Sets the stage for playing the game.
+     * 
+     * @see #play()
+     */
     public SimpleHangman()
     {
         selector = new WordSelector();
@@ -31,14 +60,25 @@ public class SimpleHangman
         }
     }
     
+    /**
+     * Called by the client to begin execution
+     * of the game.
+     * Silently exits if the operator
+     * has canceled play.
+     */
     public void play()
     {
         System.out.println( secretWord );
         if ( secretWord != null )
-            play( secretWord );
+            playGame();
     }
     
-    private void play( String toGuess )
+    /**
+     * Main driver for the game.
+     * Prompts the player for input
+     * until the game has been won, lost, or canceled.
+     */
+    private void playGame()
     {
         boolean win = false;
         while ( inProgress && !win )

@@ -1,6 +1,8 @@
-package com.judahstutorials.javaintro.hangman;
+package com.judahstutorials.javaintro.hangman.sandbox;
 
 import javax.swing.JOptionPane;
+
+import com.judahstutorials.javaintro.hangman.ImagePart;
 
 /**
  * Application to demonstrate the "merge" image assembly technique
@@ -13,7 +15,7 @@ import javax.swing.JOptionPane;
  * initialized to spaces.
  * For each remaining part of the image
  * make a two-dimensional array of chars
- * that hold the characters that describe that part.
+ * to hold the characters that describe that part.
  * Across multiple steps,
  * gradually merge each individual part
  * into the array that holds the final figure.

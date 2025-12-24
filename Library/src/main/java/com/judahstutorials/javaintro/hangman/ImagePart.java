@@ -12,8 +12,8 @@ import java.util.Arrays;
  * into a larger array, for example:
  * <pre>    finalImage.merge( rightArm )</pre>
  * <p>
- * The contents of the encapsulated array
- * are provided as an array of Strings.
+ * The content of the encapsulated array
+ * is provided as an array of Strings.
  * Internally,
  * the array of Strings is converted
  * to a two-dimensional array of chars;
@@ -247,7 +247,7 @@ public class ImagePart
     {
         int             sourceRows  = source.image.length + source.row;
         StringBuilder   bldr        = new StringBuilder();
-        bldr.append( " Too many rows in source " ).append( source.name )
+        bldr.append( "Too many rows, source=" ).append( source.name )
             .append( ": Destination rows: " ).append( image.length )
             .append( ", Source rows: " ).append( sourceRows );
         throw new IllegalArgumentException( bldr.toString() );

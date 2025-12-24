@@ -4,6 +4,15 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Encapsulates the logic that prompts the player
+ * to make a guess,
+ * which letters have been successfully guessed,
+ * and whether the player has guessed the word.
+ * Successful guesses are monitored via a char array
+ * in which unguessed letters are represented by 0
+ * and guessed letters represent themselves.
+ */
 public class GuessManager
 {
     /** The string that's been selected for the player to guess. */

@@ -1,6 +1,8 @@
-package com.judahstutorials.javaintro.hangman;
+package com.judahstutorials.javaintro.hangman.sandbox;
 
 import java.util.Arrays;
+
+import com.judahstutorials.javaintro.hangman.ImagePart;
 
 /**
  * This application verifies that the error processing logic
@@ -101,13 +103,13 @@ public class MergeDemo1
     public static void main(String[] args)
     {
         ImagePart   src     = new ImagePart( tooManyRows, tooManyRowsRow, 0 );
-        tryMerge( src, "TooManyRows" );
+        tryMerge( src, "tooManyRows" );
         
         src = new ImagePart( tooManyCols, tooManyColsRow, tooManyColsCol );
-        tryMerge( src, "TooManyCols" );
+        tryMerge( src, "tooManyCols" );
         
         src = new ImagePart( badMerge, badMergeRow, badMergeCol );
-        tryMerge( src, "TooManyCols" );
+        tryMerge( src, "tooManyCols" );
     }
     
     /**
