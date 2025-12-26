@@ -23,14 +23,14 @@
  * <ol>
  *      <li>
  *          The introduction to this project
- *          is found on the Judah's Tutorials web site,
+ *          is found on Judah's Tutorials website,
  *          <a href="https://judahstutorials.com/Classes/JavaClass/recommended_projects/index.html">
  *              Introduction to Java Programming:
                 Recommended Projects.
  *          </a>
  *      </li>
  *      <li>
- *          The introduction suggests three possible implementation
+ *          The introduction suggests three possible implementations
  *          for generating the artwork.
  *          Two of these use Unicode characters
  *          to approximate the image of the hanged man,
@@ -64,22 +64,19 @@
  * I start the game
  * by asking the player (or another operator)
  * to select a word category, 
- * for example,
- * <em>hard, easy, funny, kids,</em> etc.
+ * such as <em>hard, easy, funny, or kids</em>.
  * Each category is associated with multiple words,
- * one of which is chosen at random.
+ * and one is chosen at random.
  * Instead of choosing a category,
- * the operator is offered the option 
- * of specifying their own word.
+ * the operator can specify their own word.
  * The words associated with a category
- * are stored in separate files
- * which are located in 
+ * are stored in separate files, located in 
  * the project <em>resources</em> folder
  * <a href = "#footnote-1"><sup>1</sup></a>.
  * If you don't want to mess around with resource files,
- * you can store the files in the root of your project,
- * or hard-code them in a class file.
- * To present the choices to the operator
+ * you can store the files in the root of your project
+ * or hard-code the word lists in a class.
+ * To present the choices to the operator,
  * I use <em>JOptionPane.showOptionDialog.</em>
  * The result is kind of ugly,
  * but I don't expect my students
@@ -90,25 +87,24 @@
  * <p>
  * It would not surprise me to find
  * a Hangman game implemented in a single class.
- * For my implementation I used six:
+ * For my implementation, I used six:
  * four main classes
  * and two utility classes.
  * There are a lot of reasons
  * for choosing an implementation strategy
- * that uses a lot of little class,
+ * that uses a lot of little classes,
  * for example:
  * <ul>
  *      <li>
  *          <strong>Focus</strong><br>
  *          When a class's responsibilities
  *          are restricted to a limited number of tasks
- *          (typically <em>one</em>)
- *          it's a lot easier to focus
- *          on those tasks, and
+ *          (typically <em>one</em>),
+ *          it's much easier to focus
+ *          on those tasks and
  *          <u>
  *              prevent the logic of one task
- *              from becoming interleaved
- *              with the logic of another
+ *              from becoming interleaved with another
  *              (see also <em>spaghettification</em>).
  *          </u>
  *      </li>
@@ -121,44 +117,130 @@
  *          lines of code and then discover
  *          that the code would be perfect
  *          for a task performed elsewhere.
- *          The correct response to this
- *          is to move the code
- *          to its own class
+ *          The correct response
+ *          is to move the code to its own class
  *          (or a utility class)
- *          where it can be used anywhere you like
+ *          so it can be used anywhere you like
  *          (see, for example, the 
  *          <a href="#ImagePart">ImagePart</a>
  *          class below).
  *      </li>
  *      <li>
  *          <strong>Informal Testing</strong><br>
- *          Supposed your concentrating on the artwork
+ *          Suppose you're concentrating on the artwork
  *          for your hanged man.
  *          If your artwork logic
  *          is interleaved with the rest of your code,
- *          and your trying to get 
+ *          and you're trying to get 
  *          the details of the right arm correct,
  *          you might have to do something like this:
  *          <ul>
- *              <li>Start the application;</li>
- *              <li>Select a word to guess;</li>
- *              <li>Make five, consecutive incorrect guesses;</li>
- *              <li>See that you don't like how the right arm is drawn;</li>
- *              <li>Change a 3 to a 4 in your code;<li> and
+ *              <li>Start the application,</li>
+ *              <li>Select a word to guess,</li>
+ *              <li>Make five consecutive incorrect guesses,</li>
+ *              <li>See that you don't like how the right arm is drawn,</li>
+ *              <li>Change a 3 to a 4 in your code,<li> and
  *              <li>Start again from the top. (And again, and again.)</li>
  *          </ul>
- *          If you restrict your drawing to a single class
+ *          If you restrict your drawing to a single class,
  *          you can put a short main method in that class
  *          and quickly see the result of editing your code.
  *      </li>
+ *      <li>
+ *          <strong>Formal Testing</strong><br>
+ *          As a developer,
+ *          it is your job
+ *          to test your code
+ *          and make sure it works.
+ *          If your project has a dedicated test group,
+ *          their job is to concentrate
+ *          on the external specification,
+ *          not to make sure that 
+ *          you close a file after you're finished with it,
+ *          or to find out 
+ *          that you've got an off-by-one error
+ *          in a for loop.
+ *          You will probably have
+ *          at least one automated test
+ *          for each of your classes.
+ *          When a class is responsible 
+ *          for a limited number of tasks
+ *          (preferably <em>one</em>)
+ *          it becomes easier to formulate 
+ *          a test strategy that comprehensively 
+ *          addresses all the code in that class.
+ *      </li>
  * </ul>
+ * 
  * <p>
  * The classes in my Hangman implementation
- * consist of the following.
+ * are as follows.
  * </p>
  * <h4>The WordSelector Class</h4>
  * <p>
- * This class is responsible exclusively for
+ * This class is responsible exclusively
+ * for handling the secret word logic,
+ * which is more than just
+ * posting an input dialog.
+ * Other responsibilities include:
+ * <ul>
+ *      <li>
+ *          Detecting when the operator
+ *          wants to enter a custom.
+ *      </li>
+ *      <li>
+ *          Detecting when the operator
+ *          cancels category selection.
+ *      </li>
+ *      <li>
+ *          Detecting when the operator,
+ *          while entering a custom word,
+ *          cancels word selection.
+ *      </li>
+ *      <li>
+ *          Deciding what to do when the operator,
+ *          while entering a custom word,
+ *          responds with an empty string.
+ *      </li>
+ *      <li>
+ *          Trimming extra spaces from the operator's custom word and
+ *          (in the case of my implementation)
+ *          converting the word to upper case.
+ *      </li>
+ *      <li>
+ *          Finding the file associated with the selected category
+ *          (and being prepared for what to do
+ *          if the file can't be found).
+ *      </li>
+ *      <li>
+ *          Reading the file associated with the selected category
+ *          and handling I/O errors.
+ *      </li>
+ *      <li>
+ *          Filtering duplicate entries from the input file.
+ *      </li>
+ * </ul>
+ * 
+ * <h4 id="GuessManager">The GuessManager class</h4>
+ * <p>
+ * This class will examine a players guess,
+ * and determine whether the guess is correct or not.
+ * It has to distinguish between a guess of a single letter
+ * (the player is guessing whether
+ * a particular letter occurs in the secret word)
+ * and a guess of multiple letters
+ * (the player is trying to guess the secret word).
+ * Finally,
+ * it will maintain a record
+ * of which letters have been correctly guessed.
+ * It does this by maintaining a char array
+ * with the guessed letters filled in.
+ * For example,
+ * if the secret word is HEARSE,
+ * and the player has guessed E and R,
+ * the array will look something like
+ * <em>[_E_R_E]</em>.
+ * 
  * <h4 id="ImagePart">The ImagePart class</h4>
  * <p>
  * This class
