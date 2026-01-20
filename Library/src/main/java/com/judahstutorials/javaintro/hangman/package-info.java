@@ -102,11 +102,9 @@
  *          (typically <em>one</em>),
  *          it's much easier to focus
  *          on those tasks and
- *          <u>
- *              prevent the logic of one task
- *              from becoming interleaved with another
- *              (see also <em>spaghettification</em>).
- *          </u>
+ *          prevent the logic of one task
+ *          from becoming interleaved with another
+ *          (see also <em>spaghettification</em>).
  *      </li>
  *      <li>
  *          <strong>Reuse</strong><br>
@@ -117,7 +115,7 @@
  *          lines of code and then discover
  *          that the code would be perfect
  *          for a task performed elsewhere.
- *          The correct response
+ *          The correct response to this
  *          is to move the code to its own class
  *          (or a utility class)
  *          so it can be used anywhere you like
@@ -125,28 +123,29 @@
  *          <a href="#ImagePart">ImagePart</a>
  *          class below).
  *      </li>
- *      <li>
- *          <strong>Informal Testing</strong><br>
- *          Suppose you're concentrating on the artwork
- *          for your hanged man.
- *          If your artwork logic
- *          is interleaved with the rest of your code,
- *          and you're trying to get 
- *          the details of the right arm correct,
- *          you might have to do something like this:
- *          <ul>
- *              <li>Start the application,</li>
- *              <li>Select a word to guess,</li>
- *              <li>Make five consecutive incorrect guesses,</li>
- *              <li>See that you don't like how the right arm is drawn,</li>
- *              <li>Change a 3 to a 4 in your code,<li> and
- *              <li>Start again from the top. (And again, and again.)</li>
- *          </ul>
- *          If you restrict your drawing to a single class,
- *          you can put a short main method in that class
- *          and quickly see the result of editing your code.
- *      </li>
- *      <li>
+ *              <li>
+ *              <strong>Informal Testing</strong><br>
+ *              Suppose you're concentrating on the artwork
+ *              for your hanged man.
+ *              If your artwork logic
+ *              is interleaved with the rest of your code,
+ *              and you're trying to get 
+ *              the details of the right arm correct,
+ *              you might have to do something like this:
+ *              <ul>
+ *                  <li>Start the application,</li>
+ *                  <li>Select a word to guess,</li>
+ *                  <li>Make five consecutive incorrect guesses,</li>
+ *                  <li>See that you don't like how the right arm is drawn,</li>
+ *                  <li>Close the application,</li>
+ *                  <li>Change a 3 to a 4 in your code, and</li>
+ *                  <li>Start again from the top. (And again, and again.)</li>
+ *              </ul>
+ *              If you restrict your drawing to a single class,
+ *              you can put a temporary main method in that class
+ *              and quickly see the result of editing your code.
+ *          </li>
+ *          <li>
  *          <strong>Formal Testing</strong><br>
  *          As a developer,
  *          it is your job
@@ -169,8 +168,22 @@
  *          it becomes easier to formulate 
  *          a test strategy that comprehensively 
  *          addresses all the code in that class.
- *      </li>
+ *     </li>
  * </ul>
+ * <h3>Lots of Little Methods</h3>
+ *    <p>
+ *          The reasons for using a lot of little methods
+ *          are a lot like the reasons
+ *          for using a lot of little classes:
+ *          <ul>
+ *              <li>
+ *                  <strong>Focus</strong><br>
+ *                  When a method's responsibility
+ *                  limited to a single task,
+ *                  it's easier to get the code
+ *                  for that method right.
+ *              </li>
+ *          </ul>
  * 
  * <p>
  * The classes in my Hangman implementation
