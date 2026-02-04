@@ -4,7 +4,7 @@
     <groupId>com.judahstutorials</groupId>
     <artifactId>javaintro</artifactId>
     <packaging>jar</packaging>
-    <version>00-04</version>
+    <version>00-05</version>
     <name>javaintro</name>
     <url>http://maven.apache.org</url>
     <properties>
