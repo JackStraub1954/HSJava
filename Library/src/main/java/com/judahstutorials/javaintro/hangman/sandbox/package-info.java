@@ -24,7 +24,7 @@
  * is in your classpath.
  * Then open a command line
  * and enter <em>java</em>
- * followed by the full class name
+ * followed by the fully qualified name
  * of the target application class.
  * For example,
  * to execute <em>EscDemo1</em> type:
@@ -47,7 +47,7 @@
  *     <li>
  *          <strong>MergeDemo1</strong><br>
  *          Exercises the <em>ImagePart</em> class.
- *          It passes invalid data to an ImagePart object,
+ *          It passes invalid data to an <em>ImagePart</em> object,
  *          and lets us examine the complicated error messages
  *          this class produces.
  *     </li>

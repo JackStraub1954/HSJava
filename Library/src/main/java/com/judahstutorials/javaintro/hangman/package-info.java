@@ -48,7 +48,7 @@
  *          </a>
  *      </li>
  *      <li>
- *          For random selection of possible words/phrases
+ *          For random selection of possible words/phrases,
  *          I started with the suggestions on the
  *          <a href="https://heartshangman.com/words/">Hearts Hangman</a>
  *          web page.
@@ -57,7 +57,7 @@
  * 
  * <h2>Strategies</h2>
  * <p>
- * Following are some of the strategies I used
+ * The following are some of the strategies I used
  * in implementing the Hangman game.
  * <h3>Selecting the Word to Guess</h3>
  * <p>
@@ -116,8 +116,8 @@
  *          lines of code and then discover
  *          that the code would be perfect
  *          for a task performed elsewhere.
- *          The correct response to this
- *          is to move the code to its own class
+ *          The correct response
+ *          is to move the code into its own class
  *          (or a utility class)
  *          so it can be used anywhere you like
  *          (see, for example, the 
@@ -165,7 +165,7 @@
  *          for each of your classes.
  *          When a class is responsible 
  *          for a limited number of tasks
- *          (preferably <em>one</em>)
+ *          (preferably <em>one</em>),
  *          it becomes easier to formulate 
  *          a test strategy that comprehensively 
  *          addresses all the code in that class.
@@ -175,7 +175,7 @@
  *    <p>
  *          The reasons for using a lot of little methods
  *          are a lot like the reasons
- *          for using a lot of little classes, for example
+ *          for using a lot of little classes, for example:
  *          <ul>
  *              <li>
  *                  <strong>Focus</strong><br>
@@ -186,9 +186,9 @@
  *              </li>
  *              <li>
  *                  <strong>Testing</strong><br>
- *                  If a method performs one task
- *                  it is easier to test it
- *                  and/or observe its operation,
+ *                  If a method performs a single task,
+ *                  it is easier to test
+ *                  and/or observe its operation
  *                  than when it is interleaved
  *                  with other tasks.
  *              </li>
@@ -232,7 +232,7 @@
  *      <li>
  *          Finding the file associated with the selected category
  *          (and being prepared for what to do
- *          if the file can't be found).
+ *          if the computer can’t find the file).
  *      </li>
  *      <li>
  *          Reading the file associated with the selected category
@@ -245,7 +245,7 @@
  * 
  * <h4 id="GuessManager">The GuessManager Class</h4>
  * <p>
- * This class will examine a players guess,
+ * This class will examine a player's guess
  * and determine whether the guess is correct or not.
  * It has to distinguish between a guess of a single letter
  * (the player is guessing whether
@@ -275,7 +275,7 @@
  * It also maintains a 2-D array of chars,
  * the <em>assembly</em>,
  * representing the assembled hangman.
- * At the start of the game
+ * At the start of the game,
  * the assembly array contains 
  * characters from the strings
  * representing the gallows.
@@ -307,7 +307,7 @@
  * 
  * <h4 id="ImagePart">The ImagePart Class</h4>
  * <p>
- * This class complements the <em>EscapedArtwork</em> class,
+ * This class complements the <em>EscapedArtwork</em> class
  * and contains the logic needed
  * to merge the individual string arrays
  * into the completed assembly.
@@ -324,8 +324,8 @@
  *     </li>
  *     <li>
  *         I decided to include extensive diagnostics
- *         in the logic, 
- *         telling me when I messed up
+ *         in the logic 
+ *         to tell me when I messed up
  *         one of the part arrays.
  *         The class produces error messages
  *         like this:
@@ -336,10 +336,9 @@
     Illegal substitution, source=tooManyCols: Destination( 2,18)=|,  Source( 0,15)=|</pre>
  *
  *  <p>
- *  If your doing your job correctly,
- *  you will soon realize
- *  that a great deal of your time and effort
- *  is going to be devoted
+ *  If you’re doing your job correctly, 
+ *  you will soon realize 
+ *  that you will devote a great deal of time and effort 
  *  to unexpected tasks,
  *  such as error diagnosis and reporting.
  *  Don't be surprised when, occasionally,
@@ -352,8 +351,8 @@
  * <p>
  * This class encapsulates an unchecked exception.
  * It is intended to be used
- * when your code encounters an unanticipated error,
- * usually related to a programming mistake.
+ * when your code encounters an unexpected error,
+ * typically due to a programming mistake.
  * Ideally, this exception will only be thrown
  * during development,
  * and never in your production code.
@@ -363,7 +362,7 @@
  * "Do <em>not</em> reuse Exception, RuntimeException, Throwable, 
  * or Error directly.
  * Treat these classes as if they were abstract."
- * In my own code
+ * In my own code,
  * I am often tempted to use <em>Error</em>
  * for an exception I think will never be thrown,
  * but Bloch gets so many other things right
@@ -382,7 +381,7 @@
  * <div style="border-top: 2px solid black; font-family: sans-serif; font-size: 75%;">
  *      <p id="footnote-1" style="margin-bottom: 0;">
  *      <sup>1</sup>
- *      For more information about using resource files see
+ *      For more information about using resource files, see
  *      <a href="https://judahstutorials.com/cartesian-plane-lesson-7-property-management-page-1#loading-the-user-properties-file">
  *           Loading the User Properties File
  *      </a>
@@ -390,7 +389,7 @@
  *      <sup>2</sup>
  *      For more information about custom dialogs, see
  *      <a href="https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html">
- *          How to Make Dialogs 
+ *          How to Make Dialogs
  *      </a> 
  *      in the Oracle tutorials, and
  *      <a href="https://www.geeksforgeeks.org/java/java-swing-jdialog-examples/">
