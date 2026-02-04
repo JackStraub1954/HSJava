@@ -68,7 +68,7 @@
  * Each category is associated with multiple words,
  * and one is chosen at random.
  * Instead of choosing a category,
- * the operator can specify their own word.
+ * operators can specify their own word.
  * The words associated with a category
  * are stored in separate files, located in 
  * the project <em>resources</em> folder
@@ -78,7 +78,8 @@
  * or hard-code the word lists in a class.
  * To present the choices to the operator,
  * I use <em>JOptionPane.showOptionDialog.</em>
- * The result is kind of ugly,
+ * The result is kind of ugly; 
+ * a custom dialog would look much better,
  * but I don't expect my students
  * to be able to implement their own dialogs
  * <a href = "#footnote-2"><sup>2</sup></a>.
@@ -159,7 +160,7 @@
  *          or to find out 
  *          that you've got an off-by-one error
  *          in a for loop.
- *          You will probably have
+ *          Ideally, you will have
  *          at least one automated test
  *          for each of your classes.
  *          When a class is responsible 
@@ -174,14 +175,22 @@
  *    <p>
  *          The reasons for using a lot of little methods
  *          are a lot like the reasons
- *          for using a lot of little classes:
+ *          for using a lot of little classes, for example
  *          <ul>
  *              <li>
  *                  <strong>Focus</strong><br>
  *                  When a method's responsibility
- *                  limited to a single task,
+ *                  is limited to a single task,
  *                  it's easier to get the code
  *                  for that method right.
+ *              </li>
+ *              <li>
+ *                  <strong>Testing</strong><br>
+ *                  If a method performs one task
+ *                  it is easier to test it
+ *                  and/or observe its operation,
+ *                  than when it is interleaved
+ *                  with other tasks.
  *              </li>
  *          </ul>
  * 
@@ -199,7 +208,7 @@
  * <ul>
  *      <li>
  *          Detecting when the operator
- *          wants to enter a custom.
+ *          wants to enter a custom word.
  *      </li>
  *      <li>
  *          Detecting when the operator
@@ -234,7 +243,7 @@
  *      </li>
  * </ul>
  * 
- * <h4 id="GuessManager">The GuessManager class</h4>
+ * <h4 id="GuessManager">The GuessManager Class</h4>
  * <p>
  * This class will examine a players guess,
  * and determine whether the guess is correct or not.
@@ -253,10 +262,122 @@
  * and the player has guessed E and R,
  * the array will look something like
  * <em>[_E_R_E]</em>.
- * 
- * <h4 id="ImagePart">The ImagePart class</h4>
+ *
+ * <h4 id="EscapedArtwork">The EscapedArtwork Class</h4>
  * <p>
- * This class
+ * The <em>EscapedArtwork</em> class
+ * maintains an array of strings
+ * to represent each part
+ * of the completed hanged man:
+ * the gallows, noose, head, body,
+ * left and right arms,
+ * and left and right legs.
+ * It also maintains a 2-D array of chars,
+ * the <em>assembly</em>,
+ * representing the assembled hangman.
+ * At the start of the game
+ * the assembly array contains 
+ * characters from the strings
+ * representing the gallows.
+ * When the player makes the first incorrect guess,
+ * the array containing the noose
+ * is merged into the assembly.
+ * After the second incorrect guess,
+ * the array containing the head
+ * is merged into the assembly, etc.
+ * Here is how the string array
+ * representing the noose is declared:<pre>
+
+    // Row at which to begin drawing the noose.
+    private static final int        nooseRow    = 0;
+    //  Column at which to begin drawing the noose.
+    private static final int        nooseCol    = 5;
+    // Number of the step in which the noose is drawn on the screen.
+    private static final int        nooseInx    = 1;
+    // Array that describes the noose in the final image.
+    private static final String[]   noose       =
+    {
+     //       1    1
+     //  5----0----5---
+        "+",  // 10
+        "|",  // 1
+        "o",  // 2
+    };
+</pre>
+ * 
+ * <h4 id="ImagePart">The ImagePart Class</h4>
+ * <p>
+ * This class complements the <em>EscapedArtwork</em> class,
+ * and contains the logic needed
+ * to merge the individual string arrays
+ * into the completed assembly.
+ * There are two reasons
+ * for separating the <em>ImagePart</em> logic
+ * from the <em>EscapedArtwork</em> class:
+ * <ol>
+ *     <li>
+ *         The <em>EscapedArtwork</em> class
+ *         is already very large.
+ *         Even though most of the code
+ *         is taken up by declarations,
+ *         I chose not to make it any larger.
+ *     </li>
+ *     <li>
+ *         I decided to include extensive diagnostics
+ *         in the logic, 
+ *         telling me when I messed up
+ *         one of the part arrays.
+ *         The class produces error messages
+ *         like this:
+ *     </li>
+ * </ol>
+<pre>    Too many rows, source=tooManyRows: Destination rows: 5, Source rows: 6
+    Row too long, source=tooManyCols: Destination row/length: 2/19: Source row/length: 1/20
+    Illegal substitution, source=tooManyCols: Destination( 2,18)=|,  Source( 0,15)=|</pre>
+ *
+ *  <p>
+ *  If your doing your job correctly,
+ *  you will soon realize
+ *  that a great deal of your time and effort
+ *  is going to be devoted
+ *  to unexpected tasks,
+ *  such as error diagnosis and reporting.
+ *  Don't be surprised when, occasionally,
+ *  for every 10 lines of code
+ *  you write to perform a given task,
+ *  you write 20 lines of code
+ *  devoted to error processing.
+ *
+ * <h4 id="Malfunction">The Malfunction Class</h4>
+ * <p>
+ * This class encapsulates an unchecked exception.
+ * It is intended to be used
+ * when your code encounters an unanticipated error,
+ * usually related to a programming mistake.
+ * Ideally, this exception will only be thrown
+ * during development,
+ * and never in your production code.
+ * A lot of programmers use Java's <em>Error</em> class for this,
+ * but Joshua Bloch, in his book <em>Effective Java</em> 
+ * (third edition, &copy;2018, item 72) says: 
+ * "Do <em>not</em> reuse Exception, RuntimeException, Throwable, 
+ * or Error directly.
+ * Treat these classes as if they were abstract."
+ * In my own code
+ * I am often tempted to use <em>Error</em>
+ * for an exception I think will never be thrown,
+ * but Bloch gets so many other things right
+ * that I take his word on this subject.
+ *
+ * <h4 id="EscapedHangman">The EscapedHangman Class</h4>
+ * <p>
+ * This is a fairly simple class
+ * that contains the game's main method.
+ * It encapsulates program initiation,
+ * the "you won/lost" messages,
+ * and the "do you want to play again" logic.
+ * Most of the game is controlled
+ * through the other classes.
  * 
  * <div style="border-top: 2px solid black; font-family: sans-serif; font-size: 75%;">
  *      <p id="footnote-1" style="margin-bottom: 0;">
@@ -268,6 +389,10 @@
  *      <p id="footnote-2">
  *      <sup>2</sup>
  *      For more information about custom dialogs, see
+ *      <a href="https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html">
+ *          How to Make Dialogs 
+ *      </a> 
+ *      in the Oracle tutorials, and
  *      <a href="https://www.geeksforgeeks.org/java/java-swing-jdialog-examples/">
  *           JDialog with Examples
  *      </a>
