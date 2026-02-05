@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import app.Neighborhood;
-import edu.uweo.javaintro.game_of_life_lib.Board;
-import edu.uweo.javaintro.game_of_life_lib.Cell;
 
 public class NeighborhoodCountTest
 {
