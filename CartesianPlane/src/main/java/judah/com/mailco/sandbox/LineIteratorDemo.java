@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import judah.com.mailco.graph_utils.Root;
 
+@SuppressWarnings("serial")
 public class LineIteratorDemo extends JPanel
 {
     public static void main(String[] args)
@@ -31,7 +32,7 @@ public class LineIteratorDemo extends JPanel
     @Override
     public void paintComponent( Graphics graphics )
     {
-        Graphics2D  gtx = (Graphics2D)graphics.create();
+        Graphics2D  gtx = (Graphics2D)graphics;
         gtx.setColor( Color.WHITE );
         gtx.fillRect( 0, 0, getWidth(), getHeight() );
         

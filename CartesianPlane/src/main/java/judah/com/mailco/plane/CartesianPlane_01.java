@@ -142,7 +142,7 @@ public class CartesianPlane_01 extends JPanel
     {
         // Begin boilerplate
         super.paintComponent( graphics );
-        gtx = (Graphics2D)graphics.create();
+        gtx = (Graphics2D)graphics;
         currWidth = getWidth();
         currHeight = getHeight();
         gtx.setColor( bgColor );
@@ -162,10 +162,6 @@ public class CartesianPlane_01 extends JPanel
             ticMajorWidth, 
             ticMajorLen
         );
-        
-        // begin boilerplate
-        gtx.dispose();
-        // end boilerplate
     }
     
     /**

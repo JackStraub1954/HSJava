@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
 public class ProvingGround
 {
 
+    @SuppressWarnings("unused")
     public static void main(String[] args)
     {
         Point2D.Float   point1  = new Point2D.Float( 29.5f, -3.1f );

@@ -286,7 +286,7 @@ public class TicTacToeBoard extends JPanel
     @Override
     protected void paintComponent( Graphics graphics )
     {
-        Graphics2D  gtx             = (Graphics2D)graphics.create();
+        Graphics2D  gtx             = (Graphics2D)graphics;
         
         // If necessary, make the board square by setting its
         // dimensions equal to the smaller of the current width and height.
@@ -347,8 +347,6 @@ public class TicTacToeBoard extends JPanel
         gtx.draw( line );
         line.setLine( 0, 2 * squareSide, workingSide, 2 * squareSide );
         gtx.draw( line );
-        
-        gtx.dispose();
     }
     
     /**

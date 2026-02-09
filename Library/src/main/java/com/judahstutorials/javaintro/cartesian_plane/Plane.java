@@ -155,7 +155,7 @@ public class Plane extends JPanel
     @Override
     public void paintComponent( Graphics graphics )
     {
-        Graphics2D  gtx         = (Graphics2D)graphics.create();
+        Graphics2D  gtx         = (Graphics2D)graphics;
         int         width       = getWidth();
         int         height      = getHeight();
         int         rectWidth   = width - 2 * margin;
@@ -181,8 +181,6 @@ public class Plane extends JPanel
             gtx.setColor( textColor );
             painter.paintText( linkedMap.get( LineClass.MAJOR_TICK ) );
         }
-        
-        gtx.dispose();
     }
     
     /**

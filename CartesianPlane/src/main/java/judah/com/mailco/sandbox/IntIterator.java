@@ -5,13 +5,11 @@ import java.util.NoSuchElementException;
 
 public class IntIterator implements Iterator<Integer>
 {
-    private final int   lowerBound;
     private final int   upperBound;
     private int         next;
     
     public IntIterator( int lowerBound, int upperBound )
     {
-        this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         next = lowerBound;
     }

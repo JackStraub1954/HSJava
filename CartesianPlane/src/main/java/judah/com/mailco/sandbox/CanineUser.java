@@ -4,6 +4,7 @@ import java.awt.Color;
 
 public class CanineUser
 {
+    @SuppressWarnings("unused")
     public static void main(String[] args)
     {
         Canine1.Poodle  bestFriendA = new Canine1.Poodle();

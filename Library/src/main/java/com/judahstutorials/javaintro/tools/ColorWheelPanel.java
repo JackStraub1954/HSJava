@@ -98,7 +98,7 @@ public class ColorWheelPanel extends JPanel
     @Override
     public void paintComponent( Graphics graphics )
     {
-        Graphics2D  gtx = (Graphics2D)graphics.create();
+        Graphics2D  gtx = (Graphics2D)graphics;
         gtx.setColor( colorMgr.nextColor() );
         gtx.setRenderingHint( 
             RenderingHints.KEY_ANTIALIASING,
@@ -110,7 +110,6 @@ public class ColorWheelPanel extends JPanel
         start += degreeIncr;
         if ( start > 360 )
             start = 0;
-        gtx.dispose();
     }
     
     /**

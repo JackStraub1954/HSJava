@@ -440,7 +440,7 @@ public class Board implements Runnable
         {
             super.paintComponent(graphics);
 
-            Graphics2D gtx = (Graphics2D) graphics.create();
+            Graphics2D gtx = (Graphics2D) graphics;
 
             // The board must be square, so set the working dimensions 
             // to minimum(width, height).
