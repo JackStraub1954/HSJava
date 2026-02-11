@@ -1,8 +1,8 @@
 package com.judahstutorials.javaintro.tools;
 
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.ImageObserver;
 import java.net.URL;
 

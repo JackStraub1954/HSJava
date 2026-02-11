@@ -1,6 +1,7 @@
 package com.judahstutorials.javaintro.towerofhanoi.app;
 
-import com.judahstutorials.javaintro.towerofhanoi.*;
+import com.judahstutorials.javaintro.towerofhanoi.Pitch;
+import com.judahstutorials.javaintro.towerofhanoi.Tower;
 import com.judahstutorials.javaintro.towerofhanoi.utils.Animator;
 
 /**

@@ -1,10 +1,8 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import edu.uweo.javaintro.game_of_life_lib.ControlEvent;
-import edu.uweo.javaintro.game_of_life_lib.Controls;
+import org.junit.jupiter.api.Test;
 
 public class ControlEventTest
 {

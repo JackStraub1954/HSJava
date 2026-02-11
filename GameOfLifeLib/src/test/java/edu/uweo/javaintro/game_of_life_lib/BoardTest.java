@@ -1,6 +1,10 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -17,10 +21,6 @@ import javax.swing.JPanel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import edu.uweo.javaintro.game_of_life_lib.Board;
-import edu.uweo.javaintro.game_of_life_lib.Cell;
-import edu.uweo.javaintro.game_of_life_lib.Properties;
 
 public class BoardTest
 {

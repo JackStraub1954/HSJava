@@ -1,6 +1,6 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.AWTException;
 import java.awt.Component;
@@ -15,8 +15,6 @@ import java.util.function.Predicate;
 import javax.swing.AbstractButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-import edu.uweo.javaintro.game_of_life_lib.Cell;
 
 public class Utils
 {

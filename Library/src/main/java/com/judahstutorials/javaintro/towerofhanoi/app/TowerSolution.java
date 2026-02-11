@@ -1,6 +1,8 @@
 package com.judahstutorials.javaintro.towerofhanoi.app;
 
-import com.judahstutorials.javaintro.towerofhanoi.*;
+import com.judahstutorials.javaintro.towerofhanoi.Disk;
+import com.judahstutorials.javaintro.towerofhanoi.Pitch;
+import com.judahstutorials.javaintro.towerofhanoi.Tower;
 
 /**
  * This application encapsulates a solution to the Tower of Hanoi puzzle.

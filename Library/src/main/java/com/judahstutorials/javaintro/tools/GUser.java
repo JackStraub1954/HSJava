@@ -1,6 +1,7 @@
 package com.judahstutorials.javaintro.tools;
 
 import java.awt.Graphics2D;
+
 import javax.swing.JPanel;
 
 /**

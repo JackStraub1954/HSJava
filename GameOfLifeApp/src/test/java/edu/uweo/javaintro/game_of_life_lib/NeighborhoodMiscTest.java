@@ -1,6 +1,7 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

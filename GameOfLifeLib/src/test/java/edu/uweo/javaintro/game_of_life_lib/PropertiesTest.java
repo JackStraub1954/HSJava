@@ -1,13 +1,21 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static edu.uweo.javaintro.game_of_life_lib.Properties.*;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.BORDER_COLOR;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.BORDER_WIDTH;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.CELL_COLOR;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.GRID_COLOR;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.GRID_LINE_WIDTH;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.GRID_SIDE;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.MIN_CELL_SIDE;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.USE_BORDER;
+import static edu.uweo.javaintro.game_of_life_lib.Properties.USE_GRID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
 
-
-import edu.uweo.javaintro.game_of_life_lib.Properties;
+import org.junit.jupiter.api.Test;
 
 public class PropertiesTest
 {

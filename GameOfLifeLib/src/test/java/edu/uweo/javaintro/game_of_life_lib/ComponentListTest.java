@@ -1,7 +1,7 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Button;
 import java.awt.Component;
@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import edu.uweo.javaintro.game_of_life_lib.ComponentList;
+import org.junit.jupiter.api.Test;
 
 public class ComponentListTest
 {

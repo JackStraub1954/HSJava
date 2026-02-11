@@ -1,15 +1,20 @@
 package com.judahstutorials.javaintro.tools;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 // <pre>
 // Copy this file in its entirety to a file named Vic.java
 // Compile it before trying to compile any program that uses it
 // This implementation uses ArrayLists for the sequences of CDs
 // It also uses an initializer method to create the tableau before any Vics
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Stack;
+import java.util.Vector;
 
-
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * This is a "CD changer simulator."

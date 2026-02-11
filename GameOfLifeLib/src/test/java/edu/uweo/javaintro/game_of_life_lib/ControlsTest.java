@@ -1,9 +1,9 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Component;
 import java.util.function.Predicate;
@@ -11,9 +11,9 @@ import java.util.function.Predicate;
 import javax.swing.AbstractButton;
 import javax.swing.JSlider;
 
-import edu.uweo.javaintro.game_of_life_lib.ControlEvent;
-import edu.uweo.javaintro.game_of_life_lib.ControlListener;
-import edu.uweo.javaintro.game_of_life_lib.Controls;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ControlsTest
 {

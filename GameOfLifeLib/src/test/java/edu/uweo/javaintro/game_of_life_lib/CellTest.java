@@ -1,9 +1,10 @@
 package edu.uweo.javaintro.game_of_life_lib;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import edu.uweo.javaintro.game_of_life_lib.Cell;
+import org.junit.jupiter.api.Test;
 
 public class CellTest
 {
