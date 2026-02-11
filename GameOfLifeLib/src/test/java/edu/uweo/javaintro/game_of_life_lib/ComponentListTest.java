@@ -48,7 +48,6 @@ public class ComponentListTest
         String  text4       = "Label 1";
         String  text5       = "Label 2";
         String  text6       = "Label 3";
-        String  notFound    = "Component not found";
         JButton button1     = new JButton( text1 );
         JButton button2     = new JButton( text2 );
         JButton button3     = new JButton( text3 );

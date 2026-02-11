@@ -38,9 +38,9 @@ public class WaitNotifyDemo
             synchronized( threader )
             {
                 robot.mouseMove( loc.x, loc.y );
-                robot.mousePress( InputEvent.BUTTON1_MASK );
+                robot.mousePress( InputEvent.BUTTON1_DOWN_MASK );
                 Thread.sleep( 1000 );
-                robot.mouseRelease( InputEvent.BUTTON1_MASK );
+                robot.mouseRelease( InputEvent.BUTTON1_DOWN_MASK );
                 threader.wait();
             }
         }

@@ -539,7 +539,7 @@ public class Board implements Runnable
                 boolean alive = allCells[row][col];
                 Cell cell = new Cell(row, col, alive);
                 int ident = evt.getID();
-                int modifiers = evt.getModifiers();
+                int modifiers = evt.getModifiersEx();
                 ActionEvent event = new ActionEvent(cell, ident, "", modifiers);
                 for (ActionListener listener : listeners)
                     listener.actionPerformed(event);

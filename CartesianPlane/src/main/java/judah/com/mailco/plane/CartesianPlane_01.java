@@ -3,7 +3,6 @@ package judah.com.mailco.plane;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
@@ -23,6 +22,7 @@ import javax.swing.JPanel;
  * @author Jack Straub
  *
  */
+@SuppressWarnings("serial")
 public class CartesianPlane_01 extends JPanel
 {
 	/** The initial width of the window, in pixels. */
@@ -35,8 +35,6 @@ public class CartesianPlane_01 extends JPanel
     private Color       ticMajorColor       = new Color( .5f, .5f, .5f );
     /** The color of the minor tic marks */
     private Color       ticMinorColor       = new Color( .75f, .75f, .75f );
-    /** The color of the x- and y-axes */
-    private Color       axisColor           = new Color( 0f, 0f, 0f );
     /** The color of the grid lines */
     private Color       gridLineColor       = new Color( .7f, .7f, .7f );
     /** Distance between minor tic marks */
@@ -53,58 +51,8 @@ public class CartesianPlane_01 extends JPanel
     private double      ticMinorWidth       = ticMinorLen / 2 + 1;
     /** Width of a major tic mark*/
     private double      ticMajorWidth       = ticMinorWidth;
-    /** The width of the x- and y-axes */
-    private double      axisWidth           = ticMajorWidth;
     /** The color of the grid lines */
     private double      gridLineWidth       = 1;
-    
-    /** True to display a legend, false to leave it off. */
-    private boolean     showLegend          = true;
-    /**
-     * Width of the legend in pixels;
-     * may be negative, in which case the width is calculated 
-     * from the font size and the font units.
-     * @see #fontSize
-     * @see #fontUnits
-     * @see #legendWidth
-     */
-    private double      legendPixels        = -1;
-    /**
-     * Width of the legend.
-     * This is equal to legendPixels, unless legendPixels is negative,
-     * in which case the width is calculated from the font.
-     * @see #fontSize
-     * @see #fontUnits
-     * @see #legendPixels
-     * @see #fontDecimals
-     */
-    private double      legendWidth         = 0;
-    /** The name of the font used for the legend */
-    private String      fontName            = "fixed";
-    /** 
-     * Units for calculating font size; "em" (case-insensitive) is
-     * interpreted as EMS, anything else is interpreted as points.
-     * @see #fontSize
-     */
-    private String      fontUnits           = "em";
-    /** 
-     * Size of the font in the given units.
-     * @see #fontUnits
-     */
-    private int         fontSize            = 5;
-    /** Number of decimal points to use in legend numbers. */
-    private int         fontDecimals        = 2;
-    /** 
-     * Number of places consumed by a number in the legend,
-     * including the decimal point.
-     */
-    private int         fontFieldWidth      = 3;
-    /** 
-     * Font style. Specified by one of the constants
-     * in the font class. 
-     * The default is Font.PLAIN.
-     */
-    private int         fontStyle           = Font.PLAIN;
     
     /** The graphics context; set every time paintComponent is invoked */
     private Graphics2D  gtx         = null;
@@ -132,9 +80,6 @@ public class CartesianPlane_01 extends JPanel
         // setPreferredSize. Remember that the actual size of the
         // window may be different after being displayed.
         this.setPreferredSize( size );
-        
-        // Set the font to be used in the legend.
-        Font    font    = new Font( fontName, fontStyle, fontSize );
     }
     
     @Override
@@ -236,7 +181,6 @@ public class CartesianPlane_01 extends JPanel
         double  centerY = currHeight / 2.0;
         double  firstX  = 0;
         double  lastX   = currWidth;
-        double  firstY  = 0;
         double  lastY   = currHeight;
         Line2D.Double   line    = new Line2D.Double();
         
